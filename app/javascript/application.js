@@ -4,5 +4,5 @@ import "controllers";
 import "./src/admin";
 import "./src/archive_items_form";
 import "./src/user_registration_form";
-import trix from "trix";
+import "trix";
 import "@rails/actiontext";

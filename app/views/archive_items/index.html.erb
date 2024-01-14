@@ -1,0 +1,131 @@
+<% if notice || alert %>
+  <div class="err-messages">
+    <% if notice %>
+      <div class="notice"><%= notice %></div>
+    <% elsif alert %>
+      <div class="alert"><%= alert %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="admin-heading-wrapper --has-search">
+  <h1 class="admin-heading">Archive Items (<%= number_with_delimiter(@total_item_count, :delimiter => ',') %>)</h1>
+  <%= link_to "Add an item", new_archive_item_path, class: "button-round --secondary" %>
+
+  <%= form_with url: url_for(action: 'index', controller: 'archive_items'), html: {class: "search__form"}, method: :get do |form| %>
+    <div class="search__input-wrapper">
+      <%= form.text_field :archive_q, class: "search__field--round", value: params[:archive_q] %>
+      <% if params[:archive_q] %>
+        <button type="button" class="search__clear js-search-clear" data-clear-path="/admin/archive_items"></button>
+      <% end %>
+    </div>
+    <%= form.submit "Search", class: "search__button--round" %>
+  <% end %>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+        <th>
+          <% if params[:sort] == 'subject' %>
+            <%= link_to 'Subject', archive_items_path(:sort => 'subject-desc'), class: 'sorted-down' %>
+          <% elsif params[:sort] == 'subject-desc' %>
+            <%= link_to 'Subject', archive_items_path(:sort => 'subject'), class: 'sorted-up' %>
+          <% else %>
+            <%= link_to 'Subject', archive_items_path(:sort => 'subject') %>
+          <% end %>
+        </th>
+        <th>
+          <% if params[:sort] == 'medium' %>
+            <%= link_to 'Medium', archive_items_path(:sort => 'medium-desc'), class: 'sorted-down' %>
+          <% elsif params[:sort] == 'medium-desc' %>
+            <%= link_to 'Medium', archive_items_path(:sort => 'medium'), class: 'sorted-up' %>
+          <% else %>
+            <%= link_to 'Medium', archive_items_path(:sort => 'medium') %>
+          <% end %>
+        </th>
+        <th>
+          <% if params[:sort] == 'year' %>
+            <%= link_to 'Year', archive_items_path(:sort => 'year-desc'), class: 'sorted-down' %>
+          <% elsif params[:sort] == 'year-desc' %>
+            <%= link_to 'Year', archive_items_path(:sort => 'year'), class: 'sorted-up' %>
+          <% else %>
+            <%= link_to 'Year', archive_items_path(:sort => 'year') %>
+          <% end %>
+        </th>
+        <th>
+          <% if params[:sort] == 'location' %>
+            <%= link_to 'Location', archive_items_path(:sort => 'location-desc'), class: 'sorted-down' %>
+          <% elsif params[:sort] == 'location-desc' %>
+            <%= link_to 'Location', archive_items_path(:sort => 'location'), class: 'sorted-up' %>
+          <% else %>
+            <%= link_to 'Location', archive_items_path(:sort => 'location') %>
+          <% end %>
+        </th>
+        <th>
+          <% if params[:sort] == 'edited' %>
+            <%= link_to 'Last edited', archive_items_path(:sort => 'edited-desc'), class: 'sorted-down' %>
+          <% elsif params[:sort] == 'edited-desc' %>
+            <%= link_to 'Last edited', archive_items_path(:sort => 'edited'), class: 'sorted-up' %>
+          <% else %>
+            <%= link_to 'Last edited', archive_items_path(:sort => 'edited') %>
+          <% end %>
+        </th>
+        <th>
+          <% unless params[:sort] == 'flagged' %>
+            <%= link_to 'Show Only Archive Items Missing Files', archive_items_path(:sort => 'flagged'), class: "table-header-button" %>
+          <% else %>
+            <%= link_to 'Show All Archive Items', archive_items_path, class: "table-header-button" %></th>
+          <% end %>
+        </th>
+        <th>
+          <% if params[:sort] == "file_type" %>
+            <%= link_to 'File Type', archive_items_path(:sort => 'file_type-desc'), class: 'sorted-down' %>
+          <% elsif params[:sort] == 'file_type-desc' %>
+            <%= link_to 'File Type', archive_items_path(:sort => 'file_type'), class: 'sorted-up' %>
+          <% else %>
+            <%= link_to 'File Type', archive_items_path(:sort => 'file_type') %>
+          <% end %>
+        </th>
+        <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @archive_items.each do |archive_item| %>
+    <tr>
+      <td><%= archive_item.title %></td>
+      <td><%= archive_item.medium %></td>
+      <td><%= archive_item.year %></td>
+      <td><%= archive_item.search_locations %></td>
+      <td><%= archive_item.updated_at.strftime("%-m/%-d/%Y") %></td>
+      <td >
+        <div class="flag">
+          <% if !archive_item.content_files.attached?  %>
+              <%= image_tag('flag-icon-red.svg') %>  <span>Missing media files!</span>
+          <% end %>
+        </div>
+      </td>
+      <td>
+        <% if archive_item.content_files.attached? %>
+          <%= archive_item.content_files[0].blob.content_type %>
+        <% else %>
+          No content files
+        <% end %>
+      </td>
+      <td class="admin-table-actions">
+        <%= button_to 'Edit', edit_archive_item_path(archive_item), method: 'get', class: "admin-table-button"%>
+        <%= button_to 'Remove', archive_item_path(archive_item), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        <%= button_to 'Copy Metadata to New Item', copy_archive_item_path(archive_item), method: 'get', class: "admin-table-button"%>
+      </td>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="pagination-container">
+  <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+
+  <%= form_with url: url_for(action: 'index', controller: 'archive_items'), method: :get, html: {id: 'page-items-form', class: 'pagy-nav'} do |form| %>
+    <%= form.label :page_items, "Items per page:" %>
+    <%= form.select :page_items, options_for_select([25, 50, 100], params[:page_items].to_i), {}, { class: 'items-select',onchange: 'this.form.submit()'} %>
+  <% end %>
+</div>

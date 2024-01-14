@@ -1,0 +1,53 @@
+@import "variables";
+
+.search__form {
+    display: flex;
+}
+
+.search__field--round {
+    padding: 8px 12px;
+    border-radius: 33px;
+    border: solid 1px transparent;
+    background: $white-1;
+    color: $black-1;
+    margin-right: 10px;
+    font-size: 13px;
+    width: 200px;
+}
+
+.search__button--round {
+    background: $purple-3;
+    color: $white-1;
+    border-radius: 33px;
+    border: none;
+    min-width: 40px;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 10px 20px;
+
+    &:hover {
+        background: $purple-4;
+    }
+}
+
+.search__input-wrapper {
+    position: relative;
+    display: flex;
+}
+
+.search__clear {
+    border: solid 2px $purple-3;
+    position: absolute;
+    top: 3px;
+    right: 13px;
+    height: calc(100% - 6px);
+    aspect-ratio: 1/1;
+    cursor: pointer;
+    border-radius: 50px;
+    color: $purple-3;
+    background: url(asset-path("close.svg")) center center no-repeat;
+
+    &:hover {
+        border: solid 2px $purple-4;
+    }
+}

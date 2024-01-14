@@ -28,21 +28,21 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-gem 'pg_search', '~> 2.3'
+gem 'pg_search', '~> 2.3', '>= 2.3.6'
 
-gem 'aws-sdk-s3', '~> 1.103'
+gem 'aws-sdk-s3', '~> 1.141'
 
 gem 'acts-as-taggable-on', '~> 10.0'
 
-gem 'pagy', '~> 3.10'
+gem 'pagy', '~> 6.2'
 
-gem 'ransack', '~> 2.4'
+gem 'ransack', '~> 4.1', '>= 4.1.1'
 
-gem 'data_migrate', '~> 7.0'
+gem 'data_migrate', '~> 9.2'
 
-gem 'active_model_serializers', '~> 0.10.12'
+gem 'active_model_serializers', '~> 0.10.14'
 
-gem 'devise', '~> 4.8'
+gem 'devise', '~> 4.9', '>= 4.9.3'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
@@ -83,3 +83,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "dartsass-rails", "~> 0.5.0"

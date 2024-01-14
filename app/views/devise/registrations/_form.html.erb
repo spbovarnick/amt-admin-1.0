@@ -1,0 +1,74 @@
+<%= form_for(@user, as: :user, url: registration_path(:user), html: { class: "admin-form", method: user_form_method(@user)}) do |f| %>  
+    <%= render "devise/shared/error_messages", resource: @user %>
+
+		<% if action_name == "edit" %>
+			<%= f.hidden_field :id, value: @user.id %>
+		<% end %>
+
+    <div class="form-row">
+		<div class="form-set">
+			<%= f.label :email %>
+			<%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %>
+		</div>
+	</div>
+
+    <div class="form-row" id="admin_radio">
+		<div class="form-set">
+			<%= f.label :admin %>
+			<div class="form-select-wrapper">
+				<%= f.select :admin, [["True", true], ["False", false, { default: true }]] %>
+			</div>
+		</div>
+    </div>
+
+    <div class="form-row" id="board_member_field">
+		<div class="form-set">
+			<%= f.label :board_member %>
+			<div class="form-select-wrapper">
+					<%= f.select :board_member, [["True", true], ["False", false, { default: true }]] %>
+			</div>
+		</div>
+    </div>
+
+    <div class="form-row" id="archivist_field">
+		<div class="form-set">
+			<%= f.label :archivist %>
+			<div class="form-select-wrapper">
+					<%= f.select :archivist, [["True", true], ["False", false, { default: true }]] %>
+			</div>
+		</div>
+    </div>
+
+    <div class="form-row" id="page_select_field">
+		<div class="form-set">
+			<%= f.label :page, "Page Access" %>
+			<div class="form-select-wrapper">
+					<%= f.select :page, options_for_select( @pages, @user.page ) %>
+			</div>
+		</div>
+    </div>
+
+    <div class="form-row">
+		<div class="form-set password-initial">
+			<%= f.label :password %>
+			<% if action_name == "edit" || action_name == "update" %>
+			<i>(leave blank if you don't want to change it)</i>
+			<% end %>
+			<% if @minimum_password_length %>
+				<em>(<%= @minimum_password_length %> characters minimum)</em>
+			<% end %>
+			<%= f.password_field :password, autocomplete: "new-password" %>
+		</div>
+    </div>
+
+    <div class="form-row">
+		<div class="form-set password-confirm">
+			<%= f.label :password_confirmation %>
+			<%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+		</div>
+    </div>
+
+    <div class="actions">
+		<%= f.submit @submit_text, class: "button-round" %>
+    </div>
+<% end %>

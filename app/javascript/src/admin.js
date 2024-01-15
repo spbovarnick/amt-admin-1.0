@@ -1,5 +1,5 @@
 // Run function after dom has loaded.
-window.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("turbo:load", function () {
   tagInput();
   listenForClearSearch();
 });

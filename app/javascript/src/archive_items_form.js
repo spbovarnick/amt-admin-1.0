@@ -1,9 +1,9 @@
-window.onload = function () {
+document.addEventListener("turbo:load", function () {
   const mediumInput = document.querySelector("#archive_item_medium");
   showOrHidePoster(mediumInput);
   trackMedium(mediumInput);
   listenForClear();
-};
+});
 
 function trackMedium(input) {
   input.addEventListener("change", function () {

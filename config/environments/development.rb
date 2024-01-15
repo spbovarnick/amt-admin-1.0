@@ -76,5 +76,5 @@ Rails.application.configure do
 
   config.hotwire_livereload.force_reload_paths << Rails.root.join("app/views/**/*.html.erb")
   config.hotwire_livereload.force_reload_paths << Rails.root.join("app/assets/stylesheets")
-  config.hotwire_livereload.force_reload_paths << Rails.root.join("app/javascript/stylesheets")
+  config.hotwire_livereload.force_reload_paths << Rails.root.join("app/javascript/src")
 end

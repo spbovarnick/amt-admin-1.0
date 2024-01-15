@@ -26,6 +26,6 @@
             <li><%= link_to "User Accounts", users_path %></li>
         <% end %>
         </ul>
-        <%= link_to "Sign out", destroy_user_session_path, :method => :delete, class: "global-nav__donate-link" %>
+        <%= button_to( "Sign out", destroy_user_session_path, :method => :delete, class: "global-nav__donate-link" )%>
     </div>
 </nav>

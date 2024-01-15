@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :archive_tags
   resources :locations
   get '/archive_items/sync_search' => 'archive_items#sync_search_strings';
-  root :to => 'archive_items#index'
+  
   devise_for :users, :controllers => { :registrations => 'users/registrations', :sessions => 'users/sessions' }
   resources :users, only: [:index]
 
@@ -47,10 +47,10 @@ Rails.application.routes.draw do
       # post 'comments', to: 'comments#create'
     end
   end
-
+  root :to => 'archive_items#index'
   # root 'homepage#index'
 
-  get '*all', to: 'homepage#index', constraints: lambda { |req|
+  get '*all', to: 'archive_items#index', constraints: lambda { |req|
     req.path.exclude? 'rails/active_storage'
   }
 

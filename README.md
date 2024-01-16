@@ -28,3 +28,12 @@ OWNER [Your username];
 **_rails_live_reload_** <br/>
 Using this gem for live reload during development. <br/>
 [https://github.com/railsjazz/rails_live_reload](https://github.com/railsjazz/rails_live_reload)
+
+**_Devise_** <br/>
+Used for account management and authentication for the CMS. <br/>
+[https://github.com/heartcombo/devise](https://github.com/heartcombo/devise)
+
+**_Ransack_** <br/>
+Used for search. <br/>
+[https://github.com/activerecord-hackery/ransack](https://github.com/activerecord-hackery/ransack)
+

@@ -152,7 +152,26 @@ class ArchiveItemsController < ApplicationController
 
   def update
     @archive_item = ArchiveItem.find(params[:id])
-    @archive_item.update(archive_item_params)
+
+    # create new params hash to remove empty content_files and medium_photos
+    update_params = archive_item_params
+
+    # check if content_files is empty and remove it from update_params if it is
+    if archive_item_params[:content_files] == [""]
+      update_params.delete(:content_files)
+    end
+    
+    # check if medium_photos is empty and remove it from update_params if it is
+    if archive_item_params[:medium_photos] == [""]
+      update_params.delete(:medium_photos)
+    end
+
+    # check if poster_image is empty and remove it from update_params if it is
+    if archive_item_params[:poster_image] == [""]
+      update_params.delete(:poster_image)
+    end
+
+    @archive_item.update(update_params)
 
     if params[:clear_poster_image] === "true"
       @archive_item.poster_image.purge
@@ -179,6 +198,6 @@ class ArchiveItemsController < ApplicationController
   private
 
   def archive_item_params
-    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :content_files => [], :medium_photos => [])
+    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, content_files: [], :medium_photos => [])
   end
 end

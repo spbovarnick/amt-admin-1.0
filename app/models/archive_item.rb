@@ -32,7 +32,7 @@ class ArchiveItem < ApplicationRecord
             }
     }
 
-    has_one_attached :content_file
+    # has_one_attached :content_file
     has_many_attached :content_files
     has_one_attached :medium_photo
     has_many_attached :medium_photos

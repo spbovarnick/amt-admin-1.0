@@ -36,6 +36,9 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  # prevent purging attachments on update actions
+  config.active_storage.replace_on_assign_to_many = false
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
@@ -77,4 +80,5 @@ Rails.application.configure do
   config.hotwire_livereload.force_reload_paths << Rails.root.join("app/views/**/*.html.erb")
   config.hotwire_livereload.force_reload_paths << Rails.root.join("app/assets/stylesheets")
   config.hotwire_livereload.force_reload_paths << Rails.root.join("app/javascript/src")
+  config.hotwire_livereload.force_reload_paths << Rails.root.join("app/views/shared")
 end

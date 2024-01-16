@@ -112,6 +112,10 @@ $navbarHeight: 60px;
 }
 
 .global-nav__donate-link {
+  border: none;
+  background: none;
+  color: white;
+
   @media (min-width: $bp-md) {
     font-weight: 700;
     margin-left: 30px;

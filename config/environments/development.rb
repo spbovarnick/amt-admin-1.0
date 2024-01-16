@@ -73,9 +73,4 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
-
-  config.hotwire_livereload.force_reload_paths << Rails.root.join("app/views/**/*.html.erb")
-  config.hotwire_livereload.force_reload_paths << Rails.root.join("app/assets/stylesheets")
-  config.hotwire_livereload.force_reload_paths << Rails.root.join("app/javascript/src")
-  config.hotwire_livereload.force_reload_paths << Rails.root.join("app/views/shared")
 end

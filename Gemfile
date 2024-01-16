@@ -86,4 +86,6 @@ end
 
 gem "dartsass-rails", "~> 0.5.0"
 
-gem "hotwire-livereload", "~> 1.3", :group => :development
+group :development do
+  gem "rails_live_reload"
+end

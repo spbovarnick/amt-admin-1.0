@@ -22,3 +22,9 @@ OWNER [Your username];
 - Precompile assets: `bundle exec rake assets:precompile`
 - The master key stored in the ignored `master.key` file is required to access `google_maps_api_key`, which is stored in `config/credentials.yml.enc`
 - The `bin/dev` command points to `Procfile.dev` to start the server and watch for `Sass` changes
+
+### Third Party Tools
+
+**_rails_live_reload_** <br/>
+Using this gem for live reload during development. <br/>
+[https://github.com/railsjazz/rails_live_reload](https://github.com/railsjazz/rails_live_reload)

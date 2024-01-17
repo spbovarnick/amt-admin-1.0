@@ -26,6 +26,7 @@ module WafAdmin10
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # allows assets/images urls to be used in .scss files
     config.assets.paths << Rails.root.join('app','assets')
   end
 end

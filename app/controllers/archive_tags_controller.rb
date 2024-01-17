@@ -8,8 +8,8 @@ class ArchiveTagsController < ApplicationController
   def index
     page_items = params[:page_items].present? ? params[:page_items] : 25
 
-    if params[:archive_q]
-      @pagy, @archive_tags = pagy(ArchiveTag.ransack(name_cont: params[:archive_q]).result, page: params[:page], items: page_items)
+    if params[:q]
+      @pagy, @archive_tags = pagy(ArchiveTag.ransack(name_cont: params[:q]).result, page: params[:page], items: page_items)
     else
       @pagy, @archive_tags = pagy(ArchiveTag.all.order(name: :asc), page: params[:page], items: page_items)
     end

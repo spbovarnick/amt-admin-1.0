@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       # get 'locations/index'
       # get 'locations/api_key'
       # get 'locations/:name', to: 'locations#show'
-      # get 'tags/index'
+      get 'tags/index'
       # get 'comm_groups/index'
       # get 'people/index'
       # get 'carousel_slides/index'

@@ -16,7 +16,7 @@
     <div class="search__input-wrapper">
       <%= form.text_field :archive_q, class: "search__field--round", value: params[:archive_q] %>
       <% if params[:archive_q] %>
-        <button type="button" class="search__clear js-search-clear" data-clear-path="/admin/locations"></button>
+        <button type="button" class="search__clear js-search-clear" data-clear-path="/locations"></button>
       <% end %>
     </div>
     <%= form.submit "Search", class: "search__button--round" %>

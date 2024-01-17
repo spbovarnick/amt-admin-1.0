@@ -1,0 +1,50 @@
+<% if notice || alert %>
+  <div class="err-messages">
+    <% if notice %>
+      <div class="notice"><%= notice %></div>
+    <% elsif alert %>
+      <div class="alert"><%= alert %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="admin-heading-wrapper --has-search">
+  <h1 class="admin-heading">News Items</h1>
+  <%= link_to "Add a news item", new_news_item_path, class: "button-round  --secondary" %>
+
+  <%= form_with url: url_for(action: 'index', controller: 'news_items'), html: {class: "search__form"}, method: :get do |form| %>
+    <div class="search__input-wrapper">
+      <%= form.text_field :archive_q, class: "search__field--round", value: params[:archive_q] %>
+      <% if params[:archive_q] %>
+        <button type="button" class="search__clear js-search-clear" data-clear-path="/admin/news_items"></button>
+      <% end %>
+    </div>
+    <%= form.submit "Search", class: "search__button--round" %>
+  <% end %>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Headline</th>
+      <th>Author</th>
+      <th>Created At</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @news_items.each do |news_item| %>
+      <tr>
+        <td><%= news_item.headline %></td>
+        <td><%= news_item.author %></td>
+        <td><%= news_item.created_at %></td>
+        <td class="admin-table-actions">
+          <%= button_to 'Edit', edit_news_item_path(news_item), method: 'get', class: "admin-table-button" %>
+          <%= button_to 'Remove', news_item_path(news_item), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%== pagy_nav(@pagy) if @pagy.pages > 1 %>

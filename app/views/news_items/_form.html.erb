@@ -1,0 +1,107 @@
+<%= javascript_pack_tag "news_items_form" %>
+<%= form_with model: [:admin, @news_item], html: { class: "admin-form" } do |form| %>
+  <% if news_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(news_item.errors.count, "error") %> prohibited this news_item from being saved:</h2>
+
+      <ul>
+        <% news_item.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :headline, "Headline" %>
+      <%= form.text_field :headline, autocomplete: "off", "data-lpignore": true %>
+    </div>
+    <div class="form-set"></div>
+  </div>
+
+  <% if action_name == "new" %>
+    <%= form.hidden_field :created_by, value: @current_user.email %>
+  <% else %>
+    <%= form.hidden_field :updated_by, value: @current_user.email %>
+    <div class="form-row">
+      <div class="form-set">
+        <%= form.label :created_by, "Added by" %>
+        <%= form.text_field :created_by, disabled: true %>
+      </div>
+      <div class="form-set">
+        <%= form.label :created_at, "Date added" %>
+        <input disabled="disabled" type="text" value=<%= @news_item.created_at.strftime("%-m/%-d/%Y") %> />
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :author, "Author" %>
+      <%= form.text_field :author, autocomplete: "off", "data-lpignore": true %>
+    </div>
+    <div class="form-set"></div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :body, "Body" %>
+      <%= form.rich_text_area :body %>
+    </div>
+  </div>
+
+  <div class="form-row">
+      <div class="form-set">
+        <%= form.label :cta_text, "Call to action text" %>
+        <%= form.text_field :cta_text %>
+      </div>
+      <div class="form-set">
+        <%= form.label :created_at, "Call to action url" %>
+        <%= form.text_field :cta_link %>
+      </div>
+    </div>
+
+  <div class="form-row">
+    <% if news_item.photo.attached? %>
+      <div class="form-set" id="photo-preview">
+        <label>Photo Preview</label>
+        <% if news_item.photo.content_type == "image/jpeg" || news_item.photo.content_type == "image/png" %>
+          <%= image_tag news_item.photo.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
+        <% else %>
+            <%= link_to 'View file', news_item.photo, target: "_blank", class: "download-link" %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="form-set">
+      <%= form.label :photo, "Photo" %>
+      <%= form.file_field :photo, direct_upload: true %>
+
+      <% if news_item.photo.attached? %>
+        <%= hidden_field_tag 'clear_photo', false, id: "hidden-clear-photo"  %>
+        <div>
+          <button
+            type="button"
+            class="clear_attachement_button"
+            id="clear_photo_button"
+            data-input="hidden-clear-photo"
+            data-preview="photo-preview"
+            data-base-input-id="news_item_photo">
+            Remove current file
+          </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if notice || alert %>
+    <div class="err-messages">
+      <div class="notice"><%= notice %></div>
+      <div class="alert"><%= alert %></div>
+    </div>
+  <% end %>
+
+  <div class="form-set form-controls">
+    <%= form.submit @submit_text, class: "button-round" %>
+  </div>
+<% end %>

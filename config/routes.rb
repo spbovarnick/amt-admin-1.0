@@ -42,7 +42,7 @@ Rails.application.routes.draw do
       # get 'leadership_roles/index'
       # get 'leadership_roles/board'
       # get 'leadership_roles/staff'
-      # get 'page_carousel_slides/index'
+      get 'page_carousel_slides/index'
       # post 'comments', to: 'comments#create'
     end
   end

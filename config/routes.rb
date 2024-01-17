@@ -38,7 +38,7 @@ Rails.application.routes.draw do
       get 'people/index'
       get 'carousel_slides/index'
       get 'collections/index'
-      # get 'news_items/index'
+      get 'news_items/index'
       # get 'leadership_roles/index'
       # get 'leadership_roles/board'
       # get 'leadership_roles/staff'

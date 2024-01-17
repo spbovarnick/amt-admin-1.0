@@ -1,0 +1,52 @@
+<% if notice || alert %>
+  <div class="err-messages">
+    <% if notice %>
+      <div class="notice"><%= notice %></div>
+    <% elsif alert %>
+      <div class="alert"><%= alert %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="admin-heading-wrapper --has-search">
+  <h1 class="admin-heading">Collections</h1>
+  <%= link_to "Add a collection", new_collection_path, class: "button-round  --secondary" %>
+
+  <%= form_with url: url_for(action: 'index', controller: 'collections'), html: {class: "search__form"}, method: :get do |form| %>
+    <div class="search__input-wrapper">
+      <%= form.text_field :archive_q, class: "search__field--round", value: params[:archive_q] %>
+      <% if params[:archive_q] %>
+        <button type="button" class="search__clear js-search-clear" data-clear-path="/collections"></button>
+      <% end %>
+    </div>
+    <%= form.submit "Search", class: "search__button--round" %>
+  <% end %>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+        <th>Name</th>
+        <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @collections.each do |collection| %>
+    <tr>
+      <td><%= collection.name %></td>
+      <td class="admin-table-actions">
+        <%= button_to 'Edit', edit_collection_path(collection), method: 'get', class: "admin-table-button"%>
+        <%= button_to 'Remove', collection_path(collection), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+      </td>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="pagination-container">
+  <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+
+  <%= form_with url: url_for(action: 'index', controller: 'collections'), method: :get, html: {id: 'page-items-form', class: 'pagy-nav'} do |form| %>
+    <%= form.label :page_items, "Items per page:" %>
+    <%= form.select :page_items, options_for_select([25, 50, 100], params[:page_items].to_i), {}, { class: 'items-select',onchange: 'this.form.submit()'} %>
+  <% end %>
+</div>

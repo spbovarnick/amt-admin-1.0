@@ -19,7 +19,7 @@
             <li><%= link_to "Page Carousel Slides", page_carousel_slides_path %></li>
         <% end %>
         <% if current_user.try(:board_member?) %>
-            <%#<li><%= link_to "News Items", news_items_path %></li>%>
+            <li><%= link_to "News Items", news_items_path %></li>
             <%#<li><%= link_to "Leadership Roles", leadership_roles_path %></li>%>
         <% end %>
         <% if current_user.try(:admin?) %>

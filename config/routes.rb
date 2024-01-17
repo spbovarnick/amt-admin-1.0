@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   resources :page_carousel_slides
   # resources :leadership_roles
-  # resources :news_items
+  resources :news_items
   resources :carousel_slides
   resources :pages
   resources :comm_groups

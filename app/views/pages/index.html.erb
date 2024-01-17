@@ -29,7 +29,8 @@
         <%= button_to 'Edit', edit_page_path(page), method: 'get', class: "admin-table-button"%>
         <%= button_to 'Remove', page_path(page), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
         <%# The 'View' button links to the root_url in order to escape the Rails router, controllers and `admin` namespace and allow the React router to handle the request %>
-        <%= button_to 'View', root_url + "page/" + page.slug, class: "admin-table-button", method: 'get', form: {target: "_blank"} %>
+        <% front_end_url = Rails.env.production? ? "https://www.frontend.org/" : "http://localhost:3333/" %>
+        <%= button_to 'View', front_end_url + "page/" + page.slug, class: "admin-table-button", method: 'get', form: {target: "_blank"} %>
       </td>
   <% end %>
   </tbody>

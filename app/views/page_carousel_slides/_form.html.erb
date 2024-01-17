@@ -1,4 +1,4 @@
-<%= form_with model: [:admin, @page_carousel_slide], html: { class: "admin-form" } do |form| %>
+<%= form_with( model: [@page_carousel_slide], html: { class: "admin-form" }) do |form| %>
   <% if page_carousel_slide.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(page_carousel_slide.errors.count, "error") %> prohibited this page_carousel_slide from being saved:</h2>

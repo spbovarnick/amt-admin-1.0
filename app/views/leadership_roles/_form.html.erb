@@ -1,4 +1,4 @@
-<%= form_with model: [:admin, @leadership_role], html: { class: "admin-form" } do |form| %>
+<%= form_with( model: [@leadership_role], html: { class: "admin-form" }) do |form| %>
   <% if leadership_role.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(leadership_role.errors.count, "error") %> prohibited this leadership_role from being saved:</h2>

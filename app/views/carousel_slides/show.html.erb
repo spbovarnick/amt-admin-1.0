@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @carousel_slide.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @carousel_slide.description %>
+</p>
+
+<p>
+  <strong>Link:</strong>
+  <%= @carousel_slide.link %>
+</p>
+
+<%= link_to 'Edit', edit_admin_carousel_slide_path(@carousel_slide) %> |
+<%= link_to 'Back', admin_carousel_slides_path %>

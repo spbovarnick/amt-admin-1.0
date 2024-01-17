@@ -1,5 +1,4 @@
-<%= javascript_pack_tag "news_items_form" %>
-<%= form_with model: [:admin, @news_item], html: { class: "admin-form" } do |form| %>
+<%= form_with( model: [@news_item], html: { class: "admin-form" }) do |form| %>
   <% if news_item.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(news_item.errors.count, "error") %> prohibited this news_item from being saved:</h2>

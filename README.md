@@ -37,3 +37,14 @@ Used for account management and authentication for the CMS. <br/>
 Used for search. <br/>
 [https://github.com/activerecord-hackery/ransack](https://github.com/activerecord-hackery/ransack)
 
+**_Acts as taggable on_** <br/>
+Using this gem for tagging functionality on the `ArchiveItem` model. <br/>
+[https://github.com/mbleigh/acts-as-taggable-on](https://github.com/mbleigh/acts-as-taggable-on)
+
+**_pg-search_** <br/>
+Used for faster, indexed, full-text search. <br/>
+[https://github.com/Casecommons/pg_search](https://github.com/Casecommons/pg_search)
+
+**_dartsass-rails_**
+Use to compile Sass and output CSS.
+[https://github.com/rails/dartsass-rails](https://github.com/rails/dartsass-rails)

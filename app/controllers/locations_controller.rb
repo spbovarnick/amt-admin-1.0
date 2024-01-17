@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   layout 'admin'
-  before_action :authenticate_admin_user!, only: [:new, :edit, :update, :destroy, :index]
+  before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index]
   before_action :set_location, only: %i[ show edit update destroy ]
   before_action :authorize_archivist
 
@@ -22,12 +22,12 @@ class LocationsController < ApplicationController
   # GET /locations/new
   def new
     @location = Location.new
-    @current_user = current_admin_user
+    @current_user = current_user
   end
 
   # GET /locations/1/edit
   def edit
-    @current_user = current_admin_user
+    @current_user = current_user
   end
 
   # POST /locations or /locations.json
@@ -36,7 +36,7 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       if @location.save
-        format.html { redirect_to admin_locations_path, notice: "Location was successfully created." }
+        format.html { redirect_to locations_path, notice: "Location was successfully created." }
         format.json { render :show, status: :created, location: @location }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -58,7 +58,7 @@ class LocationsController < ApplicationController
           item.update_columns(search_locations: item.location_list.join(', '))
           item.save
         end
-        format.html { redirect_to admin_locations_path, notice: "Location was successfully updated." }
+        format.html { redirect_to locations_path, notice: "Location was successfully updated." }
         format.json { render :show, status: :ok, location: @location }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -71,7 +71,7 @@ class LocationsController < ApplicationController
   def destroy
     @location.destroy
     respond_to do |format|
-      format.html { redirect_to admin_locations_url, notice: "Location was successfully destroyed." }
+      format.html { redirect_to locations_url, notice: "Location was successfully destroyed." }
       format.json { head :no_content }
     end
   end

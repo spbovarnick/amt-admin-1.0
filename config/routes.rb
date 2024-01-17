@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # resources :pages
   resources :comm_groups
   # resources :collections
-  # resources :people
+  resources :people
   resources :archive_items, only: [:index, :create, :show, :new, :edit, :destroy, :update] do
     member do
       get 'copy'

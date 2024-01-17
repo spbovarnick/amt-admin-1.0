@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # resources :leadership_roles
   # resources :news_items
   # resources :carousel_slides
-  # resources :pages
+  resources :pages
   resources :comm_groups
   resources :collections
   resources :people

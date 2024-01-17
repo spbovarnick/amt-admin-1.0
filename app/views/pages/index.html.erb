@@ -1,0 +1,36 @@
+<% if notice || alert %>
+  <div class="err-messages">
+    <% if notice %>
+      <div class="notice"><%= notice %></div>
+    <% elsif alert %>
+      <div class="alert"><%= alert %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="admin-heading-wrapper">
+  <h1 class="admin-heading">Pages</h1>
+  <%= link_to "Add a page", new_page_path, class: "button-round  --secondary" %>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+        <th>Title</th>
+        <th></th>
+        <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @pages.each do |page| %>
+    <tr>
+      <td><%= page.title %></td>
+      <td class="admin-table-actions">
+        <%= button_to 'Edit', edit_page_path(page), method: 'get', class: "admin-table-button"%>
+        <%= button_to 'Remove', page_path(page), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        <%# The 'View' button links to the root_url in order to escape the Rails router, controllers and `admin` namespace and allow the React router to handle the request %>
+        <%= button_to 'View', root_url + "page/" + page.slug, class: "admin-table-button", method: 'get', form: {target: "_blank"} %>
+      </td>
+  <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,93 @@
+<%= form_with model: [:admin, @page], html: { class: "admin-form" } do |form| %>
+  <% if page.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(page.errors.count, "error") %> prohibited this page from being saved:</h2>
+
+      <ul>
+        <% page.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :title, "Title" %>
+      <%= form.text_field :title, autocomplete: "off", "data-lpignore": true %>
+    </div>
+    <div class="form-set"></div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :subtitle, "Subtitle" %>
+      <%= form.text_field :subtitle, autocomplete: "off", "data-lpignore": true %>
+    </div>
+    <div class="form-set"></div>
+  </div>
+
+  <div class="form-row">
+    <% if @page.header_file.attached? %>
+      <div class="form-set">
+        <label>Header Photo Preview</label>
+        <% if @page.header_file.content_type == "image/jpeg" || @page.header_file.content_type == "image/png" %>
+          <%= image_tag @page.header_file.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
+        <% else %>
+            <%= link_to 'View file', @page.header_file, target: "_blank", class: "download-link" %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="form-set">
+      <%= form.label :header_file, "Header Photo" %>
+      <%= form.file_field :header_file, direct_upload: true %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :description, "Description" %>
+      <%= form.text_area :description, autocomplete: "off", "data-lpignore": true %>
+    </div>
+    <div class="form-set"></div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :tag, "Tags" %>
+      <%= form.hidden_field :tag, :value => @page.tag, class: "js-tag-input tag-input", "data-tag-options": @tag_options.join(', ') %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :comm_groups, "Community groups" %>
+      <%= form.hidden_field :comm_groups, :value => @page.comm_groups, class: "js-tag-input tag-input", "data-tag-options": @comm_group_options.join(', ') %>
+    </div>
+  </div>
+  
+  <%# below is commented out with 'if false' bc survey form has been moved to footer %>
+  <% if false %>
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :ctatext, "Call to action text" %>
+      <%= form.text_field :ctatext %>
+    </div>
+    <div class="form-set">
+      <%= form.label :ctalink, "Call to action url" %>
+      <%= form.text_field :ctalink %>
+    </div>
+  </div>
+  <% end %>
+
+  <% if notice || alert %>
+    <div class="err-messages">
+      <div class="notice"><%= notice %></div>
+      <div class="alert"><%= alert %></div>
+    </div>
+  <% end %>
+
+  <div class="form-set form-controls">
+    <%= form.submit "Save", class: "button-round" %>
+  </div>
+<% end %>

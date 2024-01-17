@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   # resources :news_items
   # resources :carousel_slides
   # resources :pages
-  # resources :comm_groups
+  resources :comm_groups
   # resources :collections
   # resources :people
   resources :archive_items, only: [:index, :create, :show, :new, :edit, :destroy, :update] do

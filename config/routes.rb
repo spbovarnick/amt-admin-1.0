@@ -39,9 +39,9 @@ Rails.application.routes.draw do
       get 'carousel_slides/index'
       get 'collections/index'
       get 'news_items/index'
-      # get 'leadership_roles/index'
-      # get 'leadership_roles/board'
-      # get 'leadership_roles/staff'
+      get 'leadership_roles/index'
+      get 'leadership_roles/board'
+      get 'leadership_roles/staff'
       get 'page_carousel_slides/index'
       # post 'comments', to: 'comments#create'
     end

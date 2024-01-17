@@ -1,0 +1,61 @@
+<%= form_with model: [@comm_group], html: { class: "admin-form" } do |form| %>
+  <% if comm_group.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(comm_group.errors.count, "error") %> prohibited this community group from being saved:</h2>
+
+      <ul>
+        <% comm_group.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :name, "Name" %>
+      <%= form.text_field :name, autocomplete: "off", "data-lpignore": true %>
+    </div>
+    <div class="form-set"></div>
+  </div>
+
+  <% if action_name == "new" %>
+    <%= form.hidden_field :created_by, value: @current_user.email %>
+  <% else %>
+    <%= form.hidden_field :updated_by, value: @current_user.email %>
+    <div class="form-row">
+      <div class="form-set">
+        <%= form.label :created_by, "Added by" %>
+        <%= form.text_field :created_by, disabled: true %>
+      </div>
+      <div class="form-set">
+        <%= form.label :created_at, "Date added" %>
+        <input disabled="disabled" type="text" value=<%= @comm_group.created_at.strftime("%-m/%-d/%Y") %> />
+      </div>
+    </div>
+  <% end %>
+
+  <% if @comm_group.updated_by %>
+    <div class="form-row">
+      <div class="form-set">
+        <%= form.label :updated_by, "Last updated by" %>
+        <%= form.text_field :updated_by, disabled: true %>
+      </div>
+      <div class="form-set">
+        <%= form.label :updated_at, "Date updated" %>
+        <input disabled="disabled" type="text" value=<%= @comm_group.updated_at.strftime("%-m/%-d/%Y") %> />
+      </div>
+    </div>
+  <% end %>
+
+  <% if notice || alert %>
+    <div class="err-messages">
+      <div class="notice"><%= notice %></div>
+      <div class="alert"><%= alert %></div>
+    </div>
+  <% end %>
+
+  <div class="form-set form-controls">
+    <%= form.submit @submit_text, class: "button-round" %>
+  </div>
+<% end %>

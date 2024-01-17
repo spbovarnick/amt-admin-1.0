@@ -1,0 +1,36 @@
+<% if notice || alert %>
+  <div class="err-messages">
+    <% if notice %>
+      <div class="notice"><%= notice %></div>
+    <% elsif alert %>
+      <div class="alert"><%= alert %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="admin-heading-wrapper">
+  <h1 class="admin-heading">Page Carousel Slides</h1>
+  <%= link_to "Add a slide", new_page_carousel_slide_path, class: "button-round  --secondary" %>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @page_carousel_slides.each do |page_carousel_slide| %>
+      <tr>
+        <td><%= page_carousel_slide.title %></td>
+        <td class="admin-table-actions">
+        <%= button_to 'Edit', edit_page_carousel_slide_path(page_carousel_slide), method: 'get', class: 'admin-table-button' %>
+        <%= button_to 'Remove', page_carousel_slide_path(page_carousel_slide), method: 'delete', data: { confirm: 'Are you sure?'}, class: 'admin-table-button' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

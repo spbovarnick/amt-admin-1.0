@@ -1,0 +1,68 @@
+<% if notice || alert %>
+  <div class="err-messages">
+    <% if notice %>
+      <div class="notice"><%= notice %></div>
+    <% elsif alert %>
+      <div class="alert"><%= alert %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="admin-heading-wrapper">
+  <%= link_to "Add a leadership role", new_leadership_role_path, class: "button-round  --secondary" %>
+</div>
+
+<h1 class="admin-heading">Board Roles</h1>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Title</th>
+      <th>Section</th>
+      <th>Position</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @board_roles.each do |leadership_role| %>
+      <tr>
+        <td><%= leadership_role.name %></td>
+        <td><%= leadership_role.title %></td>
+        <td><%= leadership_role.section %></td>
+        <td><%= leadership_role.position %></td>
+        <td class="admin-table-actions">
+          <%= button_to 'Edit', edit_leadership_role_path(leadership_role), method: 'get', class: "admin-table-button" %>
+          <%= button_to 'Remove', leadership_role_path(leadership_role), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h1 class="admin-heading staff-section">Staff Roles</h1>
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Title</th>
+      <th>Section</th>
+      <th>Position</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @staff_roles.each do |leadership_role| %>
+      <tr>
+        <td><%= leadership_role.name %></td>
+        <td><%= leadership_role.title %></td>
+        <td><%= leadership_role.section %></td>
+        <td><%= leadership_role.position %></td>
+        <td class="admin-table-actions">
+          <%= button_to 'Edit', edit_leadership_role_path(leadership_role), method: 'get', class: "admin-table-button" %>
+          <%= button_to 'Remove', leadership_role_path(leadership_role), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @leadership_role.name %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @leadership_role.title %>
+</p>
+
+<%= link_to 'Edit', edit_admin_leadership_role_path(@leadership_role) %> |
+<%= link_to 'Back', admin_leadership_roles_path %>

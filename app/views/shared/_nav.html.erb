@@ -20,7 +20,7 @@
         <% end %>
         <% if current_user.try(:board_member?) %>
             <li><%= link_to "News Items", news_items_path %></li>
-            <%#<li><%= link_to "Leadership Roles", leadership_roles_path %></li>%>
+            <li><%= link_to "Leadership Roles", leadership_roles_path %></li>
         <% end %>
         <% if current_user.try(:admin?) %>
             <li><%= link_to "User Accounts", users_path %></li>

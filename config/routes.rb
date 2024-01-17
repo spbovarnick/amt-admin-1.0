@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   resources :page_carousel_slides
-  # resources :leadership_roles
+  resources :leadership_roles
   resources :news_items
   resources :carousel_slides
   resources :pages

@@ -1,4 +1,4 @@
-<%= form_with model: [@location], html: { class: "admin-form" } do |form| %>
+<%= form_with( model: [@location], html: { class: "admin-form" }) do |form| %>
   <% if location.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(location.errors.count, "error") %> prohibited this location from being saved:</h2>

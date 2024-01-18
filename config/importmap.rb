@@ -11,3 +11,4 @@ pin "@rails/actiontext", to: "actiontext.js"
 # subsequent modules are pinned here to be used in specific form partials where they're used/needed
 pin "admin", preload: true
 pin "archive_items_form", preload: true
+pin "user_registration_form", preload: true

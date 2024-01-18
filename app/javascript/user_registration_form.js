@@ -8,7 +8,6 @@ document.addEventListener("turbo:load", function () {
 
 // selects and disables fields based on admin select true or false
 function toggleAdminFields() {
-    console.log('hello')
     const adminInput = document.querySelector("#user_admin");
     const boardMemberSelect = document.querySelector("#user_board_member");
     const archivistSelect = document.querySelector("#user_archivist");

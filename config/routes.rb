@@ -43,7 +43,7 @@ Rails.application.routes.draw do
       get 'leadership_roles/board'
       get 'leadership_roles/staff'
       get 'page_carousel_slides/index'
-      # post 'comments', to: 'comments#create'
+      post 'comments', to: 'comments#create'
     end
   end
   root :to => 'archive_items#index'

@@ -1,3 +1,6 @@
+<% content_for :head do %>
+  <%= javascript_import_module_tag "news_items_form" %>
+<% end %>
 <%= form_with( model: [@news_item], html: { class: "admin-form" }) do |form| %>
   <% if news_item.errors.any? %>
     <div id="error_explanation">

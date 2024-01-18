@@ -12,3 +12,4 @@ pin "@rails/actiontext", to: "actiontext.js"
 pin "admin", preload: true
 pin "archive_items_form", preload: true
 pin "user_registration_form", preload: true
+pin "news_items_form", preload: true

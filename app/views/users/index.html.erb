@@ -1,0 +1,48 @@
+<% if notice || alert %>
+  <div class="err-messages">
+    <% if notice %>
+      <div class="notice"><%= notice %></div>
+    <% elsif alert %>
+      <div class="alert"><%= alert %></div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="admin-heading-wrapper --has-search">
+  <h1 class="admin-heading">User Accounts</h1>
+  <%= link_to "Create New User Account", new_user_registration_path, class: "button-round --secondary" %>
+</div>
+
+<table class="admin-table">
+<thead>
+	<tr>
+		<th>User Email</th>
+		<th>Credential</th>
+		<th>Affiliation</th>
+		<th></th>
+	</tr>
+	<% @users.each do |user| %>
+		<tr>
+			<td><%= user.email %></td>
+			<td>
+				<% if user.admin %>
+				Admin
+				<% elsif user.board_member %>
+				Board Member
+				<% elsif user.archivist %>
+				Archivist
+				<% end %>
+			</td>
+			<td>
+				<% if user.archivist && !user.admin %>
+					<%= user.page %>
+				<% end %>
+			</td>
+			<td class="admin-table-actions">
+				<%= button_to 'Edit', edit_user_registration_path(user), method: 'get', class: "admin-table-button" %>
+				<%= button_to 'Remove', user_registration_path(user.id), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+			</td>
+		</tr>
+	<% end %>
+</thead>
+</table>

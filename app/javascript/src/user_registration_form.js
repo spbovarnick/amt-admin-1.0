@@ -1,6 +1,6 @@
 // this file handles DOM manipulations for app/views/devise/registrations/_form.html.erb
 
-window.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("turbo:load", function () {
     toggleAdminFields();
     toggleArchivistFields();
     passwordMatch();
@@ -8,10 +8,11 @@ window.addEventListener("DOMContentLoaded", function () {
 
 // selects and disables fields based on admin select true or false
 function toggleAdminFields() {
-    const adminInput = document.querySelector("#admin_user_admin");
-    const boardMemberSelect = document.querySelector("#admin_user_board_member");
-    const archivistSelect = document.querySelector("#admin_user_archivist");
-    const pageInput = document.querySelector("#admin_user_page");
+    console.log('hello')
+    const adminInput = document.querySelector("#user_admin");
+    const boardMemberSelect = document.querySelector("#user_board_member");
+    const archivistSelect = document.querySelector("#user_archivist");
+    const pageInput = document.querySelector("#user_page");
     const nilValue = pageInput.querySelector("#nil-value");
     
     adminInput.value === "true" ? disabledFields(adminInput, boardMemberSelect, archivistSelect, pageInput) : null;
@@ -33,9 +34,9 @@ function toggleAdminFields() {
 }
 
 function toggleArchivistFields() {
-    const archivistSelect = document.querySelector("#admin_user_archivist");
-    const pageInput = document.querySelector("#admin_user_page");
-    const adminInput = document.querySelector("#admin_user_admin");
+    const archivistSelect = document.querySelector("#user_archivist");
+    const pageInput = document.querySelector("#user_page");
+    const adminInput = document.querySelector("#user_admin");
 
     // controls page select access based on archivist/admin role assignment
     archivistSelect.value === "false" ? pageInput.disabled = true : null
@@ -64,9 +65,9 @@ function disabledFields(adminInput, boardMemberSelect, archivistSelect, pageInpu
 
 // UI to mitigate error encounters when entering passwords
 function passwordMatch() {
-    const password = document.getElementById("admin_user_password");
+    const password = document.getElementById("user_password");
     const pwdField = document.querySelector(".password-initial")
-    const passwordConfirm = document.getElementById("admin_user_password_confirmation");
+    const passwordConfirm = document.getElementById("user_password_confirmation");
     const pwdConfirmField = document.querySelector(".password-confirm");
     const matchWarning = document.createElement("div");
     matchWarning.innerText = "*Passwords must match";

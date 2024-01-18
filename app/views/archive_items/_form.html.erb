@@ -1,3 +1,6 @@
+<% content_for :head do %>
+  <%= javascript_import_module_tag "admin" %>
+<% end %>
 <%= form_with( model: [@archive_item], local: true, html: { multipart: true, class: "admin-form" }) do |form| %>
   <div class="form-row">
     <div class="form-set">

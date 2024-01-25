@@ -59,13 +59,24 @@
     </div>
   </div>
 
+  <%# below is commented out with 'if false' bc comm_groups is not being used in filtering archive_items to pages %>
+  <% if false %>
   <div class="form-row">
     <div class="form-set">
       <%= form.label :comm_groups, "Community groups" %>
       <%= form.hidden_field :comm_groups, :value => @page.comm_groups, class: "js-tag-input tag-input", "data-tag-options": @comm_group_options.join(', ') %>
     </div>
   </div>
+  <% end %>
   
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :donate_url, "Donate link" %>
+      <%= form.text_field :donate_url, autocomplete: "off", "data-lpignore": true %>
+    </div>
+    <div class="form-set"></div>
+  </div>
+
   <%# below is commented out with 'if false' bc survey form has been moved to footer %>
   <% if false %>
   <div class="form-row">

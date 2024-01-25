@@ -498,7 +498,8 @@ CREATE TABLE public.pages (
     comm_groups character varying,
     ctatext character varying,
     ctalink character varying,
-    subtitle text
+    subtitle text,
+    donate_url character varying
 );
 
 
@@ -1149,6 +1150,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240125211210'),
 ('20231216204428'),
 ('20231216204427'),
 ('20231216204426'),

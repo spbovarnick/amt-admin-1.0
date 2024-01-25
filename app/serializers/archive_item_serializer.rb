@@ -1,7 +1,7 @@
 class ArchiveItemSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   cache key: 'archive_item', expires_in: 2400.hours
-  attributes :id, :medium, :year, :content_files, :content_urls, :title, :poster_image, :poster_url, :collections, :medium_photos, :medium_photo_urls, :content_notes
+  attributes :id, :medium, :year, :content_files, :content_urls, :title, :poster_image, :poster_url, :collections, :medium_photos, :medium_photo_urls, :content_notes, :credit
   has_many :tags, embed: :id, include: true
   has_many :locations, embed: :id, include: true
   has_many :comm_groups, embed: :id, include: true

@@ -17,6 +17,7 @@
   <thead>
     <tr>
       <th>Title</th>
+      <th>Page</th>
       <th></th>
       <th></th>
     </tr>
@@ -26,6 +27,7 @@
     <% @page_carousel_slides.each do |page_carousel_slide| %>
       <tr>
         <td><%= page_carousel_slide.title %></td>
+        <td><%= page_carousel_slide.page %></td>
         <td class="admin-table-actions">
         <%= button_to 'Edit', edit_page_carousel_slide_path(page_carousel_slide), method: 'get', class: 'admin-table-button' %>
         <%= button_to 'Remove', page_carousel_slide_path(page_carousel_slide), method: 'delete', data: { confirm: 'Are you sure?'}, class: 'admin-table-button' %>

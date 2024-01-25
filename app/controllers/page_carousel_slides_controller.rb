@@ -7,7 +7,7 @@ class PageCarouselSlidesController < ApplicationController
   # GET /page_carousel_slides or /page_carousel_slides.json
   def index
     if current_user.page == "global"
-      @page_carousel_slides = PageCarouselSlide.all
+      @page_carousel_slides = PageCarouselSlide.all.order(page: :asc, position: :asc)
     else
       @page_carousel_slides = PageCarouselSlide.where(:page => current_user.page).order(position: :asc)
     end

@@ -2,6 +2,8 @@ class ArchiveItemsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index, :get_items, :sync_search_strings]
   before_action :authorize_archivist
+  before_action :store_return_to_session, only: [:new, :edit]
+
 
   def index
     page_items = params[:page_items].present? ? params[:page_items] : 25
@@ -116,8 +118,7 @@ class ArchiveItemsController < ApplicationController
     @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list])
 
     flash.alert = "An item has been created."
-    redirect_to archive_items_path
-
+    redirect_to session.delete(:return_to) || admin_archive_items_path
   end
 
   def show
@@ -185,7 +186,7 @@ class ArchiveItemsController < ApplicationController
     @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list])
 
     flash.alert = "An item has been updated."
-    redirect_to archive_items_path
+    redirect_to session.delete(:return_to) || admin_archive_items_path
   end
 
   def destroy
@@ -196,6 +197,10 @@ class ArchiveItemsController < ApplicationController
   end
 
   private
+
+  def store_return_to_session
+    session[:return_to] = request.referrer if action_name.in?(['new', 'edit'])
+  end
 
   def archive_item_params
     params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, content_files: [], :medium_photos => [])

@@ -29,6 +29,8 @@ function tagInput() {
       let optionsArr = Array.from(menuEl.children).filter(
         (option) => option.style.display !== "none"
       );
+      menuEl.style.display = "block";
+      textInputWrapper.classList.add("--is-focused");
 
       if (event.key === "ArrowDown") {
         event.preventDefault();
@@ -51,7 +53,6 @@ function tagInput() {
         optionsArr[currentHighlight].click()
         const wrapperEl = event.target.parentNode;
         wrapperEl.classList.remove("--is-focused");
-        const menuEl = wrapperEl.querySelector(".tag-ui-options-menu");
         setTimeout(() => {
           menuEl.style.display = "none";
         }, 150); // Duration of animation

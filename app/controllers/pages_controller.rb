@@ -22,6 +22,7 @@ class PagesController < ApplicationController
   def new
     @tag_options = ArchiveTag.all.order(name: :desc).pluck(:name)
     @comm_group_options = CommGroup.all.order(name: :desc).pluck(:name)
+    @collection_options = Collection.all.order(name: :desc).pluck(:name)
     @page = Page.new
   end
 
@@ -29,6 +30,7 @@ class PagesController < ApplicationController
   def edit
     @tag_options = ArchiveTag.all.order(name: :desc).pluck(:name)
     @comm_group_options = CommGroup.all.order(name: :desc).pluck(:name)
+    @collection_options = Collection.all.order(name: :desc).pluck(:name)
     @page = Page.find(params[:id])
   end
 
@@ -79,6 +81,6 @@ class PagesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def page_params
-      params.require(:page).permit(:title, :description, :tag, :slug, :header_file, :tag_list, :comm_groups, :ctatext, :ctalink, :subtitle, :donate_url)
+      params.require(:page).permit(:title, :description, :tag, :slug, :header_file, :tag_list, :comm_groups, :ctatext, :ctalink, :subtitle, :donate_url, :collection)
     end
 end

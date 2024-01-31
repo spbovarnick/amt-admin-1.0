@@ -59,6 +59,13 @@
     </div>
   </div>
 
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :collection, "Collections" %>
+      <%= form.hidden_field :collection, :value => @page.collection, class: "js-tag-input tag-input", "data-tag-options": @collection_options.join(', ') %>
+    </div>
+  </div>
+
   <%# below is commented out with 'if false' bc comm_groups is not being used in filtering archive_items to pages %>
   <% if false %>
   <div class="form-row">

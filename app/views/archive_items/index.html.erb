@@ -36,6 +36,15 @@
           <% end %>
         </th>
         <th>
+          <% if params[:sort] == 'draft' %>
+            <%= link_to 'Draft/Published', admin_archive_items_path(:sort => 'draft-desc'), class: 'sorted-down' %>
+          <% elsif params[:sort] == 'draft-desc' %>
+            <%= link_to 'Draft/Published', admin_archive_items_path(:sort => 'draft'), class: 'sorted-up' %>
+          <% else %>
+            <%= link_to 'Draft/Published', admin_archive_items_path(:sort => 'draft-desc') %>
+          <% end %>
+        </th>
+        <th>
           <% if params[:sort] == 'medium' %>
             <%= link_to 'Medium', archive_items_path(:sort => 'medium-desc'), class: 'sorted-down' %>
           <% elsif params[:sort] == 'medium-desc' %>
@@ -94,6 +103,15 @@
   <% @archive_items.each do |archive_item| %>
     <tr>
       <td><%= archive_item.title %></td>
+      <td>
+        <div class="draft-light-cel" >
+          <% if archive_item.draft %>
+            <div class="light draft"></div>
+          <% elsif !archive_item.draft %>
+            <div class="light published"></div>
+          <% end %>
+        </div>
+      </td>
       <td><%= archive_item.medium %></td>
       <td><%= archive_item.year %></td>
       <td><%= archive_item.search_locations %></td>

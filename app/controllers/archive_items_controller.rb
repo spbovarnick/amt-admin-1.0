@@ -12,6 +12,10 @@ class ArchiveItemsController < ApplicationController
       @pagy, @archive_items = get_items({title: :asc}, page_items)
     elsif params[:sort] == 'subject-desc'
       @pagy, @archive_items = get_items({title: :desc}, page_items)
+    elsif params[:sort] == 'draft'
+      @pagy, @archive_items = get_items({draft: :asc}, page_items)
+    elsif params[:sort] == 'draft-desc'
+      @pagy, @archive_items = get_items({draft: :desc}, page_items)
     elsif params[:sort] == 'medium'
       @pagy, @archive_items = get_items({medium: :asc}, page_items)
     elsif params[:sort] == 'medium-desc'
@@ -203,6 +207,6 @@ class ArchiveItemsController < ApplicationController
   end
 
   def archive_item_params
-    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, content_files: [], :medium_photos => [])
+    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, content_files: [], :medium_photos => [])
   end
 end

@@ -2,14 +2,14 @@ class Api::V1::ArchiveItemsController < ApplicationController
   include ActiveStorage::SetCurrent
   include Rails.application.routes.url_helpers
   def index
-    archive_items = ArchiveItem.all
+    archive_items = ArchiveItem.all.where(draft: false)
     archive_items = filter_tags(archive_items)
     archive_items = filter_medium_and_year(archive_items).order(created_at: :desc)
     render json: archive_items
   end
 
   def pages_index
-    archive_items = ArchiveItem.tagged_with(params[:page_tags], :any => true)
+    archive_items = ArchiveItem.where(draf: false).tagged_with(params[:page_tags], :any => true)
     archive_items = filter_tags(archive_items)
     archive_items = filter_medium_and_year(archive_items).order(created_at: :desc)
 
@@ -40,15 +40,31 @@ class Api::V1::ArchiveItemsController < ApplicationController
   end
   
   def search
+    # get items with matching tags
     if params[:page_tags].present?
-      archive_items = ArchiveItem.tagged_with(params[:page_tags], :any => true).search_archive_items(params[:q])
-      archive_items = filter_tags(archive_items)
-      archive_items = filter_medium_and_year(archive_items)
+      tag_archive_items = ArchiveItem.tagged_with(params[:page_tags], :on => :tags, :any => true).search_archive_items(params[:q])
+    end
+
+    # get items with matching collections
+    if params[:page_collections].present?
+      collection_archive_items = ArchiveItem.tagged_with(params[:page_collections], :on => :collections, :any => true).search_archive_items(params[:q])
+    end
+
+    if tag_archive_items && collection_archive_items
+      # if both item and collection items exist, combine them
+      archive_items = tag_archive_items.or(collection_archive_items)
+    elsif tag_archive_items
+      # if only one exists, use that
+      archive_items = filter_tags(tag_archive_items)
+    elsif collection_archive_items
+      archive_items = filter_tags(collection_archive_items)
     else
+      # if none of the above conditions are met, just search for items
       archive_items = ArchiveItem.search_archive_items(params[:q])
       archive_items = filter_tags(archive_items)
-      archive_items = filter_medium_and_year(archive_items)
     end
+
+    archive_items = filter_medium_and_year(archive_items)
 
     render json: archive_items
   end

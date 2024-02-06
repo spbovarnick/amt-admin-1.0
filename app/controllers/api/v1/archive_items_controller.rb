@@ -19,9 +19,9 @@ class Api::V1::ArchiveItemsController < ApplicationController
   def timeline
     # page_tags filters results by what's connected to a given page
     if params[:page_tags].present?
-      timeline_items = ArchiveItem.tagged_with(params[:page_tags], :any => true).where.not(:year => nil).order(year: :asc)
+      timeline_items = ArchiveItem.where(draft: false).tagged_with(params[:page_tags], :any => true).where.not(:year => nil).order(year: :asc)
     else
-      timeline_items = ArchiveItem.where.not(:year => nil).order(year: :asc)
+      timeline_items = ArchiveItem.where(draft: false).where.not(:year => nil).order(year: :asc)
     end
 
     cleaned_timeline_items = []
@@ -41,13 +41,13 @@ class Api::V1::ArchiveItemsController < ApplicationController
   
   def search
     # get items with matching tags
-    if params[:page_tags].present?
-      tag_archive_items = ArchiveItem.tagged_with(params[:page_tags], :on => :tags, :any => true).search_archive_items(params[:q])
+    if params[:page_tags] && params[:page_tags].join.empty?
+      tag_archive_items = ArchiveItem.where(draft: false).tagged_with(params[:page_tags], :on => :tags, :any => true).search_archive_items(params[:q])
     end
 
     # get items with matching collections
-    if params[:page_collections].present?
-      collection_archive_items = ArchiveItem.tagged_with(params[:page_collections], :on => :collections, :any => true).search_archive_items(params[:q])
+    if params[:page_collections] && params[:page_collections].join.empty?
+      collection_archive_items = ArchiveItem.where(draft: false).tagged_with(params[:page_collections], :on => :collections, :any => true).search_archive_items(params[:q])
     end
 
     if tag_archive_items && collection_archive_items
@@ -60,7 +60,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
       archive_items = filter_tags(collection_archive_items)
     else
       # if none of the above conditions are met, just search for items
-      archive_items = ArchiveItem.search_archive_items(params[:q])
+      archive_items = ArchiveItem.where(draft: false).search_archive_items(params[:q])
       archive_items = filter_tags(archive_items)
     end
 
@@ -117,6 +117,6 @@ class Api::V1::ArchiveItemsController < ApplicationController
   end
 
   def archive_item
-    @archive_item ||= ArchiveItem.find(params[:id])
+    @archive_item ||= ArchiveItem.where(draft: false).find(params[:id])
   end
 end

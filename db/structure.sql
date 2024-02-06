@@ -179,7 +179,8 @@ CREATE TABLE public.archive_items (
     search_comm_groups character varying,
     updated_by character varying,
     ft_search tsvector GENERATED ALWAYS AS ((((((setweight(to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('english'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_collections, ''::character varying))::text), 'D'::"char"))) STORED,
-    cms_ft_search tsvector GENERATED ALWAYS AS ((((((((setweight(to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('english'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_collections, ''::character varying))::text), 'D'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(created_by, ''::character varying))::text), 'D'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(updated_by, ''::character varying))::text), 'D'::"char"))) STORED
+    cms_ft_search tsvector GENERATED ALWAYS AS ((((((((setweight(to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('english'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_collections, ''::character varying))::text), 'D'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(created_by, ''::character varying))::text), 'D'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(updated_by, ''::character varying))::text), 'D'::"char"))) STORED,
+    draft boolean DEFAULT false
 );
 
 
@@ -499,7 +500,10 @@ CREATE TABLE public.pages (
     ctatext character varying,
     ctalink character varying,
     subtitle text,
-    donate_url character varying
+    donate_url character varying,
+    collection character varying,
+    draft boolean DEFAULT false,
+    mail_list_url character varying
 );
 
 
@@ -1150,6 +1154,10 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240206001117'),
+('20240205232707'),
+('20240131184022'),
+('20240131183958'),
 ('20240125211210'),
 ('20231216204428'),
 ('20231216204427'),

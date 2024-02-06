@@ -1,19 +1,9 @@
 document.addEventListener("turbo:load", function () {
   const mediumInput = document.querySelector("#archive_item_medium");
-  const draftInput = document.querySelector("#archive_item_draft");
-  draftSelectUI(draftInput);
   showOrHidePoster(mediumInput);
   trackMedium(mediumInput);
   listenForClear();
 });
-
-function draftSelectUI(input) {
-  input.style.backgroundColor = input.value === "true" ? "#b74e55" : "#6da47c";
-  input.addEventListener("change", function () {
-    input.style.backgroundColor = input.value === "true" ? "#b74e55" : "#6da47c";
-    input.style.color = input.value === "true" ? "white" : "black";
-  });
-}
 
 function trackMedium(input) {
   input.addEventListener("change", function () {

@@ -1,6 +1,7 @@
 <% content_for :head do %>
   <%= javascript_import_module_tag "admin" %>
   <%= javascript_import_module_tag "archive_items_form" %>
+  <%= javascript_import_module_tag "draft_select" %>
 <% end %>
 <%= form_with( model: [@archive_item], local: true, html: { multipart: true, class: "admin-form" }) do |form| %>
   <div class="form-row">
@@ -206,7 +207,7 @@
       <%= form.label :draft, "Published or Saved as Draft" %>
       <div class="form-select-wrapper">
         <% default_selection = form.object.new_record? ? true : form.object.draft %>
-        <%= form.select :draft, [["Saved as draft", true], ["Published to live site", false]], selected: default_selection %>
+        <%= form.select :draft, [["Saved as draft", true], ["Published to live site", false]], {selected: default_selection}, {class: "draft-select"} %>
       </div>
     </div>
   </div>

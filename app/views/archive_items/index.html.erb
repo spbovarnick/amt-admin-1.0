@@ -104,13 +104,11 @@
     <tr>
       <td><%= archive_item.title %></td>
       <td>
-        <div class="draft-light-cel" >
-          <% if archive_item.draft %>
-            <div class="light draft"></div>
-          <% elsif !archive_item.draft %>
-            <div class="light published"></div>
-          <% end %>
-        </div>
+        <% if archive_item.draft %>
+          <div class="light draft">DRAFT</div>
+        <% elsif !archive_item.draft %>
+          <div class="light published">PUBLISHED</div>
+        <% end %>
       </td>
       <td><%= archive_item.medium %></td>
       <td><%= archive_item.year %></td>

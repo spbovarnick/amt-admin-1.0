@@ -2,7 +2,7 @@ class Api::V1::PagesController < ApplicationController
   include ActiveStorage::SetCurrent
   include Rails.application.routes.url_helpers
   def index
-    pages = Page.all.order(created_at: :desc)
+    pages = Page.all.where(draft: false).order(created_at: :desc)
     render json: pages
   end
 
@@ -17,6 +17,6 @@ class Api::V1::PagesController < ApplicationController
   private
 
   def page
-    @page ||= Page.find_by(slug: params[:slug])
+    @page ||= Page.where(draft: false).find_by(slug: params[:slug])
   end
 end

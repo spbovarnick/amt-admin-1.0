@@ -25,6 +25,13 @@
   <% @pages.each do |page| %>
     <tr>
       <td><%= page.title %></td>
+      <td>
+        <% if page.draft %>
+          <div class="light draft">DRAFT</div>
+        <% elsif !page.draft %>
+          <div class="light published">PUBLISHED</div>
+        <% end %>
+      </td>
       <td class="admin-table-actions">
         <%= button_to 'Edit', edit_page_path(page), method: 'get', class: "admin-table-button"%>
         <%= button_to 'Remove', page_path(page), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>

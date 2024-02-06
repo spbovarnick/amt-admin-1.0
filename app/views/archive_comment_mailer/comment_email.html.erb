@@ -5,7 +5,7 @@
   </head>
   <body>
     <% archive_url = Rails.env == "production" ? "https://www.worldartsfoundation.org/" : "http://localhost:3333/" %>
-    <%= link_to 'View Item', root_url + "archive-beta/" + @id, form: {target: "_blank"}%>
+    <%= link_to 'View Item', "https://www.worldartsfoundation.org/albina-community-archive/" + @id, form: {target: "_blank"}%>
     <h3>User Comment:</h3>
     <p><%= @comment %></p>
   </body>

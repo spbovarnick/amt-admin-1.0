@@ -1,3 +1,6 @@
+<%= content_for :head do %>
+  <%= javascript_import_module_tag "draft_select" %>
+<%= end %>
 <%= form_with( model: [@page], html: { class: "admin-form" }) do |form| %>
   <% if page.errors.any? %>
     <div id="error_explanation">
@@ -84,6 +87,17 @@
     <div class="form-set"></div>
   </div>
 
+
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :draft, "Published or Saved as Draft" %>
+      <div class="form-select-wrapper">
+        <% default_selection = form.object.new_record? ? true : form.object.draft %>
+        <%= form.select :draft, [["Saved as draft", true], ["Published to live site", false]], {selected: default_selection}, {class: "draft-select"} %>
+      </div>
+    </div>
+  </div>
+  
   <%# below is commented out with 'if false' bc survey form has been moved to footer %>
   <% if false %>
   <div class="form-row">

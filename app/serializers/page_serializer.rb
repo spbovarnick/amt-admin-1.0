@@ -4,7 +4,7 @@ class PageSerializer < ActiveModel::Serializer
   attributes :id, :title, :description, :tag, :header_file, :comm_groups, :ctatext, :ctalink, :subtitle, :donate_url, :collection, :draft, :mail_list_url
 
   def header_file
-    rails_blob_path(object.header_file , only_path: true) if object.header_file.attached?
+    rails_blob_url(object.header_file) if object.header_file.attached?
   end
 end
 

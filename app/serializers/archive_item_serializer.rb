@@ -9,7 +9,7 @@ class ArchiveItemSerializer < ActiveModel::Serializer
 
   def content_files
     content_files = object.content_files.map do |content_file|
-      rails_blob_path(content_file , only_path: true) if object.content_files.attached?
+      rails_blob_url(content_file ) if object.content_files.attached?
     end
   end
 
@@ -20,7 +20,7 @@ class ArchiveItemSerializer < ActiveModel::Serializer
   end
 
   def medium_photo
-    medium_photo = rails_blob_path(object.medium_photo , only_path: true) if object.medium_photo.attached?
+    medium_photo = rails_blob_url(object.medium_photo ) if object.medium_photo.attached?
   end
 
   def medium_photo_url
@@ -29,7 +29,7 @@ class ArchiveItemSerializer < ActiveModel::Serializer
 
   def medium_photos
     medium_photos = object.medium_photos.map do |medium_photo|
-      rails_blob_path(medium_photo , only_path: true) if object.medium_photos.attached?
+      rails_blob_url(medium_photo ) if object.medium_photos.attached?
     end
   end
 
@@ -40,7 +40,7 @@ class ArchiveItemSerializer < ActiveModel::Serializer
   end
 
   def poster_image
-    poster_image = rails_blob_path(object.poster_image , only_path: true) if object.poster_image.attached?
+    poster_image = rails_blob_url(object.poster_image ) if object.poster_image.attached?
   end
 
   def poster_url

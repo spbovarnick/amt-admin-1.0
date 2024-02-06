@@ -44,6 +44,8 @@ gem 'active_model_serializers', '~> 0.10.14'
 
 gem 'devise', '~> 4.9', '>= 4.9.3'
 
+gem 'rack-cors'
+
 # Use Redis adapter to run Action Cable in production
 gem "redis", ">= 4.0.1"
 

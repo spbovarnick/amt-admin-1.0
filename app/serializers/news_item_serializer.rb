@@ -3,6 +3,6 @@ class NewsItemSerializer < ActiveModel::Serializer
   attributes :id, :headline, :author, :body, :created_by, :updated_by, :photo, :cta_text, :cta_link
 
   def photo
-    photo = rails_blob_path(object.photo , only_path: true) if object.photo.attached?
+    photo = rails_blob_url(object.photo) if object.photo.attached?
   end
 end

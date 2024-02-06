@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 @import "trix";
 
 
@@ -13,7 +13,7 @@
 
 // Custom overwrites
 .admin-form trix-toolbar .trix-button {
-  background: $black-6;
+  background: variables.$black-6;
 }
 
 .admin-form .form-set .trix-button-group {
@@ -29,13 +29,13 @@
 }
 
 .trix-content {
-  background: $black-4;
+  background: variables.$black-4;
   border: none;
   border-radius: 4px;
 
   &:focus {
     outline: none;
-    border: solid 1px $purple-1;
+    border: solid 1px variables.$purple-1;
   }
 }
 

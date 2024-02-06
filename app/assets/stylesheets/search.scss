@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .search__form {
     display: flex;
@@ -8,16 +8,16 @@
     padding: 8px 12px;
     border-radius: 33px;
     border: solid 1px transparent;
-    background: $white-1;
-    color: $black-1;
+    background: variables.$white-1;
+    color: variables.$black-1;
     margin-right: 10px;
     font-size: 13px;
     width: 200px;
 }
 
 .search__button--round {
-    background: $purple-3;
-    color: $white-1;
+    background: variables.$purple-3;
+    color: variables.$white-1;
     border-radius: 33px;
     border: none;
     min-width: 40px;
@@ -26,7 +26,7 @@
     padding: 10px 20px;
 
     &:hover {
-        background: $purple-4;
+        background: variables.$purple-4;
     }
 }
 
@@ -36,7 +36,7 @@
 }
 
 .search__clear {
-    border: solid 2px $purple-3;
+    border: solid 2px variables.$purple-3;
     position: absolute;
     top: 3px;
     right: 13px;
@@ -44,10 +44,10 @@
     aspect-ratio: 1/1;
     cursor: pointer;
     border-radius: 50px;
-    color: $purple-3;
+    color: variables.$purple-3;
     background: url("close.svg") center center no-repeat;
 
     &:hover {
-        border: solid 2px $purple-4;
+        border: solid 2px variables.$purple-4;
     }
 }

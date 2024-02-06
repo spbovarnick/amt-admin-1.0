@@ -1,17 +1,17 @@
-@import "variables";
+@use "variables";
 $table-max-width: 1600px;
 
 .notice,
 .alert {
   width: 100%;
-  color: $purple-1;
+  color: variables.$purple-1;
   padding: 20px 0px;
   font-style: italic;
 }
 
 .--is-admin {
-  background: $black-1;
-  color: $white-1;
+  background: variables.$black-1;
+  color: variables.$white-1;
   padding: 120px 46px 20px 46px;
 
   .global-nav {
@@ -22,7 +22,7 @@ $table-max-width: 1600px;
     width: 100%;
 
     &.--is-light {
-      background: $purple-1;
+      background: variables.$purple-1;
     }
   }
 
@@ -34,7 +34,7 @@ $table-max-width: 1600px;
     .items-select {
       color: white;
       background-color: black;
-      border: solid 1px $black-4;
+      border: solid 1px variables.$black-4;
       padding: 4px;
       border-radius: 4px;
     }
@@ -52,14 +52,14 @@ $table-max-width: 1600px;
 
 .admin-heading {
   margin-bottom: 30px;
-  color: $white-1;
+  color: variables.$white-1;
   font-size: 24px;
   font-weight: normal;
   width: 100%;
 }
 
 .admin-breadcrumbs {
-  color: $black-5;
+  color: variables.$black-5;
   font-size: 14px;
   margin-bottom: 10px;
 
@@ -89,13 +89,13 @@ $table-max-width: 1600px;
 
   td {
     padding: 10px 15px;
-    border-bottom: solid 1px $black-4;
+    border-bottom: solid 1px variables.$black-4;
   }
 
 
   th {
     padding: 10px 15px;
-    border-bottom: solid 1px $black-5;
+    border-bottom: solid 1px variables.$black-5;
   }
 }
 .flag {
@@ -128,7 +128,7 @@ $table-max-width: 1600px;
         right: -10px;
         width: 1px;
         height: 100%;
-        background: $black-4;
+        background: variables.$black-4;
       }
     }
   }
@@ -191,7 +191,7 @@ $table-max-width: 1600px;
     }
 
     &.form-controls {
-      border-top: solid 1px $black-4;
+      border-top: solid 1px variables.$black-4;
       margin-top: 20px;
       padding-top: 20px;
 
@@ -222,16 +222,16 @@ $table-max-width: 1600px;
   input[type="text"],
   textarea {
     border: solid 1px transparent;
-    background: $black-4;
+    background: variables.$black-4;
     padding: 8px;
     border-radius: 4px;
     margin-top: 4px;
-    color: $white-1;
+    color: variables.$white-1;
     max-width: 100%;
 
     &:focus {
       outline: none;
-      border: solid 1px $purple-1;
+      border: solid 1px variables.$purple-1;
     }
   }
 
@@ -239,18 +239,18 @@ $table-max-width: 1600px;
     -webkit-appearance: none;
     -moz-appearance: none;
     border: solid 1px transparent;
-    background: $black-4;
+    background: variables.$black-4;
     padding: 8px 30px 8px 8px;
     border-radius: 4px;
     margin-top: 4px;
-    color: $white-1;
+    color: variables.$white-1;
     width: 100%;
     max-width: 100%;
     outline: none;
 
     &:focus,
     &:focus-visible {
-      border: solid 1px $purple-1;
+      border: solid 1px variables.$purple-1;
     }
   }
 
@@ -282,7 +282,7 @@ $table-max-width: 1600px;
     height: 15px;
 
     &:focus {
-      outline: solid 1px $purple-1;
+      outline: solid 1px variables.$purple-1;
     }
   }
 
@@ -292,8 +292,8 @@ $table-max-width: 1600px;
     margin-right: 10px;
     border-radius: 33px;
     border: solid 1px transparent;
-    background: $white-1;
-    color: $black-1;
+    background: variables.$white-1;
+    color: variables.$black-1;
     cursor: pointer;
     display: inline-block;
   }
@@ -305,7 +305,7 @@ $table-max-width: 1600px;
   }
 
   .download-link {
-    color: $black-5;
+    color: variables.$black-5;
     text-decoration: underline;
   }
 }
@@ -331,7 +331,7 @@ $table-max-width: 1600px;
   position: absolute;
   top: 6px;
   left: 6px;
-  color: $black-5;
+  color: variables.$black-5;
   cursor: pointer;
   text-decoration: none;
   filter: drop-shadow(3px 3px 2px #000);
@@ -349,7 +349,7 @@ $table-max-width: 1600px;
 }
 
 .admin-form-filename {
-  color: $black-5;
+  color: variables.$black-5;
 }
 
 body.--is-admin .pagy-nav {
@@ -359,8 +359,8 @@ body.--is-admin .pagy-nav {
   .page {
     padding-right: 5px;
     margin-right: 5px;
-    border-right: solid 1px $black-4;
-    color: $black-6;
+    border-right: solid 1px variables.$black-4;
+    color: variables.$black-6;
 
     &:last-child {
       border-right: none;
@@ -369,15 +369,15 @@ body.--is-admin .pagy-nav {
 
   .page.prev,
   .page.next {
-    color: $black-6;
+    color: variables.$black-6;
   }
 
   .page.disabled {
-    color: $black-3;
+    color: variables.$black-3;
   }
 
   .page.active {
-    color: $white-1;
+    color: variables.$white-1;
     position: relative;
 
     &:after {
@@ -387,7 +387,7 @@ body.--is-admin .pagy-nav {
       position: absolute;
       left: 0;
       bottom: -2px;
-      background: $purple-1;
+      background: variables.$purple-1;
     }
   }
 }
@@ -401,7 +401,7 @@ body.--is-admin .pagy-nav {
     height: 0;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
-    border-bottom: 7px solid $purple-1;
+    border-bottom: 7px solid variables.$purple-1;
     position: absolute;
     bottom: 7px;
     right: -15px;
@@ -415,11 +415,11 @@ body.--is-admin .pagy-nav {
   padding: 5px 10px;
 
   &.draft {
-    background-color: $draft-red;
+    background-color: variables.$draft-red;
   }
 
   &.published {
-    background-color: $published-green;
+    background-color: variables.$published-green;
   }
 }
 
@@ -432,7 +432,7 @@ body.--is-admin .pagy-nav {
     height: 0;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
-    border-top: 7px solid $purple-1;
+    border-top: 7px solid variables.$purple-1;
     position: absolute;
     bottom: 7px;
     right: -15px;
@@ -445,7 +445,7 @@ body.--is-admin .pagy-nav {
   }
 
   .global-nav__links {
-    border-right: solid 1px $black-1;
+    border-right: solid 1px variables.$black-1;
     padding-right: 10px;
     font-size: 14px;
 
@@ -458,7 +458,7 @@ body.--is-admin .pagy-nav {
 .clear_attachement_button {
   background: none;
   border: none;
-  color: $black-5;
+  color: variables.$black-5;
   display: inline;
   margin-top: 10px;
   font-size: 14px;

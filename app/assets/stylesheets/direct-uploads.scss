@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .direct-upload {
     display: inline-block;
@@ -25,7 +25,7 @@
     left: 0;
     bottom: 0;
     opacity: 0.5;
-    background: $purple-6;
+    background: variables.$purple-6;
     transition: width 120ms ease-out, opacity 60ms 60ms ease-in;
     transform: translate3d(0, 0, 0);
   }

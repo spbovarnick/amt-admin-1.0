@@ -1,12 +1,12 @@
-@import "variables";
+@use "variables";
 
 .cmpt-footer {
   padding-top: 40px;
   padding-bottom: 20px;
-  background: $white-3;
-  color: $black-1;
+  background: variables.$white-3;
+  color: variables.$black-1;
 
-  @media (min-width: $bp-md) {
+  @media (min-width: variables.$bp-md) {
     padding-top: 100px;
     padding-bottom: 80px;
   }
@@ -16,7 +16,7 @@
     flex-direction: column;
     justify-content: space-between;
 
-    @media (min-width: $bp-md) {
+    @media (min-width: variables.$bp-md) {
       flex-direction: row;
     }
   }
@@ -29,7 +29,7 @@
   justify-content: space-between;
   order: 2;
 
-  @media (min-width: $bp-md) {
+  @media (min-width: variables.$bp-md) {
     font-size: 24px;
     order: 0;
   }
@@ -37,7 +37,7 @@
   .cmpt-footer__copy {
     display: block;
 
-    @media (min-width: $bp-md) {
+    @media (min-width: variables.$bp-md) {
       display: none;
     }
   }
@@ -47,7 +47,7 @@
   .cmpt-footer__copy {
     display: none;
 
-    @media (min-width: $bp-md) {
+    @media (min-width: variables.$bp-md) {
       display: block;
     }
   }
@@ -61,7 +61,7 @@
   font-size: 20px;
   font-weight: 300;
 
-  @media (min-width: $bp-md) {
+  @media (min-width: variables.$bp-md) {
     font-size: 36px;
     margin-bottom: 80px;
   }
@@ -73,10 +73,10 @@
       margin-bottom: 0;
 
       a {
-        color: $purple-6;
+        color: variables.$purple-6;
       }
     }
-    @media (min-width: $bp-sm){
+    @media (min-width: variables.$bp-sm){
       margin-bottom: 20px;
     }
   }
@@ -90,7 +90,7 @@
   margin-top: 40px;
   margin-bottom: 10px;
 
-  @media (min-width: $bp-md) {
+  @media (min-width: variables.$bp-md) {
     margin-top: 0;
     margin-bottom: 0;
   }
@@ -107,7 +107,7 @@
 .cmpt-footer__byline {
   display: none;
 
-  @media (min-width: $bp-md) {
+  @media (min-width: variables.$bp-md) {
     display: block;
   }
 }

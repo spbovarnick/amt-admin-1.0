@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .tag-ui-button-wrapper {
     margin-top: 10px;
@@ -17,7 +17,7 @@
     margin-bottom: 8px;
     border-radius: 33px;
     border: none;
-    background: $black-6;
+    background: variables.$black-6;
     position: relative;
     
     &:not(.current-user-page-tag) {
@@ -32,8 +32,8 @@
         content: 'Remove';
         font-size: 10px;
         padding: 4px;
-        background: $purple-6;
-        color: $white-1;
+        background: variables.$purple-6;
+        color: variables.$white-1;
         position: absolute;
         top: 0;
         left: 50%;
@@ -82,17 +82,17 @@
     padding: 15px 5px;
     border-radius: 0;
     border: none;
-    border-bottom: solid 1px $black-1;
-    background: $black-2;
-    color: $white-1;
+    border-bottom: solid 1px variables.$black-1;
+    background: variables.$black-2;
+    color: variables.$white-1;
 
     &:last-child {
         border-bottom: none;
     }
 
     &:hover, &.highlighted {
-        background: $purple-5;
-        color: $black-1;
+        background: variables.$purple-5;
+        color: variables.$black-1;
     }
 }
 

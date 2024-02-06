@@ -11,16 +11,12 @@ default: &default
 
 development:
   <<: *default
-  database: waf_admin_rails_development
-
-# development:
-#   <<: *default
-#   reconnect: false
-#   database: <%= ENV['TARGET_DB'] == 'localhost' ? 'waf_admin_rails_development' : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB'] : ENV['PROD_DB']) %>
-#   pool: 5
-#   username: <%= ENV['TARGET_DB'] == 'localhost' ? nil : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB_USER'] : ENV['PROD_DB_USER']) %>
-#   password: <%= ENV['TARGET_DB'] == 'localhost' ? nil : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB_PASSWORD'] : ENV['PROD_DB_PASSWORD']) %>
-#   host: <%= ENV['TARGET_DB'] == 'localhost' ? nil : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB_HOST'] : ENV['PROD_DB_HOST']) %>
+  reconnect: false
+  database: <%= ENV['TARGET_DB'] == 'localhost' ? 'waf_admin_rails_development' : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB'] : ENV['PROD_DB']) %>
+  pool: 5
+  username: <%= ENV['TARGET_DB'] == 'localhost' ? nil : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB_USER'] : ENV['PROD_DB_USER']) %>
+  password: <%= ENV['TARGET_DB'] == 'localhost' ? nil : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB_PASSWORD'] : ENV['PROD_DB_PASSWORD']) %>
+  host: <%= ENV['TARGET_DB'] == 'localhost' ? nil : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB_HOST'] : ENV['PROD_DB_HOST']) %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

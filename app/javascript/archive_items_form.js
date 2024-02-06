@@ -1,5 +1,8 @@
 document.addEventListener("turbo:load", function () {
   const mediumInput = document.querySelector("#archive_item_medium");
+  if (!mediumInput) {
+    return;
+  }
   showOrHidePoster(mediumInput);
   trackMedium(mediumInput);
   listenForClear();

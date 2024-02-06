@@ -408,24 +408,18 @@ body.--is-admin .pagy-nav {
   }
 }
 
-.draft-light-cel {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+.light {
+  width: fit-content;
+  border-radius: 30px;
+  text-align: center;
+  padding: 5px 10px;
 
-  .light {
-    width: 30px;
-    height: 30px;
-    border-radius: 30px;
+  &.draft {
+    background-color: $draft-red;
+  }
 
-    &.draft {
-      background-color: $draft-red;
-    }
-
-    &.published {
-      background-color: $published-green;
-    }
+  &.published {
+    background-color: $published-green;
   }
 }
 

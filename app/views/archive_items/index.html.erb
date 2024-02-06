@@ -37,11 +37,11 @@
         </th>
         <th>
           <% if params[:sort] == 'draft' %>
-            <%= link_to 'Draft/Published', admin_archive_items_path(:sort => 'draft-desc'), class: 'sorted-down' %>
+            <%= link_to 'Draft/Published', archive_items_path(:sort => 'draft-desc'), class: 'sorted-down' %>
           <% elsif params[:sort] == 'draft-desc' %>
-            <%= link_to 'Draft/Published', admin_archive_items_path(:sort => 'draft'), class: 'sorted-up' %>
+            <%= link_to 'Draft/Published', archive_items_path(:sort => 'draft'), class: 'sorted-up' %>
           <% else %>
-            <%= link_to 'Draft/Published', admin_archive_items_path(:sort => 'draft-desc') %>
+            <%= link_to 'Draft/Published', archive_items_path(:sort => 'draft-desc') %>
           <% end %>
         </th>
         <th>

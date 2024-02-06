@@ -1,6 +1,7 @@
-<%= content_for :head do %>
+<% content_for :head do %>
   <%= javascript_import_module_tag "draft_select" %>
-<%= end %>
+  <%= javascript_import_module_tag "admin" %>
+<% end %>
 <%= form_with( model: [@page], html: { class: "admin-form" }) do |form| %>
   <% if page.errors.any? %>
     <div id="error_explanation">
@@ -87,6 +88,13 @@
     <div class="form-set"></div>
   </div>
 
+  <div class="form-row">
+    <div class="form-set">
+      <%= form.label :mail_list_url, "Mailing list url" %>
+      <%= form.text_field :mail_list_url, autocomplete: "off", "data-lpignore": true %>
+    </div>
+    <div class="form-set"></div>
+  </div>
 
   <div class="form-row">
     <div class="form-set">

@@ -222,6 +222,8 @@ GEM
     rack (3.0.8)
     rack-cors (2.0.1)
       rack (>= 2.0.0)
+    rack-mini-profiler (3.3.0)
+      rack (>= 1.2.0)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -364,6 +366,7 @@ DEPENDENCIES
   pg_search (~> 2.3, >= 2.3.6)
   puma (>= 5.0)
   rack-cors
+  rack-mini-profiler
   rails (~> 7.1.2)
   rails_live_reload
   ransack (~> 4.1, >= 4.1.1)

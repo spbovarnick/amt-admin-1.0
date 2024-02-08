@@ -7,6 +7,8 @@ This site is built with Ruby on Rails using the latest `importmaps` to handle js
 This app is using a postgres database locally and in production.
 To create a local database you can run `rails db:create`, and then seed it with data using `rails db:seed`.
 
+Make sure to check `storage.yml` `local` settings to use the the Pathname appropriate to your use case--setting this up from scratch or migrating from the original monorepo.
+
 If you are transitiong from the original version of this project, you can create a copy of your original local db with the following psql command:
 ```
 CREATE DATABASE waf_admin_rails_development

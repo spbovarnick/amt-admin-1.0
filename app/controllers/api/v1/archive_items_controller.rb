@@ -9,7 +9,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
   end
 
   def pages_index
-    archive_items = ArchiveItem.where(draf: false).tagged_with(params[:page_tags], :any => true)
+    archive_items = ArchiveItem.where(draft: false).tagged_with(params[:page_tags], :any => true)
     archive_items = filter_tags(archive_items)
     archive_items = filter_medium_and_year(archive_items).order(created_at: :desc)
 

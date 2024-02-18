@@ -16,7 +16,7 @@ default: &default
 development:
   <<: *default
   reconnect: false
-  database: <%= ENV['TARGET_DB'] == 'localhost' ? 'waf_admin_rails_development' : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB'] : ENV['PROD_DB']) %>
+  database: <%= ENV['TARGET_DB'] == 'localhost' ? 'amt_admin_rails_development' : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB'] : ENV['PROD_DB']) %>
   pool: 5
   username: <%= ENV['TARGET_DB'] == 'localhost' ? nil : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB_USER'] : ENV['PROD_DB_USER']) %>
   password: <%= ENV['TARGET_DB'] == 'localhost' ? nil : (ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_DB_PASSWORD'] : ENV['PROD_DB_PASSWORD']) %>

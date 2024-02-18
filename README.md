@@ -13,7 +13,7 @@ Make sure to check `storage.yml` `local` settings to use the the Pathname approp
 
 If you are transitiong from the original version of this project, you can create a copy of your original local db with the following psql command:
 ```
-CREATE DATABASE waf_admin_rails_development
+CREATE DATABASE amt_admin_rails_development
 WITH TEMPLATE waf_rails_development
 OWNER [Your username];
 ```

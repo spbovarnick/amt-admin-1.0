@@ -7,12 +7,6 @@ class ApplicationController < ActionController::Base
           redirect_to news_items_path
       end
   end
-  
-  def authorize_board_member
-      if !current_user.board_member
-          redirect_to archive_items_path
-      end
-  end
 
   def authorize_global_admin
       if !current_user.admin

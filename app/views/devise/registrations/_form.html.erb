@@ -1,7 +1,4 @@
-<% content_for :head do %>
-	<%= javascript_import_module_tag "user_registration_form" %>
-<% end %>
-<%= form_for(@user, as: :user, url: registration_path(:user), html: { class: "admin-form", method: user_form_method(@user)}) do |f| %>  
+<%= form_for(@user, as: :user, url: registration_path(:user), html: { class: ["admin-form", "user-reg-form"], method: user_form_method(@user)}) do |f| %>  
     <%= render "devise/shared/error_messages", resource: @user %>
 
 		<% if action_name == "edit" %>

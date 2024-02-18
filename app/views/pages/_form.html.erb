@@ -1,8 +1,4 @@
-<% content_for :head do %>
-  <%= javascript_import_module_tag "draft_select" %>
-  <%= javascript_import_module_tag "admin" %>
-<% end %>
-<%= form_with( model: [@page], html: { class: "admin-form" }) do |form| %>
+<%= form_with( model: [@page], html: { class: ["admin-form", "page-form"] }) do |form| %>
   <% if page.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(page.errors.count, "error") %> prohibited this page from being saved:</h2>

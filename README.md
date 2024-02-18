@@ -22,7 +22,7 @@ OWNER [Your username];
 - Make sure you have [redis](https://redis.io/docs/install/install-redis/install-redis-on-mac-os/) installed globally (`brew install redis`) and running while working in development
 - Install node modules: `yarn install`
 - Precompile assets: `bundle exec rake assets:precompile`
-- The master key stored in the ignored `master.key` file is required to access `google_maps_api_key`, which is stored in `config/credentials.yml.enc`
+- The master key stored in the ignored `master.key` file is required to access mailer address and app-specific password, which is stored in `config/credentials.yml.enc`
 - Rather than `rails s`, boot the development server with the `bin/dev` command, which points to `Procfile.dev` to start the server and watch for `Sass` changes
 
 ### Third Party Tools

@@ -16,6 +16,8 @@ WITH TEMPLATE waf_rails_development
 OWNER [Your username];
 ```
 
+Because ActiveRecord attachments from the original db are stored within the other repo, you'll need to move them to this repo to access them. You can do so from your terminal with the command `cp -r absolute/path/to/original/repo/storage/* absolute/path/to/new/repo/storage`. You can get the absolute path to each repo's storage directory by opening each respective project's console and entering `Rails.root.join("storage")`.
+
 ### Local Development
 
 - Make sure you have yarn installed globaly: `npm install --global yarn`
@@ -24,6 +26,8 @@ OWNER [Your username];
 - Precompile assets: `bundle exec rake assets:precompile`
 - The master key stored in the ignored `master.key` file is required to access mailer address and app-specific password, which is stored in `config/credentials.yml.enc`
 - Rather than `rails s`, boot the development server with the `bin/dev` command, which points to `Procfile.dev` to start the server and watch for `Sass` changes
+
+If you encounter the error `[__NSCFConstantString initialize] may have been in progress in another thread when fork() was called. We cannot safely call it or ignore it in the fork() child process. Crashing instead. Set a breakpoint on objc_initializeAfterForkError to debug.` add `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` to your `~/.zshrc` or `~/.bashrc`. You can check that the `OBJC_DISABLE_INITIALIZE_FORK_SAFETY` variable is set correctly by opening a fresh terminal from within your IDE and running `echo $OBJC_DISABLE_INITIALIZE_FORK_SAFETY`. If `YES` is returned, go ahead and start the server.
 
 ### Third Party Tools
 

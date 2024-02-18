@@ -4,10 +4,7 @@ test:
 
 local:
   service: Disk
-  # This root value allows access to the records copied from your OG local waf db
-  root: <%= Rails.root.sub("-admin-1.0", "").join("storage") %>
-  # If you are starting this project from scratch uncomment the line below
-  # root: <%= Rails.root.join("storage") %>
+  root: <%= Rails.root.join("storage") %>
 
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 amazon:

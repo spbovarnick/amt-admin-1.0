@@ -15,11 +15,13 @@ class CarouselSlidesController < ApplicationController
 
   # GET /carousel_slides/new
   def new
+    @pages_options = Page.all.order(title: :asc).pluck(:title, :slug)
     @carousel_slide = CarouselSlide.new
   end
 
   # GET /carousel_slides/1/edit
   def edit
+    @pages_options = Page.all.order(title: :asc).pluck(:title, :slug)
   end
 
   # POST /carousel_slides or /carousel_slides.json

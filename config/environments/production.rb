@@ -7,8 +7,8 @@ Rails.application.configure do
   config.enable_reloading = false
 
   config.action_mailer.delivery_method = :smtp
-  host = 'worldartsfoundation.org'
-  config.action_mailer.default_url_options = { :host => 'worldartsfoundation.org', protocol: 'https' }
+  host = 'https://amt-admin-727b777103da.herokuapp.com'
+  config.action_mailer.default_url_options = { :host => 'https://amt-admin-727b777103da.herokuapp.com', protocol: 'https' }
   config.action_mailer.smtp_settings = {
     address:              'smtp.gmail.com',
     port:                 587,

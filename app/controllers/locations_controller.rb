@@ -2,7 +2,6 @@ class LocationsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index]
   before_action :set_location, only: %i[ show edit update destroy ]
-  before_action :authorize_archivist
 
   # GET /locations or /locations.json
   def index

@@ -2,7 +2,6 @@ class CarouselSlidesController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!
   before_action :set_carousel_slide, only: %i[ show edit update destroy ]
-  before_action :authorize_archivist
 
   # GET /carousel_slides or /carousel_slides.json
   def index

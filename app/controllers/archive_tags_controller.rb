@@ -2,7 +2,6 @@ class ArchiveTagsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index]
   before_action :set_archive_tag, only: %i[ show edit update destroy ]
-  before_action :authorize_archivist
 
   # GET /archive_tags or /archive_tags.json
   def index

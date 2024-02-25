@@ -2,8 +2,6 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   resources :page_carousel_slides
-  resources :leadership_roles
-  resources :news_items
   resources :carousel_slides
   resources :pages
   resources :comm_groups
@@ -38,10 +36,6 @@ Rails.application.routes.draw do
       get 'people/index'
       get 'carousel_slides/index'
       get 'collections/index'
-      get 'news_items/index'
-      get 'leadership_roles/index'
-      get 'leadership_roles/board'
-      get 'leadership_roles/staff'
       get 'page_carousel_slides/index'
       post 'comments', to: 'comments#create'
     end

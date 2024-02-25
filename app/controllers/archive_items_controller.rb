@@ -1,7 +1,6 @@
 class ArchiveItemsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index, :get_items, :sync_search_strings]
-  before_action :authorize_archivist
   before_action :store_return_to_session, only: [:new, :edit]
 
 

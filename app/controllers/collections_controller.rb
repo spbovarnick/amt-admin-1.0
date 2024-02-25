@@ -2,7 +2,6 @@ class CollectionsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index]
   before_action :set_collection, only: %i[ show edit update destroy ]
-  before_action :authorize_archivist
   PAGE_ITEMS = 25
 
   # GET /collections or /collections.json

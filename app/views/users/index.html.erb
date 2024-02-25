@@ -27,14 +27,12 @@
 			<td>
 				<% if user.admin %>
 				Admin
-				<% elsif user.board_member %>
-				Board Member
-				<% elsif user.archivist %>
+				<% else %>
 				Archivist
 				<% end %>
 			</td>
 			<td>
-				<% if user.archivist && !user.admin %>
+				<% if !user.admin %>
 					<%= user.page %>
 				<% end %>
 			</td>

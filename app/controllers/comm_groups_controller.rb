@@ -3,7 +3,6 @@ class CommGroupsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index]
   before_action :set_comm_group, only: %i[ show edit update destroy ]
-  before_action :authorize_archivist
 
   # GET /comm_groups or /comm_groups.json
   def index

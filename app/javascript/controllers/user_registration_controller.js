@@ -3,60 +3,29 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller { 
   connect() {
     toggleAdminFields();
-    toggleArchivistFields();
     passwordMatch();
 
     // selects and disables fields based on admin select true or false
     function toggleAdminFields() {
       const adminInput = document.querySelector("#user_admin");
-      const boardMemberSelect = document.querySelector("#user_board_member");
-      const archivistSelect = document.querySelector("#user_archivist");
       const pageInput = document.querySelector("#user_page");
       const nilValue = pageInput.querySelector("#nil-value");
 
-      adminInput.value === "true" ? disabledFields(adminInput, boardMemberSelect, archivistSelect, pageInput) : null;
+      adminInput.value === "true" ? disabledFields(adminInput, pageInput) : null;
 
       adminInput.addEventListener("change", (event) => {
         if (event.target.value === "true") {
-          disabledFields(adminInput, boardMemberSelect, archivistSelect, pageInput);
+          disabledFields(adminInput, pageInput);
         } else if (event.target.value === "false") {
-          boardMemberSelect.querySelector("option[value='false']").selected = true;
-          boardMemberSelect.disabled = false;
-          archivistSelect.querySelector("option[value='false']").selected = true;
-          archivistSelect.disabled = false;
-          nilValue.selected = true;
-          if (archivistSelect.value === "false") {
-            pageInput.disabled = true;
-          }
-        }
-      });
-    }
-
-    function toggleArchivistFields() {
-      const archivistSelect = document.querySelector("#user_archivist");
-      const pageInput = document.querySelector("#user_page");
-      const adminInput = document.querySelector("#user_admin");
-
-      // controls page select access based on archivist/admin role assignment
-      archivistSelect.value === "false" ? pageInput.disabled = true : null
-      archivistSelect.addEventListener("change", (event) => {
-        // if user not archivist, no page access granted, :page => nil
-        if (event.target.value === "false") {
-          pageInput.disabled = true;
-          pageInput.querySelector("#nil-value").selected = true;
-        } else {
           pageInput.disabled = false;
+          nilValue.selected = true;
         }
       });
     }
 
-    function disabledFields(adminInput, boardMemberSelect, archivistSelect, pageInput) {
+    function disabledFields(adminInput, pageInput) {
       const globalOption = pageInput.querySelector("option[value='global']");
       if (adminInput.value === "true") {
-        boardMemberSelect.querySelector("option[value='true']").selected = true;
-        boardMemberSelect.disabled = true;
-        archivistSelect.querySelector("option[value='true']").selected = true;
-        archivistSelect.disabled = true;
         globalOption.selected = true;
         pageInput.disabled = true;
       }

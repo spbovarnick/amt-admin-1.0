@@ -2,7 +2,6 @@ class PagesController < ApplicationController
   layout 'admin', except: [:display]
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index]
   before_action :set_page, only: %i[ show edit update destroy ]
-  before_action :authorize_archivist
 
   # GET /pages or /pages.json
   def index

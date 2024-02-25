@@ -2,7 +2,6 @@ class PeopleController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index]
   before_action :set_person, only: %i[ show edit update destroy ]
-  before_action :authorize_archivist
 
   # GET /people or /people.json
   def index

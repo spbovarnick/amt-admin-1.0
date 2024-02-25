@@ -74,17 +74,17 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:board_member, :archivist, :page, :admin])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:page, :admin])
   end
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [:board_member, :archivist, :page, :admin, :id])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:page, :admin, :id])
   end
 
   # method overrides some of Devise's built-in to allow for blank password field on update
   def account_update_params
-    update_params = params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :admin, :board_member, :archivist, :page)
+    update_params = params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :admin, :page)
 
     if update_params[:password].blank? && update_params[:password_confirmation].blank?
       update_params.delete(:password)

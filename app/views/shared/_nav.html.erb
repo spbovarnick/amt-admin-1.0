@@ -2,22 +2,20 @@
     <a class="global-nav__home-link" href="/">ALBINA COMMUNITY ARCHIVE</a>
     <div class="global-nav__right">
         <ul class="global-nav__links">
-        <% if current_user.try(:archivist?) %>
-            <li><%= link_to "Archive Items", archive_items_path %></li>
-            <li class="global-nav__associated">
-                <div class="global-nav__associated-link">Associated Data <span class="global-nav__associated-arrow">></span></div>
-                <ul class="sub-menu">
-                    <li><%= link_to "Tags", archive_tags_path %></li>
-                    <li><%= link_to "Locations", locations_path %></li>
-                    <li><%= link_to "Community Groups", comm_groups_path %></li>
-                    <li><%= link_to "People", people_path %></li>
-                    <li><%= link_to "Collections", collections_path %></li>
-                </ul>
-            </li>
-            <li><%= link_to "Pages", pages_path %></li>
-            <li><%= link_to "Features", carousel_slides_path %></li>
-            <li><%= link_to "Page Carousel Slides", page_carousel_slides_path %></li>
-        <% end %>
+        <li><%= link_to "Archive Items", archive_items_path %></li>
+        <li class="global-nav__associated">
+            <div class="global-nav__associated-link">Associated Data <span class="global-nav__associated-arrow">></span></div>
+            <ul class="sub-menu">
+                <li><%= link_to "Tags", archive_tags_path %></li>
+                <li><%= link_to "Locations", locations_path %></li>
+                <li><%= link_to "Community Groups", comm_groups_path %></li>
+                <li><%= link_to "People", people_path %></li>
+                <li><%= link_to "Collections", collections_path %></li>
+            </ul>
+        </li>
+        <li><%= link_to "Pages", pages_path %></li>
+        <li><%= link_to "Features", carousel_slides_path %></li>
+        <li><%= link_to "Page Carousel Slides", page_carousel_slides_path %></li>
         <% if current_user.try(:admin?) %>
             <li><%= link_to "User Accounts", users_path %></li>
         <% end %>

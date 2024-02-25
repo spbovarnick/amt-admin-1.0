@@ -77,7 +77,7 @@ User.create!({:email => "someone@gmail.com", :password => "testpass", :password_
 
 #### Archivists
 
-Users with archivist authorization can access and create Archive Items, all associated Page Data, and Pages. Such users can be created through the console with the following command:
+All non-admin users are considered archiviststs and can access and create Archive Items, all associated Page Data, and Pages. Such users can be created through the console with the following command:
 <br/>
 Archivists can only access records and pages related to the organization they are working for. Organizational affiliation is indicated with the `:page` key. In the example below, the archivist account will be used by someone working under Albina Music Trust. It is important here that the value entered for `:page` exactly match the tag being used on the associated page.
 <br/>
@@ -86,7 +86,7 @@ For global access to all archive records, `:page => "global"`
 Users with archivist authorization can be created through the console with the following command (in this example the archivist is affiliated with Albina Music Trust):
 
 ```
-User.create!({:email => "someone@gmail.com", :password => "testpass", :password_confirmation => "testpass", :archivist => true, :page => "Albina Music Trust"})
+User.create!({:email => "someone@gmail.com", :password => "testpass", :password_confirmation => "testpass", :page => "Albina Music Trust"})
 ```
 
 ### Third Party Tools

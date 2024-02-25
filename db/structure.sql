@@ -9,6 +9,27 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: heroku_ext; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA heroku_ext;
+
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON SCHEMA public IS '';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -90,10 +111,10 @@ CREATE TABLE public.active_storage_blobs (
     filename character varying NOT NULL,
     content_type character varying,
     metadata text,
+    service_name character varying NOT NULL,
     byte_size bigint NOT NULL,
-    checksum character varying,
-    created_at timestamp without time zone NOT NULL,
-    service_name character varying NOT NULL
+    checksum character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -178,6 +199,7 @@ CREATE TABLE public.archive_items (
     search_collections character varying,
     search_comm_groups character varying,
     updated_by character varying,
+    searchable tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text)) STORED,
     ft_search tsvector GENERATED ALWAYS AS ((((((setweight(to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('english'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_collections, ''::character varying))::text), 'D'::"char"))) STORED,
     cms_ft_search tsvector GENERATED ALWAYS AS ((((((((setweight(to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('english'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_collections, ''::character varying))::text), 'D'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(created_by, ''::character varying))::text), 'D'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(updated_by, ''::character varying))::text), 'D'::"char"))) STORED,
     draft boolean DEFAULT false
@@ -337,37 +359,12 @@ ALTER SEQUENCE public.comm_groups_id_seq OWNED BY public.comm_groups.id;
 
 
 --
--- Name: leadership_roles; Type: TABLE; Schema: public; Owner: -
+-- Name: data_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.leadership_roles (
-    id bigint NOT NULL,
-    name character varying,
-    title character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    section character varying,
-    "position" integer
+CREATE TABLE public.data_migrations (
+    version character varying NOT NULL
 );
-
-
---
--- Name: leadership_roles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.leadership_roles_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: leadership_roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.leadership_roles_id_seq OWNED BY public.leadership_roles.id;
 
 
 --
@@ -404,43 +401,6 @@ CREATE SEQUENCE public.locations_id_seq
 --
 
 ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
-
-
---
--- Name: news_items; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.news_items (
-    id bigint NOT NULL,
-    headline character varying,
-    author character varying,
-    body text,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    created_by character varying,
-    updated_by character varying,
-    cta_text character varying,
-    cta_link character varying
-);
-
-
---
--- Name: news_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.news_items_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: news_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.news_items_id_seq OWNED BY public.news_items.id;
 
 
 --
@@ -650,10 +610,8 @@ CREATE TABLE public.users (
     remember_created_at timestamp without time zone,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    board_member boolean DEFAULT false,
-    archivist boolean DEFAULT false,
-    page character varying,
-    admin boolean DEFAULT false
+    admin boolean DEFAULT false,
+    page character varying
 );
 
 
@@ -740,24 +698,10 @@ ALTER TABLE ONLY public.comm_groups ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
--- Name: leadership_roles id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.leadership_roles ALTER COLUMN id SET DEFAULT nextval('public.leadership_roles_id_seq'::regclass);
-
-
---
 -- Name: locations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
-
-
---
--- Name: news_items id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.news_items ALTER COLUMN id SET DEFAULT nextval('public.news_items_id_seq'::regclass);
 
 
 --
@@ -883,11 +827,11 @@ ALTER TABLE ONLY public.comm_groups
 
 
 --
--- Name: leadership_roles leadership_roles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: data_migrations data_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.leadership_roles
-    ADD CONSTRAINT leadership_roles_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.data_migrations
+    ADD CONSTRAINT data_migrations_pkey PRIMARY KEY (version);
 
 
 --
@@ -896,14 +840,6 @@ ALTER TABLE ONLY public.leadership_roles
 
 ALTER TABLE ONLY public.locations
     ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
-
-
---
--- Name: news_items news_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.news_items
-    ADD CONSTRAINT news_items_pkey PRIMARY KEY (id);
 
 
 --
@@ -1005,38 +941,10 @@ CREATE INDEX index_archive_items_on_cms_ft_search ON public.archive_items USING 
 
 
 --
--- Name: index_archive_tags_on_name; Type: INDEX; Schema: public; Owner: -
+-- Name: index_archive_items_on_searchable; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_archive_tags_on_name ON public.archive_tags USING btree (name);
-
-
---
--- Name: index_collections_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_collections_on_name ON public.collections USING btree (name);
-
-
---
--- Name: index_comm_groups_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_comm_groups_on_name ON public.comm_groups USING btree (name);
-
-
---
--- Name: index_locations_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_locations_on_name ON public.locations USING btree (name);
-
-
---
--- Name: index_people_on_name; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_people_on_name ON public.people USING btree (name);
+CREATE INDEX index_archive_items_on_searchable ON public.archive_items USING gin (searchable);
 
 
 --
@@ -1151,9 +1059,12 @@ ALTER TABLE ONLY public.active_storage_attachments
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user", public;
+SET search_path TO "$user", public, heroku_ext;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240225182257'),
+('20240225181921'),
+('20240225181409'),
 ('20240201054536'),
 ('20240131222623'),
 ('20240131174547'),
@@ -1188,30 +1099,14 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230707214836'),
 ('20230627060100'),
 ('20230619202459'),
-('20230615191034'),
-('20230615191033'),
-('20230615191032'),
-('20230608180428'),
-('20230608180207'),
-('20230608175408'),
-('20230608024934'),
-('20230608015631'),
-('20230607011756'),
-('20230607010642'),
-('20230607010239'),
-('20230605232242'),
-('20230605232009'),
-('20230605231640'),
 ('20230603003822'),
 ('20230603003654'),
-('20230603003315'),
 ('20230603002926'),
 ('20230603002217'),
 ('20230602003746'),
 ('20230601224852'),
 ('20230601224818'),
 ('20230601224620'),
-('20230601224051'),
 ('20230601201144'),
 ('20230531194250'),
 ('20230531194007'),

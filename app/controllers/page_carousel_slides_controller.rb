@@ -2,7 +2,6 @@ class PageCarouselSlidesController < ApplicationController
   layout 'admin', except: [:display]
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index]
   before_action :set_page_carousel_slide, only: %i[ show edit update destroy ]
-  before_action :authorize_archivist
 
   # GET /page_carousel_slides or /page_carousel_slides.json
   def index

@@ -82,11 +82,11 @@ class Api::V1::ArchiveItemsController < ApplicationController
   def choose_timeline_media(item)
     valid_formats = [".jpg", ".jpeg", ".png"]
     if item.poster_image.attached?
-      path = rails_blob_url(item.poster_image) 
+      path = item.poster_image.url()
     elsif item.medium_photos.attached?
-      path = rails_blob_url(item.medium_photos[0])
+      path = item.medium_photos[0].url()
     elsif item.content_files.attached?
-      path = rails_blob_url(item.content_files[0])
+      path = item.content_files[0].url()
       if !valid_formats.include?(File.extname(path))
         path = nil
       end

@@ -41,6 +41,8 @@ Optional values for `TARGET_DB` are:
 - `staging`
 - `production`
 
+*NOTE! Be vigilant about your `TARGET_DB` value. Targeting production can result in unwanted mutations to the prod db.
+
 ### Asset storage
 
 In the production environment, all files uploaded through the admin are saved to an Amazon S3 bucket. There are different buckets for staging and prod, but what bucket is used is based on the environment's config vars.

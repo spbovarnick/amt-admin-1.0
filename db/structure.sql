@@ -902,6 +902,27 @@ CREATE INDEX index_archive_items_on_cms_ft_search ON public.archive_items USING 
 
 
 --
+-- Name: index_archive_items_on_draft; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archive_items_on_draft ON public.archive_items USING btree (draft);
+
+
+--
+-- Name: index_archive_items_on_medium; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archive_items_on_medium ON public.archive_items USING btree (medium);
+
+
+--
+-- Name: index_archive_items_on_year; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archive_items_on_year ON public.archive_items USING btree (year);
+
+
+--
 -- Name: index_archive_tags_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1051,6 +1072,11 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240226222030'),
+('20240226221955'),
+('20240226221840'),
+('20240226081006'),
+('20240226080910'),
 ('20240225182257'),
 ('20240225181921'),
 ('20240225181409'),

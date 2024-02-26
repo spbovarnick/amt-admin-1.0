@@ -18,25 +18,32 @@ class Api::V1::ArchiveItemsController < ApplicationController
 
   def timeline
     # page_tags filters results by what's connected to a given page
-    if params[:page_tags].present?
-      timeline_items = ArchiveItem.where(draft: false).tagged_with(params[:page_tags], :any => true).where.not(:year => nil).order(year: :asc)
-    else
-      timeline_items = ArchiveItem.where(draft: false).where.not(:year => nil).order(year: :asc)
-    end
+    conditions = {draft: false}
+    conditions[:tags] = params[:page_tags] if params[:page_tags].present?
 
-    cleaned_timeline_items = []
-    timeline_items.each do |item|
-      clean_item = {
+    timeline_items = ArchiveItem
+                    .select(:id, :year, :title, :date_is_approx, :medium)
+                    .where(conditions)
+                    .merge(ArchiveItem.where.not(year: nil))
+                    .with_attached_poster_image
+                    .with_attached_medium_photos
+                    .with_attached_content_files
+                    .order(year: :asc)
+
+     items_as_json = timeline_items.map do |item|
+      {
         id: item.id,
         year: item.year,
-        title: item.title.split("").length > 37 ? item.title.split("").slice(0, 37).push("...").join() : item.title,
-        media: choose_timeline_media(item),
-        date_is_approx: item.date_is_approx
+        title: item.title,
+        date_is_approx: item.date_is_approx,
+        medium: item.medium,
+        poster_image_url: item.poster_image.attached? ? item.poster_image.url() : nil,
+        medium_photo_url: item.medium_photos.attached? ? item.medium_photos[0].url() : nil,
+        content_file_url: item.content_files.attached? ? item.content_files[0].url() : nil
       }
-      cleaned_timeline_items.push(clean_item)
     end
-
-    render json: cleaned_timeline_items 
+    
+    render json: items_as_json
   end
   
   def search
@@ -78,27 +85,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
   end
 
   private
-
-  def choose_timeline_media(item)
-    valid_formats = [".jpg", ".jpeg", ".png"]
-    if item.poster_image.attached?
-      path = item.poster_image.url()
-    elsif item.medium_photos.attached?
-      path = item.medium_photos[0].url()
-    elsif item.content_files.attached?
-      path = item.content_files[0].url()
-      if !valid_formats.include?(File.extname(path))
-        path = nil
-      end
-    end
-    
-    {
-      url: path,
-      medium: item.medium
-    }
-    
-  end
-
+  
   def filter_tags(archive_items)
     allTags = params.slice(:tags, :locations, :comm_groups, :people, :collections).values.flatten.compact
     allTags.length > 0 ? archive_items.tagged_with(allTags, :any => true) : archive_items

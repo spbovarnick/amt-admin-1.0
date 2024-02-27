@@ -91,3 +91,5 @@ gem "dartsass-rails", "~> 0.5.0"
 group :development do
   gem "rails_live_reload"
 end
+
+gem 'dalli', '~> 2.7', '>= 2.7.6'

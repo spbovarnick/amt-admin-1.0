@@ -31,17 +31,20 @@ class Api::V1::ArchiveItemsController < ApplicationController
                     .with_attached_content_files
                     .order(year: :asc)
 
-     items_as_json = Rails.cache.fetch(cache_key, expires_in: 12.hours) dotimeline_items.map do |item|
-      {
-        id: item.id,
-        year: item.year,
-        title: item.title,
-        date_is_approx: item.date_is_approx,
-        medium: item.medium,
-        poster_image_url: item.poster_image.attached? ? item.poster_image.url() : nil,
-        medium_photo_url: item.medium_photos.attached? ? item.medium_photos[0].url() : nil,
-        content_file_url: item.content_files.attached? ? item.content_files[0].url() : nil
-      }
+     items_as_json = Rails.cache.fetch(cache_key, expires_in: 4.hours ) do 
+      timeline_items.map do |item|
+        {
+          id: item.id,
+          year: item.year,
+          title: item.title,
+          date_is_approx: item.date_is_approx,
+          medium: item.medium,
+          poster_image_url: item.poster_image.attached? ? item.poster_image.url() : nil,
+          medium_photo_url: item.medium_photos.attached? ? item.medium_photos[0].url() : nil,
+          content_file_url: item.content_files.attached? ? item.content_files[0].url() : nil,
+          time: Time.current
+        }
+      end
     end
     
     render json: items_as_json

@@ -121,6 +121,7 @@ GEM
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crass (1.0.6)
+    dalli (2.7.11)
     dartsass-rails (0.5.0)
       railties (>= 6.0.0)
       sass-embedded (~> 1.63)
@@ -341,6 +342,7 @@ DEPENDENCIES
   aws-sdk-s3 (~> 1.141)
   bootsnap
   capybara
+  dalli (~> 2.7, >= 2.7.6)
   dartsass-rails (~> 0.5.0)
   data_migrate (~> 9.2)
   debug

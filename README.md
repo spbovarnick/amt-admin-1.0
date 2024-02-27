@@ -53,7 +53,7 @@ The production environment is hosted on Heroku.
 
 If you haven't already, [install the Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli): `npm install -g heroku`
 
-Connect your local repo to both the production app by running `heroku git:remote -a amt-prod` from within your local `amt-admin` directory.
+Connect your local repo to both the production app by running `heroku git:remote -a amt-admin` from within your local `amt-admin` directory.
 
 To deploy the main branch to either env run: `git push [remote name] main`.
 
@@ -62,8 +62,7 @@ Migrate production ready code from staging to prod using Heroku's "promote" UI.
 
 If you need to run migraions on the Heroku app, run:
 
-- Staging: `heroku run rake db:migrate`
-- Production: `heroku run rake db:migrate --app amt-prod`
+- Production: `heroku run rake db:migrate --app amt-admin`
 
 ### Users
 

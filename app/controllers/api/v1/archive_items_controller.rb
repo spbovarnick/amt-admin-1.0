@@ -17,6 +17,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
   end
 
   def timeline
+    cache_key = "timeline/#{params[:page_tags]}"
     # page_tags filters results by what's connected to a given page
     conditions = {draft: false}
     conditions[:tags] = params[:page_tags] if params[:page_tags].present?
@@ -30,7 +31,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
                     .with_attached_content_files
                     .order(year: :asc)
 
-     items_as_json = timeline_items.map do |item|
+     items_as_json = Rails.cache.fetch(cache_key, expires_in: 12.hours) dotimeline_items.map do |item|
       {
         id: item.id,
         year: item.year,

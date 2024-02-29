@@ -18,13 +18,11 @@ class Api::V1::ArchiveItemsController < ApplicationController
 
   def timeline
     cache_key = "timeline/#{params[:page_tags]}"
-    # page_tags filters results by what's connected to a given page
-    conditions = {draft: false}
-    conditions[:tags] = params[:page_tags] if params[:page_tags].present?
 
     timeline_items = ArchiveItem
                     .select(:id, :year, :title, :date_is_approx, :medium)
-                    .where(conditions)
+                    .where(draft: false)
+                    .tagged_with(params[:page_tags], :any => true)
                     .merge(ArchiveItem.where.not(year: nil))
                     .with_attached_poster_image
                     .with_attached_medium_photos

@@ -13,6 +13,8 @@ amazon:
   secret_access_key: <%= ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_S3_SECRET'] : ENV['S3_SECRET'] %>
   region: us-west-2
   bucket: <%= ENV['TARGET_DB'] == 'staging' ? ENV['STAGING_S3_BUCKET'] : ENV['S3_BUCKET'] %>
+  upload:
+    acl: "bucket-owner-full-control"
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:

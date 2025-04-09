@@ -1,4 +1,6 @@
 # config/initializers/force_s3_acl.rb
+require "active_storage/service/s3_service"
+
 Rails.application.config.to_prepare do
   ActiveStorage::Service::S3Service.class_eval do
     private

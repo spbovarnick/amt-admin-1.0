@@ -13,8 +13,8 @@ export default class extends Controller {
 
     function trackCollection(input) {
       input.addEventListener("change", function () {
-        console.log(input.value)
-        const collectionID = input.value.toString();
+        const val = input.value.toString()
+        const collectionID = val.slice(0, val.indexOf("_"))
         const collectionIDPadded = collectionID.padStart(3, 0);
         uidCollection.innerHTML = collectionIDPadded;
       });

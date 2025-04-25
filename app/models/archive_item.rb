@@ -48,7 +48,7 @@ class ArchiveItem < ApplicationRecord
 
     # sets uid upon record creation
     after_commit :set_uid!, on: [:create, :update]
-    before_save :update_search_collections!
+    # before_save :update_search_collections!
 
     # this method copies the taggable 'metadata' from on archive_item to the form for a new one
     def copy_tags_from(other_item)

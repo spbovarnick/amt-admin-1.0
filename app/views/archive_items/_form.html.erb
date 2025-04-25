@@ -54,7 +54,7 @@
     <div class="form-set">
       <%= form.label :medium, "Medium" %>
       <div class="form-select-wrapper" >
-        <%= form.select :medium, [["Photo", "photo"], ["Film", "film"], ["Audio", "audio"], ["Article", "article"], ["Printed Material", "printed material"]], :include_blank => true %>
+        <%= form.select :medium, [["Photo", "photo"], ["Film", "film"], ["Audio", "audio"], ["Article", "article"], ["Printed Material", "printed material"]], :include_blank => true, :required => true %>
       </div>
     </div>
     <div class="form-set">
@@ -97,13 +97,7 @@
   <div class="form-row">
     <div class="form-set">
       <%= form.label :collection_list, "Collection" %>
-      <select name="archive_item[collection_list]" id="archive_item_collection_list">
-      <%= Collection.order(:name).each do |collection| %>
-        <option value="<%= collection.id %>_<%= collection.name %>">
-          <%= collection.name %>
-        </option>
-      <% end %>
-    </select>
+      <%= form.collection_select :collection_list, Collection.order(:name), :id_and_name, :name, :include_blank => true, :required => true %>
     </div>
   </div>
 

@@ -42,8 +42,13 @@ class ArchiveItem < ApplicationRecord
     has_rich_text :medium_notes
     has_one_attached :poster_image
 
+    # validations
+    validates :medium, presence: true, inclusion: { in: ["photo","film","audio","article","printed material"] }
+    # validates :collections, presence: true
+
     # sets uid upon record creation
-    after_commit :set_uid!, on: :create
+    after_commit :set_uid!, on: [:create, :update]
+    before_save :update_search_collections!
 
     # this method copies the taggable 'metadata' from on archive_item to the form for a new one
     def copy_tags_from(other_item)
@@ -64,6 +69,14 @@ class ArchiveItem < ApplicationRecord
         "printed material" => 5
     }.freeze
 
+    def only_one_collection
+
+    end
+
+    def update_search_collections
+
+    end
+
     # method for setting UID upon record creation
     def set_uid!
 
@@ -72,10 +85,12 @@ class ArchiveItem < ApplicationRecord
         coll_id = tags_on(:collections).first.id
         medium_code = MEDIUM_CODES[medium]
 
+        # pad id values with 0's
         coll_str = format('%03d', coll_id)
         medium_str = format('%03d', medium_code)
         item_str = format('%06d', id)
 
+        # halve item string for 3rd hyphen
         part1, part2 = item_str[0, 3], item_str[3, 3]
 
         update_column(:uid, "#{coll_str}-#{medium_str}-#{part1}-#{part2}")

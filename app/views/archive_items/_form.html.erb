@@ -1,4 +1,18 @@
-<%= form_with( model: [@archive_item], local: true, html: { multipart: true, class: ["admin-form", "archive-item-form"] }, data: { controller: 'draft-select tag-input archive-items-form direct-uploads'} ) do |form| %>
+<%= form_with( model: [@archive_item], local: true, html: { multipart: true, class: ["admin-form", "archive-item-form"] }, data: { controller: 'draft-select tag-input archive-items-form direct-uploads uid'} ) do |form| %>
+
+  <div class="form-row">
+    <div class="form-set">
+      <label>
+        Unique ID #
+      </label>
+      <div id="uid-box">
+        <div id="uid-inner-box">
+          <span id="uid-collection-str"><% if @archive_item.uid %><%= @archive_item.uid.slice(0, 3) %><% else %>XXX<% end %></span>-<span id="uid-medium-str"><% if @archive_item.uid %><%= @archive_item.uid.slice(4, 3) %><% else %>XXX<% end %></span>-<span id="uid-item-str"><% if @item_uid_str %><%= @item_uid_str %><% else %><%= @part1 %>-<%= @part2 %><% end %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="form-row">
     <div class="form-set">
       <%= form.label :title, "Subject" %>
@@ -40,7 +54,7 @@
     <div class="form-set">
       <%= form.label :medium, "Medium" %>
       <div class="form-select-wrapper" >
-        <%= form.select :medium, [["Photo", "photo"], ["Film", "film"], ["Audio", "audio"], ["Article", "article"], ["Printed Material", "printed material"]] %>
+        <%= form.select :medium, [["Photo", "photo"], ["Film", "film"], ["Audio", "audio"], ["Article", "article"], ["Printed Material", "printed material"]], :include_blank => true %>
       </div>
     </div>
     <div class="form-set">
@@ -82,8 +96,14 @@
 
   <div class="form-row">
     <div class="form-set">
-      <%= form.label :person_list, "Courtesy of" %>
-      <%= form.hidden_field :collection_list, :value => @archive_item.collection_list.join(', '), class: "js-tag-input tag-input", "data-tag-options": @collection_options.join(', ') %>
+      <%= form.label :collection_list, "Collection" %>
+      <select name="archive_item[collection_list]" id="archive_item_collection_list">
+      <%= Collection.order(:name).each do |collection| %>
+        <option value="<%= collection.id %>_<%= collection.name %>">
+          <%= collection.name %>
+        </option>
+      <% end %>
+    </select>
     </div>
   </div>
 

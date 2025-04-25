@@ -19,7 +19,7 @@
     border: none;
     background: variables.$black-6;
     position: relative;
-    
+
     &:not(.current-user-page-tag) {
         cursor: pointer;
     }
@@ -53,10 +53,10 @@
 }
 
 .tag-ui-text-input-wrapper {
-    position: relative;    
+    position: relative;
 }
 
-.tag-ui-text-input {
+.tag-ui-text-input, #archive_item_collection_list {
     width: calc(50% - 15px);
 }
 

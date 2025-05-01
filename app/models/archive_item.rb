@@ -46,9 +46,8 @@ class ArchiveItem < ApplicationRecord
     validates :medium, presence: true, inclusion: { in: ["photo","film","audio","article","printed material"] }
     # validates :collections, presence: true
 
-    # sets uid upon record creation
+    # sets uid upon record creation, update
     after_commit :set_uid!, on: [:create, :update]
-    # before_save :update_search_collections!
 
     # this method copies the taggable 'metadata' from on archive_item to the form for a new one
     def copy_tags_from(other_item)
@@ -69,18 +68,9 @@ class ArchiveItem < ApplicationRecord
         "printed material" => 5
     }.freeze
 
-    def only_one_collection
-
-    end
-
-    def update_search_collections
-
-    end
-
     # method for setting UID upon record creation
+    # UID is set here, because including record ID in #new UI, requires manipulating values in real time
     def set_uid!
-
-        return if uid.present?
 
         coll_id = tags_on(:collections).first.id
         medium_code = MEDIUM_CODES[medium]

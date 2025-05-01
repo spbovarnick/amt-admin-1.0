@@ -122,6 +122,7 @@ class ArchiveItemsController < ApplicationController
 
     # Update search fields
     @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
+    # ^ collection_list param is split here, because of concatenated value passed into #new view
 
     flash.alert = "An item has been created."
     redirect_to session.delete(:return_to) || archive_items_path
@@ -190,7 +191,8 @@ class ArchiveItemsController < ApplicationController
     end
 
     # Update search fields
-    @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list])
+    @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
+    # ^ collection_list param is split here, because of concatenated value passed into #edit view)
 
     flash.alert = "An item has been updated."
     redirect_to session.delete(:return_to) || archive_items_path

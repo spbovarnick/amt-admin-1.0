@@ -15,12 +15,21 @@ export default class extends Controller {
       // listen for changes to the collection input select
       input.addEventListener("change", function () {
         const val = input.value.toString()
-        // value passed to input is concatenation of ID and collection name, ID is pulled from string
-        const collectionID = val.slice(0, val.indexOf("_"))
-        // ID is padded with 0s
-        const collectionIDPadded = collectionID.padStart(3, 0);
-        // #uid-collection-str <span> innerHTML is set with collection ID string
-        uidCollection.innerHTML = collectionIDPadded;
+
+        // query collections for name to return ID to pass to UID
+        fetch(`/collections/find_by_name?name=${encodeURIComponent(val)}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.id) {
+              const idStr = data.id.toString();
+              const collectionIDPadded = idStr.padStart(3, 0);
+              // #uid-collection-str <span> innerHTML is set with collection ID string
+              uidCollection.innerHTML = collectionIDPadded;
+            } else {
+              console.log("Error:", data.error);
+            }
+          })
+          .catch(error => console.error("error:", error));
       });
     };
 

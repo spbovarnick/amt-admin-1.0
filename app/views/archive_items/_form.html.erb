@@ -96,7 +96,7 @@
     <div class="form-set">
       <%= form.label :collection_list, "Collection" %>
       <%# collection value is special concatenation of id and name values, which are later split into UID and search_collections when record is saved %>
-      <%= form.collection_select :collection_list, Collection.order(:name), :id_and_name, :name, :include_blank => true, :required => true %>
+      <%= form.collection_select :collection_list, Collection.order(:name), :name, :name, :include_blank => true, :required => true %>
     </div>
   </div>
 

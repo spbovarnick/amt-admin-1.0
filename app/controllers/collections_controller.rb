@@ -4,6 +4,15 @@ class CollectionsController < ApplicationController
   before_action :set_collection, only: %i[ show edit update destroy ]
   PAGE_ITEMS = 25
 
+  def find_by_name
+    @collection = Collection.find_by(name: params[:name])
+    if @collection
+      render json: {id: @collection.id}
+    else
+      render json: {error: "Collection not found"}, status: :not_found
+    end
+  end
+
   # GET /collections or /collections.json
   def index
     if params[:archive_q]

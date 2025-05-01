@@ -112,7 +112,7 @@ class ArchiveItemsController < ApplicationController
     @tag_options = ArchiveTag.all.order(name: :desc).pluck(:name)
     @location_options = Location.all.order(name: :desc).pluck(:name)
     @person_options = Person.all.order(name: :desc).pluck(:name)
-    # @collection_options = Collection.all.order(name: :desc).pluck(:name, :id)
+    @collection_options = Collection.all.order(name: :desc).pluck(:name)
     @comm_group_options = CommGroup.all.order(name: :desc).pluck(:name)
     @current_user = current_user
   end

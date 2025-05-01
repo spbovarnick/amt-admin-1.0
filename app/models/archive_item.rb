@@ -72,7 +72,9 @@ class ArchiveItem < ApplicationRecord
     # UID is set here, because including record ID in #new UI, requires manipulating values in real time
     def set_uid!
 
-        coll_id = tags_on(:collections).first.id
+        coll_name = collection_list
+        coll = Collection.find_by(name: collection_list.first)
+        coll_id = coll.id
         medium_code = MEDIUM_CODES[medium]
 
         # pad id values with 0's

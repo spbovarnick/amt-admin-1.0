@@ -1,6 +1,6 @@
-namespace :archive_item do
+namespace :archive_items do
 
-  task :add_uids do
+  task add_uids: :environment do
     counter = 0
 
     MEDIUM_CODES = {
@@ -14,14 +14,17 @@ namespace :archive_item do
     ArchiveItem.find_each do |item|
       next if item.uid.present?
 
-      coll = Collection.find_by(name: item.collection_list.first)
+      next if !item.search_collections.present?
+
+      coll = Collection.find_by(name: item.search_collections)
+      puts item.id, item.search_collections
       coll_id = coll.id
       medium_code = MEDIUM_CODES[item.medium]
 
       # pad id values with 0's
       coll_str = format('%03d', coll_id)
       medium_str = format('%03d', medium_code)
-      item_str = format('%06d', id)
+      item_str = format('%06d', item.id)
 
       # halve item string for 3rd hyphen
       part1, part2 = item_str[0, 3], item_str[3, 3]
@@ -29,7 +32,7 @@ namespace :archive_item do
       item.update_column(:uid, "#{coll_str}-#{medium_str}-#{part1}-#{part2}")
       counter += 1
 
-      puts "✅ Generated #{counter} UIDs"
     end
+    puts "✅ Generated #{counter} UIDs"
   end
 end

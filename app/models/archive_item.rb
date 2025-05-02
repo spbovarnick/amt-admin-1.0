@@ -46,6 +46,7 @@ class ArchiveItem < ApplicationRecord
     validates :medium, presence: true, inclusion: { in: ["photo","film","audio","article","printed material"] }
     # validates :collections, presence: true
 
+    before_commit :strip_title, on: [:create, :update]
     # sets uid upon record creation, update
     after_commit :set_uid!, on: [:create, :update]
 
@@ -85,5 +86,9 @@ class ArchiveItem < ApplicationRecord
         part1, part2 = item_str[0, 3], item_str[3, 3]
 
         update_column(:uid, "#{coll_str}-#{medium_str}-#{part1}-#{part2}")
+    end
+
+    def strip_title
+        update_column(:title, title.strip)
     end
 end

@@ -142,7 +142,11 @@ class ArchiveItemsController < ApplicationController
         redirect_to archive_items_path
       end
     end
-    @item_uid_str = @archive_item.uid.slice(8...)
+
+    item_id = format('%06d', @archive_item.id)
+    @part1 = item_id[0, 3]
+    @part2 = item_id[3, 3]
+    @archive_item.uid.present? ? @item_uid_str = @archive_item.uid.slice(8...) : nil
     @submit_text = "Update Item"
     @tag_options = ArchiveTag.all.order(name: :desc).pluck(:name)
     @location_options = Location.all.order(name: :desc).pluck(:name)

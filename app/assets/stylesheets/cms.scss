@@ -88,7 +88,7 @@ $table-max-width: 1600px;
   text-align: left;
 
   td {
-    padding: 10px 15px;
+    padding: 5px 10px;
     border-bottom: solid 1px variables.$black-4;
   }
 
@@ -113,25 +113,6 @@ $table-max-width: 1600px;
   white-space: nowrap;
   text-align: right;
   font-size: 13px;
-
-  .button_to {
-    display: inline-block;
-
-    &:not(:last-of-type) {
-      margin-right: 10px;
-      position: relative;
-
-      &:after {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: -10px;
-        width: 1px;
-        height: 100%;
-        background: variables.$black-4;
-      }
-    }
-  }
 }
 
 .admin-form {

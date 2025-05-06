@@ -98,13 +98,16 @@ class ArchiveItemsController < ApplicationController
     @tag_options = ArchiveTag.all.order(name: :desc).pluck(:name)
     @location_options = Location.all.order(name: :desc).pluck(:name)
     @person_options = Person.all.order(name: :desc).pluck(:name)
-    @collection_options = Collection.all.order(name: :desc).pluck(:name)
+    # @collection_options = Collection.all.order(name: :desc).pluck(:name, :id)
     @comm_group_options = CommGroup.all.order(name: :desc).pluck(:name)
     @current_user = current_user
   end
 
   def new
     @archive_item = ArchiveItem.new
+    next_id = format('%06d', ArchiveItem.last.id + 1)
+    @part1 = next_id[0, 3]
+    @part2 = next_id[3, 3]
     @submit_text = "Create Item"
     @tag_options = ArchiveTag.all.order(name: :desc).pluck(:name)
     @location_options = Location.all.order(name: :desc).pluck(:name)
@@ -118,7 +121,8 @@ class ArchiveItemsController < ApplicationController
     @archive_item = ArchiveItem.create(archive_item_params)
 
     # Update search fields
-    @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list])
+    @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
+    # ^ collection_list param is split here, because of concatenated value passed into #new view
 
     flash.alert = "An item has been created."
     redirect_to session.delete(:return_to) || archive_items_path
@@ -138,6 +142,11 @@ class ArchiveItemsController < ApplicationController
         redirect_to archive_items_path
       end
     end
+
+    item_id = format('%06d', @archive_item.id)
+    @part1 = item_id[0, 3]
+    @part2 = item_id[3, 3]
+    @archive_item.uid.present? ? @item_uid_str = @archive_item.uid.slice(8...) : nil
     @submit_text = "Update Item"
     @tag_options = ArchiveTag.all.order(name: :desc).pluck(:name)
     @location_options = Location.all.order(name: :desc).pluck(:name)
@@ -164,7 +173,7 @@ class ArchiveItemsController < ApplicationController
     if archive_item_params[:content_files] == [""]
       update_params.delete(:content_files)
     end
-    
+
     # check if medium_photos is empty and remove it from update_params if it is
     if archive_item_params[:medium_photos] == [""]
       update_params.delete(:medium_photos)
@@ -186,7 +195,8 @@ class ArchiveItemsController < ApplicationController
     end
 
     # Update search fields
-    @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list])
+    @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
+    # ^ collection_list param is split here, because of concatenated value passed into #edit view)
 
     flash.alert = "An item has been updated."
     redirect_to session.delete(:return_to) || archive_items_path

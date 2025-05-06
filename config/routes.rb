@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   resources :carousel_slides
   resources :pages
   resources :comm_groups
-  resources :collections
+  resources :collections do
+    collection do
+      # special route to get collection id number from uid_controller.js
+      get 'find_by_name'
+    end
+  end
   resources :people
   resources :archive_items, only: [:index, :create, :show, :new, :edit, :destroy, :update] do
     member do
@@ -16,7 +21,7 @@ Rails.application.routes.draw do
   resources :archive_tags
   resources :locations
   get '/archive_items/sync_search' => 'archive_items#sync_search_strings';
-  
+
   devise_for :users, :controllers => { :registrations => 'users/registrations', :sessions => 'users/sessions' }
   resources :users, only: [:index]
 

@@ -180,7 +180,8 @@ CREATE TABLE public.archive_items (
     updated_by character varying,
     ft_search tsvector GENERATED ALWAYS AS ((((((setweight(to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('english'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_collections, ''::character varying))::text), 'D'::"char"))) STORED,
     cms_ft_search tsvector GENERATED ALWAYS AS ((((((((setweight(to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('english'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(search_collections, ''::character varying))::text), 'D'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(created_by, ''::character varying))::text), 'D'::"char")) || setweight(to_tsvector('english'::regconfig, (COALESCE(updated_by, ''::character varying))::text), 'D'::"char"))) STORED,
-    draft boolean DEFAULT false
+    draft boolean DEFAULT false,
+    uid character varying
 );
 
 
@@ -916,6 +917,13 @@ CREATE INDEX index_archive_items_on_medium ON public.archive_items USING btree (
 
 
 --
+-- Name: index_archive_items_on_uid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_archive_items_on_uid ON public.archive_items USING btree (uid);
+
+
+--
 -- Name: index_archive_items_on_year; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1072,6 +1080,9 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250417221814'),
+('20240229063230'),
+('20240229063019'),
 ('20240226222030'),
 ('20240226221955'),
 ('20240226221840'),

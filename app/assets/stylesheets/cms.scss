@@ -201,6 +201,23 @@ $table-max-width: 1600px;
     }
   }
 
+  #uid-box {
+    border: 3px solid white;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 4px;
+    color: variables.$white-1;
+    width: fit-content;
+
+    #uid-inner-box {
+      background-color: white;
+      border: 3px solid white;
+      padding: 4px;
+      border-radius: 4px;
+      color: variables.$black-1;
+    }
+  }
+
   .field {
     margin-bottom: 10px;
   }
@@ -336,7 +353,7 @@ $table-max-width: 1600px;
   text-decoration: none;
   filter: drop-shadow(3px 3px 2px #000);
   transition: all .4s ease-in-out;
-  
+
   &:hover {
     filter: drop-shadow(4px 4px 3px #000);
     font-weight: 500;

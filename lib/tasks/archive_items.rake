@@ -34,7 +34,7 @@ namespace :archive_items do
 
         item.update_column(:uid, "#{coll_str}-#{medium_str}-#{part1}-#{part2}")
         counter += 1
-      rescue
+      rescue => e
         puts "Error on ArchiveItem id: #{item.id}, title: #{item.title}"
         puts "#{e.class}: #{e.message}"
       end

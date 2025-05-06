@@ -15,6 +15,10 @@ class ArchiveItemsController < ApplicationController
       @pagy, @archive_items = get_items({draft: :asc}, page_items)
     elsif params[:sort] == 'draft-desc'
       @pagy, @archive_items = get_items({draft: :desc}, page_items)
+    elsif params[:sort] == 'collection'
+      @pagy, @archive_items = get_items({draft: :asc}, page_items)
+    elsif params[:sort] == 'collection-desc'
+      @pagy, @archive_items = get_items({draft: :desc}, page_items)
     elsif params[:sort] == 'medium'
       @pagy, @archive_items = get_items({medium: :asc}, page_items)
     elsif params[:sort] == 'medium-desc'

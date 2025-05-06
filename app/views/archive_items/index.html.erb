@@ -45,6 +45,18 @@
           <% end %>
         </th>
         <th>
+          UID
+        </th>
+        <th>
+          <% if params[:sort] == 'collection' %>
+            <%= link_to 'Collection', archive_items_path(:sort => 'collection-desc'), class: 'sorted-down' %>
+          <% elsif params[:sort] == 'collection-desc' %>
+            <%= link_to 'Collection', archive_items_path(:sort => 'collection'), class: 'sorted-up' %>
+          <% else %>
+            <%= link_to 'Collection', archive_items_path(:sort => 'collection') %>
+          <% end %>
+        </th>
+        <th>
           <% if params[:sort] == 'medium' %>
             <%= link_to 'Medium', archive_items_path(:sort => 'medium-desc'), class: 'sorted-down' %>
           <% elsif params[:sort] == 'medium-desc' %>
@@ -60,15 +72,6 @@
             <%= link_to 'Year', archive_items_path(:sort => 'year'), class: 'sorted-up' %>
           <% else %>
             <%= link_to 'Year', archive_items_path(:sort => 'year') %>
-          <% end %>
-        </th>
-        <th>
-          <% if params[:sort] == 'location' %>
-            <%= link_to 'Location', archive_items_path(:sort => 'location-desc'), class: 'sorted-down' %>
-          <% elsif params[:sort] == 'location-desc' %>
-            <%= link_to 'Location', archive_items_path(:sort => 'location'), class: 'sorted-up' %>
-          <% else %>
-            <%= link_to 'Location', archive_items_path(:sort => 'location') %>
           <% end %>
         </th>
         <th>
@@ -110,9 +113,10 @@
           <div class="light published">PUBLISHED</div>
         <% end %>
       </td>
+      <td><%= archive_item.uid %></td>
+      <td><%= archive_item.search_collections %></td>
       <td><%= archive_item.medium %></td>
       <td><%= archive_item.year %></td>
-      <td><%= archive_item.search_locations %></td>
       <td><%= archive_item.updated_at.strftime("%-m/%-d/%Y") %></td>
       <td >
         <div class="flag">

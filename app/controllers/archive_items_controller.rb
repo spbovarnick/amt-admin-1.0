@@ -1,8 +1,25 @@
+require "prawn"
+
 class ArchiveItemsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index, :get_items, :sync_search_strings]
   before_action :store_return_to_session, only: [:new, :edit]
 
+  def create_uid_pdf
+    @archive_item = ArchiveItem.find(params[:id])
+
+    pdf = Prawn::Document.new
+
+    pdf.text @archive_item.uid, align: :center, size: 24
+    pdf.text "Title: #{@archive_item.title}"
+    pdf.text "Year: #{@archive_item.year}"
+    pdf.text "Medium: #{@archive_item.medium}"
+    pdf.text "UID: #{@archive_item.uid}"
+
+    # send_data pdf.render filename: "#{@archive_item.uid}.pdf", type: 'application/pdf'
+    item = ArchiveItem.find(params[:id])
+    send_data generate_pdf(item), filename: "#{@archive_item.uid}.pdf", type: 'application/pdf'
+  end
 
   def index
     page_items = params[:page_items].present? ? params[:page_items] : 25
@@ -214,6 +231,15 @@ class ArchiveItemsController < ApplicationController
   end
 
   private
+
+  def generate_pdf(item)
+    Prawn::Document.new do
+      text item.uid, align: :center, size: 24
+      text "Title: #{item.title}"
+      text "Medium: #{item.medium}"
+      text "UID: #{item.uid}"
+    end.render
+  end
 
   def store_return_to_session
     session[:return_to] = request.referrer if action_name.in?(['new', 'edit'])

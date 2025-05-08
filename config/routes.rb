@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     member do
       get 'copy'
       delete 'delete_medium_photo'
+      get 'export_csv'
     end
   end
   resources :archive_tags

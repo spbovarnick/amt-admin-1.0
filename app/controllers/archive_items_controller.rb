@@ -1,8 +1,19 @@
+require 'csv'
 class ArchiveItemsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index, :get_items, :sync_search_strings]
   before_action :store_return_to_session, only: [:new, :edit]
 
+  def export_csv
+    @archive_items = ArchiveItem.all
+
+    respond_to do |format|
+      format.csv do
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = "attachment; filename=snapshot.csv"
+      end
+    end
+  end
 
   def index
     page_items = params[:page_items].present? ? params[:page_items] : 25

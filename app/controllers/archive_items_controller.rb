@@ -57,9 +57,11 @@ class ArchiveItemsController < ApplicationController
 
     @total_item_count = @pagy.count
 
+    @all_items = ArchiveItem.all
+
     respond_to do |format|
       format.html
-      format.csv { send_data @archive_items.to_csv, filename: "archive_items-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"}
+      format.csv { send_data @all_items.to_csv, filename: "archive_items-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"}
     end
   end
 

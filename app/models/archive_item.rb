@@ -1,3 +1,5 @@
+require 'csv'
+
 class ArchiveItem < ApplicationRecord
     include PgSearch::Model
     pg_search_scope :search_archive_items,
@@ -56,6 +58,20 @@ class ArchiveItem < ApplicationRecord
         tag_list = other_item.send("#{metadata.to_s}_list")
         tag_list_string = tag_list.join(", ")
         self.send("#{metadata.to_s}_list=", tag_list_string)
+        end
+    end
+
+    # on-demand csv
+    def self.to_csv
+        attributes = %w{ uid search_collections title created_by created_at medium credit year search_comm_groups search_people search_tags }
+        headers = [ "UID",  "Collection",  "Title",  "Created By",  "Created At",  "Medium",  "Credit",  "Year",  "Community Groups",  "People",  "Tags" ]
+
+        CSV.generate(headers: true) do |csv|
+            csv << headers
+
+            all.each do |item|
+                csv << item.attributes.values_at(*attributes)
+            end
         end
     end
 

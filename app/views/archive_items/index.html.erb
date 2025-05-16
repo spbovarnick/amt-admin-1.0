@@ -144,7 +144,7 @@
 <div class="pagination-container">
   <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
 
-  <%= link_to "Export CSV Snapshot", archive_items_path(format: 'csv'), class: "button-round sml"  %>
+  <%= link_to "Export CSV Snapshot", export_archive_items_to_csv, class: "button-round sml"  %>
 
   <%= form_with url: url_for(action: 'index', controller: 'archive_items'), method: :get, html: {id: 'page-items-form', class: 'pagy-nav'} do |form| %>
     <%= form.label :page_items, "Items per page:" %>

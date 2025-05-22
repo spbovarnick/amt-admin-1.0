@@ -77,7 +77,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       # credentials: credentials
     )
 
-    puts "Credentials check: #{credentials}"
+    puts "Secret check: #{ENV["S3_SECRET"]}. Key check: #{ENV['S3_KEY']}"
 
     presigner = Aws::S3::Presigner.new(client: client)
 

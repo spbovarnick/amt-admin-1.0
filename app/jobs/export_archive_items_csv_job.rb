@@ -45,6 +45,8 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     s3_key = "exports/archive_items_#{file_id_string}.csv"
     s3_url = upload_to_s3(file.path, s3_key)
 
+    puts "Using AWS key: #{ENV['S3_KEY']&.first(6)}..." if Rails.env.staging?
+
     CsvMailer.with(user:, url: s3_url).csv_ready.deliver_later
     puts "Successfully uploaded to: #{s3_url}"
     puts "Job finished at #{Time.now}"

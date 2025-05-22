@@ -64,9 +64,9 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
     # this bucket is private, required getting presigned url via client
     client = Aws::S3::Client.new(
-      region: ENV['AWS_REGION'],
-      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+      region: 'us-west-2',
+      access_key_id: ENV['S3_KEY'],
+      secret_access_key: ENV['S3_SECRET']
     )
 
     presigner = Aws::S3::Presigner.new(client: client)

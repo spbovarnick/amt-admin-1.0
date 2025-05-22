@@ -65,7 +65,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     obj.upload_file(path, acl: "private")
 
     credentials = Aws::Credentials.new(
-      ENV['S3_KEY']
+      ENV['S3_KEY'],
       ENV['S3_SECRET']
     )
 

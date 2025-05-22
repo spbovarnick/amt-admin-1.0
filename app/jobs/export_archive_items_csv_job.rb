@@ -14,22 +14,29 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     CSV.open(file.path, "w") do |csv|
       csv << headers
 
-      # pull content file urls
-      ArchiveItem.includes( {content_files_attachments: :blob }, :rich_text_content_notes, :rich_text_medium_notes).find_each(batch_size: 100) do |item|
-        urls = item.content_files.map do |file|
-          Rails.application.routes.url_helpers.rails_blob_url(file, only_path: false)
-        rescue => e
-            "Error: #{e.message}"
-        end.join(", ")
+      ArchiveItem
+        # .pluck(:uid, :search_collections, :title, :created_by, :created_at, :medium, :credit, :year, :search_comm_groups, :search_people, :search_tags)
+        # .select(:uid, :search_collections, :title, :created_by, :created_at, :medium, :credit, :year, :search_comm_groups, :search_people, :search_tags)
+        .includes( {content_files_attachments: :blob }, :rich_text_content_notes, :rich_text_medium_notes)
+        .find_each(batch_size: 50) do |item|
 
-        # transform block text to plain
-        content_notes = item.content_notes&.to_plain_text || ""
-        medium_notes = item.medium_notes&.to_plain_text || ""
+          csv << generate_csv_row(item)
 
-        row = attributes.map { |attr| item.send(attr) }
+          # # pull content file urls
+          # urls = item.content_files.map do |file|
+          #   Rails.application.routes.url_helpers.rails_blob_url(file, only_path: true)
+          # rescue => e
+          #     "Error: #{e.message}"
+          # end.join(", ")
 
-        csv << row + [content_notes, medium_notes, urls]
-      end
+          # # transform block text to plain
+          # content_notes = item.content_notes&.to_plain_text || ""
+          # medium_notes = item.medium_notes&.to_plain_text || ""
+
+          # row = attributes.map { |attr| item.send(attr) }
+
+          # csv << row + [content_notes, medium_notes, urls]
+        end
     end
 
     # legible/organizational string name
@@ -72,5 +79,44 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     )
 
     return s3_url
+  end
+
+  def generate_csv_row(item)
+    # pull content file urls
+    urls = item.content_files.map do |file|
+      Rails.application.routes.url_helpers.rails_blob_url(file, only_path: true)
+    rescue => e
+        "Error: #{e.message}"
+    end.join(", ")
+
+    # transform block text to plain
+    if item.content_notes&.body&.present?
+      content_notes = item.content_notes.to_plain_text
+    else
+      content_notes = ""
+    end
+
+    if item.medium_notes&.body&.present?
+      medium_notes = item.medium_notes.to_plain_text
+    else
+      medium_notes = ""
+    end
+
+    [
+      item.uid,
+      item.search_collections,
+      item.title,
+      item.created_by,
+      item.created_at,
+      item.medium,
+      item.credit,
+      item.year,
+      item.search_comm_groups,
+      item.search_people,
+      item.search_tags,
+      content_notes,
+      medium_notes,
+      urls
+    ]
   end
 end

@@ -66,7 +66,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
     credentials = Aws::Credentials.new(
       ENV['S3_KEY']
-      ENV('S3_SECRET')
+      ENV['S3_SECRET']
     )
 
     # this bucket is private, required getting presigned url via client

@@ -2,6 +2,7 @@ require 'csv'
 class ExportArchiveItemsCsvJob < ApplicationJob
   queue_as :default
   def perform(user_id)
+    puts "Job started at #{Time.now}"
     user = User.find(user_id)
     file = Tempfile.new(["archive_items", ".csv"])
 
@@ -16,7 +17,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       # pull content file urls
       ArchiveItem.includes( {content_files_attachments: :blob }, :rich_text_content_notes, :rich_text_medium_notes).find_each(batch_size: 100) do |item|
         urls = item.content_files.map do |file|
-          Rails.application.routes.url_helpers.url_for(file)
+          Rails.application.routes.url_helpers.rails_blob_url(file, only_path: false)
         rescue => e
             "Error: #{e.message}"
         end.join(", ")
@@ -38,7 +39,8 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     s3_url = upload_to_s3(file.path, s3_key)
 
     CsvMailer.with(user:, url: s3_url).csv_ready.deliver_later
-    puts "Successfully uploaded to: #{s3_url}" if Rails.env.development?
+    puts "Successfully uploaded to: #{s3_url}"
+    puts "Job finished at #{Time.now}"
   ensure
     file&.close
     file&.unlink

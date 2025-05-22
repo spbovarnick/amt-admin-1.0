@@ -59,7 +59,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
   def upload_to_s3(path, key)
     s3 = Aws::S3::Resource.new(region: 'us-west-2')
-    bucket = s3.bucket(ENV["CSV_BUCKET_NAME"])
+    bucket = s3.bucket(ENV.fetch("CSV_BUCKET_NAME"))
 
     obj = bucket.object(key)
     obj.upload_file(path, acl: "private")
@@ -72,16 +72,18 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     # this bucket is private, required getting presigned url via client
     client = Aws::S3::Client.new(
       region: 'us-west-2',
-      # access_key_id: ENV['S3_KEY'],
-      # secret_access_key: ENV['S3_SECRET']
-      credentials: credentials
+      access_key_id: ENV.fetch('S3_KEY'),
+      secret_access_key: ENV.fetch('S3_SECRET')
+      # credentials: credentials
     )
+
+    puts "Credentials check: #{credentials}"
 
     presigner = Aws::S3::Presigner.new(client: client)
 
     s3_url = presigner.presigned_url(
       :get_object,
-      bucket: ENV['CSV_BUCKET_NAME'],
+      bucket: ENV.fetch('CSV_BUCKET_NAME'),
       key: obj.key,
       expires_in: 604800
     )

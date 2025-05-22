@@ -48,7 +48,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
   def upload_to_s3(path, key)
     s3 = Aws::S3::Resource.new(region: 'us-west-2')
-    bucket = s3.bucket(ENV["S3_BUCKET_NAME"])
+    bucket = s3.bucket(ENV["CSV_BUCKET_NAME"])
 
     obj = bucket.object(key)
     obj.upload_file(path, acl: "private")
@@ -64,7 +64,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
     s3_url = presigner.presigned_url(
       :get_object,
-      bucket: ENV['S3_BUCKET_NAME'],
+      bucket: ENV['CSV_BUCKET_NAME'],
       key: obj.key,
       expires_in: 604800
     )

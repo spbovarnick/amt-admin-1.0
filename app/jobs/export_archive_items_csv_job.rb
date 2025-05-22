@@ -64,11 +64,17 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     obj = bucket.object(key)
     obj.upload_file(path, acl: "private")
 
+    credentials = Aws::Credentials.new(
+      ENV['S3_KEY']
+      ENV('S3_SECRET')
+    )
+
     # this bucket is private, required getting presigned url via client
     client = Aws::S3::Client.new(
       region: 'us-west-2',
-      access_key_id: ENV['S3_KEY'],
-      secret_access_key: ENV['S3_SECRET']
+      # access_key_id: ENV['S3_KEY'],
+      # secret_access_key: ENV['S3_SECRET']
+      credentials: credentials
     )
 
     presigner = Aws::S3::Presigner.new(client: client)

@@ -86,7 +86,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
   def generate_csv_row(item)
     # pull content file urls
     urls = item.content_files.map do |file|
-      Rails.application.routes.url_helpers.rails_blob_url(file, only_path: true)
+      Rails.application.routes.url_helpers.url_for(file)
     rescue => e
         "Error: #{e.message}"
     end.join(", ")

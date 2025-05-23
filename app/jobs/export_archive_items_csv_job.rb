@@ -15,7 +15,6 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     attributes = %w{ uid search_collections title created_by created_at medium credit year search_comm_groups search_people search_tags }
     headers = [ "UID",  "Collection",  "Title",  "Created By",  "Created At",  "Medium",  "Credit",  "Year",  "Community Groups",  "People",  "Tags", "Content Notes", "Medium Technical Notes", "Content Files" ]
 
-    i = 0
     # write csv
     CSV.open(file.path, "w") do |csv|
       csv << headers
@@ -23,9 +22,6 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       ArchiveItem
         .includes( {content_files_attachments: :blob }, :rich_text_content_notes, :rich_text_medium_notes)
         .find_each(batch_size: 50) do |item|
-
-          i += 1
-          puts "[#{i}] Processing item #{item.id}"
 
           csv << generate_csv_row(item)
         end

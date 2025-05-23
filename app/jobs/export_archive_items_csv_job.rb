@@ -2,6 +2,10 @@ require 'csv'
 class ExportArchiveItemsCsvJob < ApplicationJob
   queue_as :default
   def perform(user_id)
+    aws_key = ENV['S3_KEY']
+    aws_secret = ENV['S3_SECRET']
+    aws_bucket = ENV['CSV_BUCKET_NAME']
+
     puts "Job started at #{Time.now}"
     user = User.find(user_id)
     file = Tempfile.new(["archive_items", ".csv"])
@@ -47,7 +51,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     file_id_string = [Time.now.year, Time.now.mon, Time.now.mday].join('-') + '_' + [ Time.now.hour, Time.now.min, Time.now.sec].join(':')
 
     s3_key = "exports/archive_items_#{file_id_string}.csv"
-    s3_url = upload_to_s3(file.path, s3_key)
+    s3_url = upload_to_s3(file.path, s3_key, aws_key, aws_secret, aws_bucket)
 
     puts "Using AWS key: #{ENV['S3_KEY']&.first(6)}..." if Rails.env.staging?
 
@@ -61,35 +65,27 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
   private
 
-  def upload_to_s3(path, key)
+  def upload_to_s3(path, key, s3_key, s3_secret, bucket_name)
     s3 = Aws::S3::Resource.new(region: 'us-west-2')
-    bucket = s3.bucket(ENV.fetch("CSV_BUCKET_NAME"))
+    bucket = s3.bucket(bucket_name)
 
     obj = bucket.object(key)
     obj.upload_file(path, acl: "private")
 
-    credentials = Aws::Credentials.new(
-      ENV['S3_KEY'],
-      ENV['S3_SECRET']
-    )
-
     # this bucket is private, required getting presigned url via client
     client = Aws::S3::Client.new(
       region: 'us-west-2',
-      access_key_id: ENV.fetch('S3_KEY'),
-      secret_access_key: ENV.fetch('S3_SECRET')
-      # credentials: credentials
+      access_key_id: s3_key,
+      secret_access_key: s3_secret,
     )
-
-    puts "Secret check: #{ENV["S3_SECRET"]}. Key check: #{ENV['S3_KEY']}"
 
     presigner = Aws::S3::Presigner.new(client: client)
 
     s3_url = presigner.presigned_url(
       :get_object,
-      bucket: ENV.fetch('CSV_BUCKET_NAME'),
+      bucket: bucket_name,
       key: obj.key,
-      expires_in: 604800
+      expires_in: 604800,
     )
 
     return s3_url

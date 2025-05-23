@@ -43,8 +43,6 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       bucket_name: aws_bucket
     )
 
-    puts "Using AWS key: #{ENV['S3_KEY']&.first(6)}..." if Rails.env.staging?
-
     CsvMailer.with(user:, url: s3_url).csv_ready.deliver_later
     puts "Successfully uploaded to: #{s3_url}"
     puts "Job finished at #{Time.now}"
@@ -56,11 +54,6 @@ class ExportArchiveItemsCsvJob < ApplicationJob
   private
 
   def upload_to_s3(path:, object_key:, access_key:, secret_key:, bucket_name:)
-
-    puts "Using AWS key: #{access_key.inspect}"
-    puts "Using AWS secret: #{secret_key.inspect}"
-    puts "Using AWS bucket: #{bucket_name.inspect}"
-
 
     creds = Aws::Credentials.new(access_key, secret_key)
     s3 = Aws::S3::Resource.new(
@@ -77,16 +70,6 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       region: 'us-west-2',
       credentials: creds,
     )
-
-    puts "Client credentials: #{client.config.credentials.inspect}"
-
-    begin
-      client.list_buckets
-      puts "✅ Successfully listed buckets"
-    rescue => e
-      puts "❌ list_buckets failed: #{e.class} - #{e.message}"
-    end
-
 
     presigner = Aws::S3::Presigner.new(client: client)
 

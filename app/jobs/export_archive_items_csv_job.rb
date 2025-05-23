@@ -82,7 +82,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
   def generate_csv_row(item)
     # pull content file urls
     urls = item.content_files.map do |file|
-      Rails.application.routes.url_helpers.rails_blob_url(file, only_path: false)
+      blob_url(file)
     rescue => e
       "Error: #{e.message}"
     end.join(", ")
@@ -116,5 +116,13 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       medium_notes,
       urls
     ]
+  end
+
+  def blob_url(file)
+    if Rails.env.production? || Rails.env.staging?
+      return "http://#{ENV.fetch('CSV_BUCKET_NAME')}.s3.us-west-2.amazonaws.com/#{file.key}"
+    else
+      return Rails.application.routes.url_helpers.rails_blob_url(file, only_path: false)
+    end
   end
 end

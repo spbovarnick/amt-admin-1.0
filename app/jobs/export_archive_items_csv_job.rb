@@ -1,6 +1,7 @@
 require 'csv'
 class ExportArchiveItemsCsvJob < ApplicationJob
   queue_as :default
+
   def perform(user_id)
     aws_key = ENV['S3_KEY']
     aws_secret = ENV['S3_SECRET']
@@ -20,8 +21,6 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       csv << headers
 
       ArchiveItem
-        # .pluck(:uid, :search_collections, :title, :created_by, :created_at, :medium, :credit, :year, :search_comm_groups, :search_people, :search_tags)
-        # .select(:uid, :search_collections, :title, :created_by, :created_at, :medium, :credit, :year, :search_comm_groups, :search_people, :search_tags)
         .includes( {content_files_attachments: :blob }, :rich_text_content_notes, :rich_text_medium_notes)
         .find_each(batch_size: 50) do |item|
 
@@ -29,33 +28,24 @@ class ExportArchiveItemsCsvJob < ApplicationJob
           puts "[#{i}] Processing item #{item.id}"
 
           csv << generate_csv_row(item)
-
-          # # pull content file urls
-          # urls = item.content_files.map do |file|
-          #   Rails.application.routes.url_helpers.rails_blob_url(file, only_path: true)
-          # rescue => e
-          #     "Error: #{e.message}"
-          # end.join(", ")
-
-          # # transform block text to plain
-          # content_notes = item.content_notes&.to_plain_text || ""
-          # medium_notes = item.medium_notes&.to_plain_text || ""
-
-          # row = attributes.map { |attr| item.send(attr) }
-
-          # csv << row + [content_notes, medium_notes, urls]
         end
     end
 
     # legible/organizational string name
     file_id_string = [Time.now.year, Time.now.mon, Time.now.mday].join('-') + '_' + [ Time.now.hour, Time.now.min, Time.now.sec].join(':')
 
-    s3_key = "exports/archive_items_#{file_id_string}.csv"
-    s3_url = upload_to_s3(file.path, s3_key, aws_key, aws_secret, aws_bucket)
+    obj_key = "exports/archive_items_#{file_id_string}.csv"
+    s3_url = upload_to_s3(
+      path: file.path,
+      object_key: obj_key,
+      access_key: aws_key,
+      secret_key: aws_secret,
+      bucket_name: aws_bucket
+    )
 
     puts "Using AWS key: #{ENV['S3_KEY']&.first(6)}..." if Rails.env.staging?
 
-    CsvMailer.with(user:, url: s3_url).csv_ready.deliver_now
+    CsvMailer.with(user:, url: s3_url).csv_ready.deliver_later
     puts "Successfully uploaded to: #{s3_url}"
     puts "Job finished at #{Time.now}"
   ensure
@@ -65,19 +55,38 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
   private
 
-  def upload_to_s3(path, key, s3_key, s3_secret, bucket_name)
-    s3 = Aws::S3::Resource.new(region: 'us-west-2')
-    bucket = s3.bucket(bucket_name)
+  def upload_to_s3(path:, object_key:, access_key:, secret_key:, bucket_name:)
 
-    obj = bucket.object(key)
+    puts "Using AWS key: #{access_key.inspect}"
+    puts "Using AWS secret: #{secret_key.inspect}"
+    puts "Using AWS bucket: #{bucket_name.inspect}"
+
+
+    creds = Aws::Credentials.new(access_key, secret_key)
+    s3 = Aws::S3::Resource.new(
+      region: 'us-west-2',
+      credentials: creds,
+      )
+
+    bucket = s3.bucket(bucket_name)
+    obj = bucket.object(object_key)
     obj.upload_file(path, acl: "private")
 
     # this bucket is private, required getting presigned url via client
     client = Aws::S3::Client.new(
       region: 'us-west-2',
-      access_key_id: s3_key,
-      secret_access_key: s3_secret,
+      credentials: creds,
     )
+
+    puts "Client credentials: #{client.config.credentials.inspect}"
+
+    begin
+      client.list_buckets
+      puts "✅ Successfully listed buckets"
+    rescue => e
+      puts "❌ list_buckets failed: #{e.class} - #{e.message}"
+    end
+
 
     presigner = Aws::S3::Presigner.new(client: client)
 

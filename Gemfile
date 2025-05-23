@@ -46,6 +46,8 @@ gem 'devise', '~> 4.9', '>= 4.9.3'
 
 gem 'rack-cors'
 
+gem 'sidekiq'
+
 # Use Redis adapter to run Action Cable in production
 gem "redis", ">= 4.0.1"
 

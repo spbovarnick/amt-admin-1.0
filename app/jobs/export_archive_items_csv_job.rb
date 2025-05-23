@@ -120,7 +120,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
   def blob_url(file)
     if Rails.env.production? || Rails.env.staging?
-      return "http://#{ENV.fetch('CSV_BUCKET_NAME')}.s3.us-west-2.amazonaws.com/#{file.key}"
+      return "http://#{ENV.fetch('S3_BUCKET')}.s3.us-west-2.amazonaws.com/#{file.key}"
     else
       return Rails.application.routes.url_helpers.rails_blob_url(file, only_path: false)
     end

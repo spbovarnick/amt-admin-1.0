@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 
   resources :page_carousel_slides
   resources :carousel_slides
@@ -13,6 +15,9 @@ Rails.application.routes.draw do
   end
   resources :people
   resources :archive_items, only: [:index, :create, :show, :new, :edit, :destroy, :update] do
+    collection do
+      post :export_to_csv
+    end
     member do
       get 'copy'
       delete 'delete_medium_photo'

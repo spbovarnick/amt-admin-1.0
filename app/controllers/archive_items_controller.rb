@@ -65,6 +65,11 @@ class ArchiveItemsController < ApplicationController
     end
   end
 
+  def export_to_csv
+    ExportArchiveItemsCsvJob.perform_later(current_user.id)
+    redirect_to archive_items_path, notice: "Export started. You'll receive an email when it's ready."
+  end
+
   def get_items(sort, num_items)
     if sort.keys.first == :file_type
 

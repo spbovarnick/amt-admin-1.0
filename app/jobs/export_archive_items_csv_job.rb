@@ -111,6 +111,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       item.year,
       item.search_comm_groups,
       item.search_people,
+      item.search_locations,
       item.search_tags,
       content_notes,
       medium_notes,

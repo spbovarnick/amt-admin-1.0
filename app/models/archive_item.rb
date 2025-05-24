@@ -61,31 +61,6 @@ class ArchiveItem < ApplicationRecord
         end
     end
 
-    # on-demand csv
-    def self.to_csv
-        attributes = %w{ uid search_collections title created_by created_at medium credit year search_comm_groups search_people search_tags }
-        headers = [ "UID",  "Collection",  "Title",  "Created By",  "Created At",  "Medium",  "Credit",  "Year",  "Community Groups",  "People",  "Tags", "Content Notes", "Medium Technical Notes", "Content Files" ]
-
-        CSV.generate(headers: true) do |csv|
-            csv << (headers)
-
-            all.each do |item|
-                urls = item.content_files.map do |file|
-                    Rails.application.routes.url_helpers.url_for(file)
-                rescue => e
-                    "Error: #{e.message}"
-                end.join(", ")
-
-                content_notes = item.content_notes&.to_plain_text || ""
-                medium_notes = item.medium_notes&.to_plain_text || ""
-
-                row = attributes.map { |attr| item.send(attr) }
-
-                csv << row + [content_notes, medium_notes, urls]
-            end
-        end
-    end
-
     private
 
     MEDIUM_CODES = {

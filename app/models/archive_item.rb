@@ -1,3 +1,5 @@
+require 'csv'
+
 class ArchiveItem < ApplicationRecord
     include PgSearch::Model
     pg_search_scope :search_archive_items,

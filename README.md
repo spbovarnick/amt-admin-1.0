@@ -62,7 +62,9 @@ Migrate production ready code from staging to prod using Heroku's "promote" UI.
 
 If you need to run migraions on the Heroku app, run:
 
-- Production: `heroku run rake db:migrate --app amt-admin`
+- Production: `heroku run rake db:migrate --app <staging-or-prod-app>`
+
+Worker process is scaled to 1, ie `heroku ps:scale worker=1`
 
 ### Users
 
@@ -115,3 +117,11 @@ Used for faster, indexed, full-text search. <br/>
 **_dartsass-rails_**
 Use to compile Sass and output CSS.
 [https://github.com/rails/dartsass-rails](https://github.com/rails/dartsass-rails)
+
+**_Sidekiq_**
+Job handler for CSV export.
+[https://github.com/sidekiq/sidekiq](https://github.com/sidekiq/sidekiq)
+
+**_Heroku Key-Value Store_**
+In-memory KVS for jobs run by Sidekiq.
+[https://devcenter.heroku.com/articles/heroku-redis](https://devcenter.heroku.com/articles/heroku-redis)

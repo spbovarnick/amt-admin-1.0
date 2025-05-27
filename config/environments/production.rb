@@ -8,12 +8,14 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   host = 'https://amt-admin-727b777103da.herokuapp.com'
-  config.action_mailer.default_url_options = { :host => 'https://amt-admin-727b777103da.herokuapp.com', protocol: 'https' }
+  config.action_mailer.default_url_options = {
+    :host => ENV['TARGET_DB'] == 'staging' ? 'https://amt-admin-staging-812531629ed1.herokuapp.com' : 'https://amt-admin-727b777103da.herokuapp.com', protocol: 'https'
+  }
   config.action_mailer.smtp_settings = {
     address:              'smtp.gmail.com',
     port:                 587,
-    user_name:            Rails.application.credentials.development[:gmail],
-    password:             Rails.application.credentials.development[:gmail_pwd],
+    user_name:            Rails.application.credentials.production[:gmail],
+    password:             Rails.application.credentials.production[:gmail_pwd],
     authentication:       'plain',
     enable_starttls_auto: true
   }

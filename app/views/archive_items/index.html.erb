@@ -9,7 +9,7 @@
 <% end %>
 
 <div class="admin-heading-wrapper --has-search">
-  <h1 class="admin-heading">Archive Items (<%= number_with_delimiter(@total_item_count, :delimiter => ',') %>)</h1>
+  <h1 class="admin-heading">Archive Items (<%= number_with_delimiter(@total_item_count, :delimiter => ',') %>) </h1>
   <%= link_to "Add an item", new_archive_item_path, class: "button-round --secondary" %>
 
   <%= form_with url: url_for(action: 'index', controller: 'archive_items'), html: {class: "search__form"}, method: :get do |form| %>
@@ -143,6 +143,8 @@
 
 <div class="pagination-container">
   <%== pagy_nav(@pagy) if @pagy.pages > 1 %>
+
+  <%= button_to "Export CSV Snapshot", export_to_csv_archive_items_path, class: "button-round sml"  %>
 
   <%= form_with url: url_for(action: 'index', controller: 'archive_items'), method: :get, html: {id: 'page-items-form', class: 'pagy-nav'} do |form| %>
     <%= form.label :page_items, "Items per page:" %>

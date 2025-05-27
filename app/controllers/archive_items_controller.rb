@@ -1,10 +1,10 @@
+require 'csv'
 require "prawn"
 
 class ArchiveItemsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index, :get_items, :sync_search_strings]
   before_action :store_return_to_session, only: [:new, :edit]
-
   def create_uid_pdf
     @archive_item = ArchiveItem.find(params[:id])
 
@@ -73,6 +73,18 @@ class ArchiveItemsController < ApplicationController
     end
 
     @total_item_count = @pagy.count
+
+    @all_items = ArchiveItem.all
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @all_items.to_csv, filename: "archive_items-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"}
+    end
+  end
+
+  def export_to_csv
+    ExportArchiveItemsCsvJob.perform_later(current_user.id)
+    redirect_to archive_items_path, notice: "Export started. You'll receive an email when it's ready."
   end
 
   def get_items(sort, num_items)

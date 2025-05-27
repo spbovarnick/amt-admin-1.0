@@ -1,5 +1,0 @@
-<%- headers = ['Title', 'UID'] -%>
-<%= CSV.generate_line headers -%>
-<%- @archive_items.each do |item| -%>
-  <%= CSV.generate_line([item.title, item.uid]) %>
-<%- end -%>

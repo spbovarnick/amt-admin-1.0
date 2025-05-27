@@ -28,6 +28,7 @@ Because ActiveRecord attachments from the original db are stored within the othe
 - Precompile assets: `bundle exec rake assets:precompile`
 - The master key stored in the ignored `master.key` file is required to access mailer address and app-specific password, which is stored in `config/credentials.yml.enc`
 - Rather than `rails s`, boot the development server with the `bin/dev` command, which points to `Procfile.dev` to start the server and watch for `Sass` changes
+- Due to the production volume of `ArchiveItem` records, the application uses `redis` and `Sidekiq` for the ActiveJob `ExportArchiveItemsCsvJob`. To work on this or other jobs locally, you must run `Sidekiq` locally in a second terminal with the command `bundle exec sidekiq`
 
 If you encounter the error `[__NSCFConstantString initialize] may have been in progress in another thread when fork() was called. We cannot safely call it or ignore it in the fork() child process. Crashing instead. Set a breakpoint on objc_initializeAfterForkError to debug.` add `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` to your `~/.zshrc` or `~/.bashrc`. You can check that the `OBJC_DISABLE_INITIALIZE_FORK_SAFETY` variable is set correctly by opening a fresh terminal from within your IDE and running `echo $OBJC_DISABLE_INITIALIZE_FORK_SAFETY`. If `YES` is returned, go ahead and start the server.
 

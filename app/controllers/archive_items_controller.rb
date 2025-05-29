@@ -6,6 +6,7 @@ class ArchiveItemsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index, :get_items, :sync_search_strings]
   before_action :store_return_to_session, only: [:new, :edit]
+
   def create_uid_pdf
     item = ArchiveItem.find(params[:id])
     send_data generate_pdf(item), filename: "#{item.uid}.pdf", type: 'application/pdf'
@@ -232,11 +233,27 @@ class ArchiveItemsController < ApplicationController
   private
 
   def generate_pdf(item)
-    Prawn::Document.generate("#{item.uid}", page_size: [6.in, 4.in], background: "app/assets/images/UID_TEMPLATE_DEV.jpg") do
-      # text item.uid, align: :center, size: 24
-      # text "Title: #{item.title}"
-      # text "Medium: #{item.medium}"
-      # text "UID: #{item.uid}"
+    output_path = Rails.env == "development" ? Rails.root.join("tmp", "labels", "#{item.uid}.pdf") : "#{item.uid}.pdf"
+    FileUtils.mkdir_p(output_path.dirname)
+
+    Prawn::Document.generate(output_path, page_size: [25.in, 16.667.in], background: "app/assets/images/UID_TEMPLATE_DEV.jpg", print_scaling: :fit) do
+      font("app/assets/font/Arial Black.ttf")
+      font_size 50
+
+      text_box(
+        "#{item.uid}",
+        at: [1.25.in, 12.in],
+        width: 16.667.in,
+        height: 1.in,
+        rotate: -90,
+        valign: :center
+        # rotate_around: :center
+      )
+
+      text_box "#{item.uid}",
+        at: [12.076.in, 12.649.in]
+      text_box "#{item.search_collections}",
+        at: [12.076.in, 3.279.in]
     end
   end
 

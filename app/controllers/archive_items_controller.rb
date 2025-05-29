@@ -234,7 +234,7 @@ class ArchiveItemsController < ApplicationController
 
   def generate_pdf(item)
     output_path = Rails.env == "development" ? Rails.root.join("tmp", "labels", "#{item.uid}.pdf") : "#{item.uid}.pdf"
-    FileUtils.mkdir_p(output_path.dirname)
+    Rails.env = "development" ? FileUtils.mkdir_p(output_path.dirname) : nil
 
     Prawn::Document.generate(output_path, page_size: [25.in, 16.667.in], background: "app/assets/images/UID_TEMPLATE_DEV.jpg", print_scaling: :fit) do
       font("app/assets/font/Arial Black.ttf")

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     member do
       get 'copy'
       delete 'delete_medium_photo'
+      get :create_uid_pdf
     end
   end
   resources :archive_tags

@@ -113,7 +113,13 @@
           <div class="light published">PUBLISHED</div>
         <% end %>
       </td>
-      <td><%= archive_item.uid %></td>
+      <td>
+        <% if archive_item.uid.present? %>
+          <%= link_to archive_item.uid, create_uid_pdf_archive_item_path(archive_item), method: 'get', class: "admin-table-button", target: '_blank'  %>
+        <% else %>
+          <%= '' %>
+        <% end %>
+      </td>
       <td><%= archive_item.search_collections %></td>
       <td><%= archive_item.medium %></td>
       <td><%= archive_item.year %></td>

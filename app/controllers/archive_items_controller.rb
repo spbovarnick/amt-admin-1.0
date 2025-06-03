@@ -1,8 +1,18 @@
 require 'csv'
+require "prawn"
+require "prawn/measurement_extensions"
+
 class ArchiveItemsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index, :get_items, :sync_search_strings]
   before_action :store_return_to_session, only: [:new, :edit]
+
+  def create_uid_pdf
+    item = ArchiveItem.find(params[:id])
+    send_data generate_pdf(item), filename: "#{item.uid}.pdf", type: 'application/pdf'
+
+
+  end
 
   def index
     page_items = params[:page_items].present? ? params[:page_items] : 25
@@ -221,6 +231,35 @@ class ArchiveItemsController < ApplicationController
   end
 
   private
+
+  def generate_pdf(item)
+    if Rails.env.development?
+      output_path = Rails.root.join("tmp", "labels", "#{item.uid}.pdf")
+      FileUtils.mkdir_p(output_path.dirname)
+    else
+      output_path = "#{item.uid}.pdf"
+    end
+
+    Prawn::Document.generate(output_path, page_size: [25.in, 16.667.in], background: "app/assets/images/UID_TEMPLATE_DEV.jpg", print_scaling: :fit) do
+      font("app/assets/font/Arial Black.ttf")
+      font_size 50
+
+      text_box(
+        "#{item.uid}",
+        at: [1.25.in, 12.in],
+        width: 16.667.in,
+        height: 1.in,
+        rotate: -90,
+        valign: :center
+        # rotate_around: :center
+      )
+
+      text_box "#{item.uid}",
+        at: [12.076.in, 12.649.in]
+      text_box "#{item.search_collections}",
+        at: [12.076.in, 3.279.in]
+    end
+  end
 
   def store_return_to_session
     session[:return_to] = request.referrer if action_name.in?(['new', 'edit'])

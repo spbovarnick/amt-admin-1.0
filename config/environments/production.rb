@@ -113,4 +113,4 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end
 
-Rails.application.routes.default_url_options[:host] = 'amt-admin-727b777103da.herokuapp.com'
+Rails.application.routes.default_url_options[:host] = ENV["HOST"]

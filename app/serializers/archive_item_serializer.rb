@@ -11,7 +11,7 @@ class ArchiveItemSerializer < ActiveModel::Serializer
     return nil unless object.poster_image.attached?
 
     if Rails.env.production?
-      object.poster_image.url(expires_in: 1.hour)
+      object.poster_image.url()
     else
       rails_blob_url(object.poster_image)
     end
@@ -22,7 +22,7 @@ class ArchiveItemSerializer < ActiveModel::Serializer
 
     object.content_files.map do |file|
       if Rails.env.production?
-        file.url(expires_in: 1.hour)
+        file.url()
       else
         rails_blob_url(file)
       end
@@ -34,7 +34,7 @@ class ArchiveItemSerializer < ActiveModel::Serializer
 
     object.medium_photos.map do |photo|
       if Rails.env.production?
-        photo.url(expires_in: 1.hour)
+        photo.url()
       else
         rails_blob_url(photo)
       end

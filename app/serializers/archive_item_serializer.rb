@@ -7,39 +7,6 @@ class ArchiveItemSerializer < ActiveModel::Serializer
   has_many :comm_groups, embed: :id, include: true
   has_many :people, embed: :id, include: true
 
-  # def poster_url
-  #   return nil unless object.poster_image.attached?
-
-  #   if Rails.env.production?
-  #     object.poster_image.url()
-  #   else
-  #     rails_blob_url(object.poster_image)
-  #   end
-  # end
-
-  # def content_file_urls
-  #   return [] unless object.content_files.attached?
-
-  #   object.content_files.map do |file|
-  #     if Rails.env.production?
-  #       file.url()
-  #     else
-  #       rails_blob_url(file)
-  #     end
-  #   end
-  # end
-
-  # def medium_photo_urls
-  #   return [] unless object.medium_photos.attached?
-
-  #   object.medium_photos.map do |photo|
-  #     if Rails.env.production?
-  #       photo.url()
-  #     else
-  #       rails_blob_url(photo)
-  #     end
-  #   end
-  # end
   def poster_url
     return nil unless object.poster_image.attached?
 
@@ -53,25 +20,37 @@ class ArchiveItemSerializer < ActiveModel::Serializer
   def content_file_urls
     return [] unless object.content_files.attached?
 
-    object.content_files.map do |file|
-      if Rails.env.production?
-        file.url(expires_in: 1.hour, disposition: "inline")
-      else
-        rails_blob_url(file)
-      end
+    if Rails.env.production?
+      object.content_files.map { |file| file.url(expires_in 1.hour)}
+    else
+      object.content_files.map { |file| rails_blob_url(file)}
     end
+
+    # object.content_files.map do |file|
+    #   if Rails.env.production?
+    #     file.url(expires_in: 1.hour, disposition: "inline")
+    #   else
+    #     rails_blob_url(file)
+    #   end
+    # end
   end
 
   def medium_photo_urls
     return [] unless object.medium_photos.attached?
 
-    object.medium_photos.map do |photo|
-      if Rails.env.production?
-        photo.url(expires_in: 1.hour, disposition: "inline")
-      else
-        rails_blob_url(photo)
-      end
+    if Rails.env.production?
+      object.medium_photos.map { |photo| photo.url(expires_in: 1.hour)}
+    else
+      object.medium_photos.map { |photo| rails_blob_url(photo)}
     end
+
+    # object.medium_photos.map do |photo|
+    #   if Rails.env.production?
+    #     photo.url(expires_in: 1.hour, disposition: "inline")
+    #   else
+    #     rails_blob_url(photo)
+    #   end
+    # end
   end
 
 end

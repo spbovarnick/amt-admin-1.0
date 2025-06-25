@@ -31,6 +31,6 @@ module WafAdmin10
     # allows assets/images urls to be used in .scss files
     config.assets.paths << Rails.root.join('app','assets')
 
-    config.cache_store = :mem_cache_store # Will fallback to $MEMCACHE_SERVERS, then 127.0.0.1:11211
+    # config.cache_store = :mem_cache_store # Will fallback to $MEMCACHE_SERVERS, then 127.0.0.1:11211
   end
 end

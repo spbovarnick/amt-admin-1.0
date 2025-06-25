@@ -1,7 +1,7 @@
 class ArchiveItemSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
 
-  attributes :id, :medium, :year, :title, :content_notes, :credit, :draft, :poster_url, :content_file_urls, :medium_photo_urls, :collections, :credit
+  attributes :id, :medium, :year, :title, :content_notes, :credit, :draft, :poster_url, :content_file_urls, :content_file_names, :medium_photo_urls, :medium_photos_file_names, :collections, :credit
   has_many :tags, embed: :id, include: true
   has_many :locations, embed: :id, include: true
   has_many :comm_groups, embed: :id, include: true
@@ -17,6 +17,12 @@ class ArchiveItemSerializer < ActiveModel::Serializer
     end
   end
 
+  def content_file_names
+    return [] unless object.content_files.attached?
+
+    object.content_files.map { |file| file.filename.to_s }
+  end
+
   def content_file_urls
     return [] unless object.content_files.attached?
 
@@ -25,14 +31,6 @@ class ArchiveItemSerializer < ActiveModel::Serializer
     else
       object.content_files.map { |file| rails_blob_url(file)}
     end
-
-    # object.content_files.map do |file|
-    #   if Rails.env.production?
-    #     file.url(expires_in: 1.hour, disposition: "inline")
-    #   else
-    #     rails_blob_url(file)
-    #   end
-    # end
   end
 
   def medium_photo_urls
@@ -43,14 +41,12 @@ class ArchiveItemSerializer < ActiveModel::Serializer
     else
       object.medium_photos.map { |photo| rails_blob_url(photo)}
     end
+  end
 
-    # object.medium_photos.map do |photo|
-    #   if Rails.env.production?
-    #     photo.url(expires_in: 1.hour, disposition: "inline")
-    #   else
-    #     rails_blob_url(photo)
-    #   end
-    # end
+  def medium_photos_file_names
+    return [] unless object.medium_photos.attached?
+
+    object.medium_photos.map { |file| file.filename.to_s }
   end
 
 end

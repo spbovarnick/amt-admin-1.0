@@ -13,7 +13,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
     # select columns and headers to use
     attributes = %w{ uid search_collections title created_by created_at updated_at medium credit year search_comm_groups search_people search_locations search_tags }
-    headers = [ "UID",  "Collection",  "Title",  "Created By",  "Created At", "Last Updated",  "Medium",  "Credit",  "Year",  "Community Groups",  "People", "Location", "Tags", "Content Notes", "Medium Technical Notes", "Content Files", "Published" ]
+    headers = [ "UID",  "Collection",  "Title",  "Created By",  "Created At", "Last Updated",  "Medium",  "Credit",  "Year",  "Community Groups",  "People", "Location", "Tags", "Content Notes", "Medium Technical Notes", "Content Files", "Filenames", "Published" ]
 
     # write csv
     CSV.open(file.path, "w") do |csv|
@@ -87,6 +87,12 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       "Error: #{e.message}"
     end.join(", ")
 
+    filenames = item.content_files.map do |file|
+      name_arr = file.filename.to_s
+    rescue => e
+      "Error: #{e.message}"
+    end
+
     # transform block text to plain
     if item.content_notes&.body&.present?
       content_notes = item.content_notes.to_plain_text
@@ -117,6 +123,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       content_notes,
       medium_notes,
       urls,
+      filenames.join(', '),
       !item.draft
     ]
   end

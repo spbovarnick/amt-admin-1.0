@@ -11,204 +11,205 @@
     </div>
   </div>
 
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :title, "Subject" %>
-      <%= form.text_field :title, autocomplete: "off", "data-lpignore": true %>
-    </div>
-  </div>
-
-  <% if action_name == "new" || action_name == "copy" %>
-    <%= form.hidden_field :created_by, value: @current_user.email %>
-  <% else %>
-    <%= form.hidden_field :updated_by, value: @current_user.email %>
-    <div class="form-row">
-      <div class="form-set">
-        <%= form.label :created_by, "Added by" %>
-        <%= form.text_field :created_by, disabled: true %>
-      </div>
-      <div class="form-set">
-        <%= form.label :created_at, "Date added" %>
-        <input disabled="disabled" type="text" value=<%= @archive_item.created_at.strftime("%-m/%-d/%Y") %> />
-      </div>
-    </div>
-  <% end %>
-
-  <% if @archive_item.updated_by %>
-    <div class="form-row">
-      <div class="form-set">
-        <%= form.label :updated_by, "Last updated by" %>
-        <%= form.text_field :updated_by, disabled: true %>
-      </div>
-      <div class="form-set">
-        <%= form.label :updated_at, "Date updated" %>
-        <input disabled="disabled" type="text" value=<%= @archive_item.updated_at.strftime("%-m/%-d/%Y") %> />
-      </div>
-    </div>
-  <% end %>
-
-
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :medium, "Medium" %>
-      <div class="form-select-wrapper" >
-        <%= form.select :medium, [["Photo", "photo"], ["Film", "film"], ["Audio", "audio"], ["Article", "article"], ["Printed Material", "printed material"]], :include_blank => true, :required => true %>
-      </div>
-    </div>
-    <div class="form-set">
-      <%= form.label :credit, "Credit" %>
-      <%= form.text_field :credit, "data-lpignore": true %>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :year, "Year" %>
-      <%= form.text_field :year, "data-lpignore": true %>
-    </div>
-    <div class="form-set checkbox-wrapper">
-      <%= form.check_box :date_is_approx %> <span>- Date is approximate</span>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :comm_group_list, "Community Group" %>
-      <%= form.hidden_field :comm_group_list, :value => @archive_item.comm_group_list.join(', '), class: "js-tag-input tag-input", "data-tag-options": @comm_group_options.join(', ') %>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :person_list, "People" %>
-      <%= form.hidden_field :person_list, :value => @archive_item.person_list.join(', '), class: "js-tag-input tag-input", "data-tag-options": @person_options.join(', ') %>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :location_list, "Location" %>
-      <%= form.hidden_field :location_list, :value => @archive_item.location_list.join(', '), class: "js-tag-input tag-input", "data-tag-options": @location_options.join(', ') %>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :collection_list, "Collection" %>
-      <%# collection value is special concatenation of id and name values, which are later split into UID and search_collections when record is saved %>
-      <%= form.collection_select :collection_list, Collection.order(:name), :name, :name, :include_blank => true, :required => true %>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :tag_list, "Tags" %>
-      <% unless @current_user.page == "global" %>
-        <div class="user-page-tag-input" style="display:none;">
-          <%= @current_user.page %>
+  <div class="aiu-grid-columns" >
+    <div class="aiu-grid-column-left" >
+      <div class="form-row">
+        <div class="form-set">
+          <%= form.label :medium, "Medium" %>
+          <div class="form-select-wrapper" >
+            <%= form.select :medium, [["Photo", "photo"], ["Film", "film"], ["Audio", "audio"], ["Article", "article"], ["Printed Material", "printed material"]], :include_blank => true, :required => true %>
+          </div>
         </div>
-      <% end %>
-      <%= form.hidden_field :tag_list, :value => @current_user.page != "global" && !@archive_item.tag_list.include?(@current_user.page)? @archive_item.tag_list.join(', ').concat(@current_user.page) : @archive_item.tag_list.join(', ') , class: "js-tag-input tag-input archive-tags", "data-tag-options": @tag_options.join(', ') %>
-    </div>
-  </div>
+        <div class="form-set">
+          <%= form.label :collection_list, "Collection" %>
+          <%# collection value is special concatenation of id and name values, which are later split into UID and search_collections when record is saved %>
+          <%= form.collection_select :collection_list, Collection.order(:name), :name, :name, :include_blank => true, :required => true %>
+        </div>
+      </div>
 
-  <div class="form-row">
-    <% if @archive_item.content_files.attached? %>
-      <div class="form-set">
-        <label>Content Preview</label>
-          <% @archive_item.content_files.each do |file| %>
-            <% if @archive_item.medium == "photo" %>
-              <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
-                <%= image_tag file.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
-              <% else %>
-                <%= link_to 'View file', file, target: "_blank", class: "download-link" %>
-              <% end %>
-            <% else %>
-                <div class="admin-form-filename">File: <%= file.filename %></div>
-            <% end %>
+      <div class="form-row">
+        <div class="form-set">
+          <%= form.label :title, "Subject" %>
+          <%= form.text_field :title, autocomplete: "off", "data-lpignore": true %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-set">
+          <%= form.label :comm_group_list, "Community Group" %>
+          <%= form.hidden_field :comm_group_list, :value => @archive_item.comm_group_list.join(', '), class: "js-tag-input tag-input", "data-tag-options": @comm_group_options.join(', ') %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-set">
+          <%= form.label :person_list, "People" %>
+          <%= form.hidden_field :person_list, :value => @archive_item.person_list.join(', '), class: "js-tag-input tag-input", "data-tag-options": @person_options.join(', ') %>
+        </div>
+        <div class="form-set">
+          <%= form.label :credit, "Credit" %>
+          <%= form.text_field :credit, "data-lpignore": true %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-set">
+          <%= form.label :year, "Year" %>
+          <%= form.text_field :year, "data-lpignore": true %>
+        </div>
+        <div class="form-set checkbox-wrapper">
+          <%= form.check_box :date_is_approx %> <span>- Date is approximate</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-set" id="location-set">
+          <%= form.label :location_list, "Location" %>
+          <%= form.hidden_field :location_list, :value => @archive_item.location_list.join(', '), class: "js-tag-input tag-input location-tag", "data-tag-options": @location_options.join(', ') %>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-set">
+          <%= form.label :tag_list, "Tags" %>
+          <% unless @current_user.page == "global" %>
+            <div class="user-page-tag-input" style="display:none;">
+              <%= @current_user.page %>
+            </div>
           <% end %>
+          <%= form.hidden_field :tag_list, :value => @current_user.page != "global" && !@archive_item.tag_list.include?(@current_user.page)? @archive_item.tag_list.join(', ').concat(@current_user.page) : @archive_item.tag_list.join(', ') , class: "js-tag-input tag-input archive-tags", "data-tag-options": @tag_options.join(', ') %>
+        </div>
       </div>
-    <% end %>
-    <div class="form-set">
-      <%= form.label :content_files, "Content Files" %>
-      <%= form.file_field :content_files, direct_upload: true, multiple: true %>
-    </div>
-  </div>
 
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :content_notes, "Content notes" %>
-      <%= form.rich_text_area :content_notes %>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <% if notice %>
-      <div class="err-messages">
-        <div class="notice"><%= notice %></div>
+      <div class="form-row">
+        <div class="form-set">
+          <%= form.label :content_notes, "Content notes" %>
+          <%= form.rich_text_area :content_notes %>
+        </div>
       </div>
-    <% end %>
-    <% if @archive_item.medium_photos.attached? %>
-      <div class="form-set" id="medium_photo-preview">
-        <label>Medium Photo Preview</label>
-        <% @archive_item.medium_photos.each do |medium_photo| %>
-            <% if medium_photo.content_type == "image/jpeg" || medium_photo.content_type == "image/png" %>
-              <div class="removable-image-container">
-                <%= link_to 'X', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
-                <%= image_tag medium_photo.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
-              </div>
-            <% else %>
-              <%= link_to 'View file', medium_photo, target: "_blank", class: "download-link" %>
-              <%= link_to 'Remove file', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
-            <% end %>
-        <% end %>
+
+      <div class="form-row">
+        <div class="form-set">
+          <%= form.label :medium_notes, "Medium technical notes" %>
+          <%= form.rich_text_area :medium_notes %>
+        </div>
       </div>
-    <% end %>
-    <div class="form-set">
-      <%= form.label :medium_photos, "Medium Photos" %>
-      <%= form.file_field :medium_photos, direct_upload: true, multiple: true %>
-    </div>
-  </div>
 
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :medium_notes, "Medium technical notes" %>
-      <%= form.rich_text_area :medium_notes %>
-    </div>
-  </div>
+      <% if action_name == "new" || action_name == "copy" %>
+        <%= form.hidden_field :created_by, value: @current_user.email %>
+      <% else %>
+        <%= form.hidden_field :updated_by, value: @current_user.email %>
+        <div class="form-row">
+          <div class="form-set">
+            <%= form.label :created_by, "Added by" %>
+            <%= form.text_field :created_by, disabled: true %>
+          </div>
+          <div class="form-set">
+            <%= form.label :created_at, "Date added" %>
+            <input disabled="disabled" type="text" value=<%= @archive_item.created_at.strftime("%-m/%-d/%Y") %> />
+          </div>
+        </div>
+      <% end %>
 
-  <div id="poster-image-row" class="form-row hidden">
-    <% if @archive_item.poster_image.attached? %>
-      <div class="form-set" id="poster-image-preview">
-        <label>Poster Image Preview</label>
-        <% if @archive_item.poster_image.content_type == "image/jpeg" || @archive_item.poster_image.content_type == "image/png" %>
-          <%= image_tag @archive_item.poster_image.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
-        <% else %>
-            <%= link_to 'View file', @archive_item.poster_image, target: "_blank", class: "download-link" %>
-        <% end %>
-      </div>
-    <% end %>
-    <div class="form-set">
-      <%= form.label :poster_image, "Poster Image" %>
-      <%= form.file_field :poster_image, direct_upload: true %>
-
-      <% if @archive_item.poster_image.attached? %>
-        <%= hidden_field_tag 'clear_poster_image', false, id: "hidden-clear-input"  %>
-        <div>
-          <button
-            type="button"
-            class="clear_attachement_button"
-            id="clear_poster_button"
-            data-input="hidden-clear-input"
-            data-preview="poster-image-preview"
-            data-base-input-id="archive_item_poster_image">
-            Remove current file
-          </button>
+      <% if @archive_item.updated_by %>
+        <div class="form-row">
+          <div class="form-set">
+            <%= form.label :updated_by, "Last updated by" %>
+            <%= form.text_field :updated_by, disabled: true %>
+          </div>
+          <div class="form-set">
+            <%= form.label :updated_at, "Date updated" %>
+            <input disabled="disabled" type="text" value=<%= @archive_item.updated_at.strftime("%-m/%-d/%Y") %> />
+          </div>
         </div>
       <% end %>
     </div>
-  </div>
 
+    <div class="aiu-grid-column-right" >
+      <div class="form-row">
+      <% if @archive_item.content_files.attached? %>
+        <div class="form-set">
+          <label>Content Preview</label>
+            <% @archive_item.content_files.each do |file| %>
+              <% if @archive_item.medium == "photo" %>
+                <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
+                  <%= image_tag file.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
+                <% else %>
+                  <%= link_to 'View file', file, target: "_blank", class: "download-link" %>
+                <% end %>
+              <% else %>
+                  <div class="admin-form-filename">File: <%= file.filename %></div>
+              <% end %>
+            <% end %>
+        </div>
+      <% end %>
+      <div class="form-set">
+        <%= form.label :content_files, "Content Files" %>
+        <%= form.file_field :content_files, direct_upload: true, multiple: true %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <% if notice %>
+        <div class="err-messages">
+          <div class="notice"><%= notice %></div>
+        </div>
+      <% end %>
+      <% if @archive_item.medium_photos.attached? %>
+        <div class="form-set" id="medium_photo-preview">
+          <label>Medium Photo Preview</label>
+          <% @archive_item.medium_photos.each do |medium_photo| %>
+              <% if medium_photo.content_type == "image/jpeg" || medium_photo.content_type == "image/png" %>
+                <div class="removable-image-container">
+                  <%= link_to 'X', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
+                  <%= image_tag medium_photo.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
+                </div>
+              <% else %>
+                <%= link_to 'View file', medium_photo, target: "_blank", class: "download-link" %>
+                <%= link_to 'Remove file', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
+              <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <div class="form-set">
+        <%= form.label :medium_photos, "Medium Photos" %>
+        <%= form.file_field :medium_photos, direct_upload: true, multiple: true %>
+      </div>
+    </div>
+
+    <div id="poster-image-row" class="form-row hidden">
+      <% if @archive_item.poster_image.attached? %>
+        <div class="form-set" id="poster-image-preview">
+          <label>Poster Image Preview</label>
+          <% if @archive_item.poster_image.content_type == "image/jpeg" || @archive_item.poster_image.content_type == "image/png" %>
+            <%= image_tag @archive_item.poster_image.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
+          <% else %>
+              <%= link_to 'View file', @archive_item.poster_image, target: "_blank", class: "download-link" %>
+          <% end %>
+        </div>
+      <% end %>
+      <div class="form-set">
+        <%= form.label :poster_image, "Poster Image" %>
+        <%= form.file_field :poster_image, direct_upload: true %>
+
+        <% if @archive_item.poster_image.attached? %>
+          <%= hidden_field_tag 'clear_poster_image', false, id: "hidden-clear-input"  %>
+          <div>
+            <button
+              type="button"
+              class="clear_attachement_button"
+              id="clear_poster_button"
+              data-input="hidden-clear-input"
+              data-preview="poster-image-preview"
+              data-base-input-id="archive_item_poster_image">
+              Remove current file
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    </div>
+  </div>
 
   <div class="form-row">
     <div class="form-set">

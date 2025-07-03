@@ -119,23 +119,96 @@ $table-max-width: 1600px;
   display: flex;
   flex-flow: column;
   margin: 40px 0;
-  max-width: 800px;
 
   .form-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
 
-    &.hidden {
-      display: none;
+    &:nth-of-type(2) {
+      .form-set {
+        width: 100% !important;
+      }
+    }
+
+    &:nth-of-type(4) {
+      .tag-ui-text-input:first-of-type {
+        width: 100%;
+      }
+    }
+
+    &:nth-of-type(8), &:nth-of-type(9) {
+      .form-set {
+        width: 100%;
+      }
+    }
+  }
+
+  .aiu-grid-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 23px;
+
+    .aiu-grid-column-right {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+    }
+
+    .file-col{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 23px;
+
+      &.hidden {
+        display: none;
+      }
+
+      .file-header{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+
+        &.no-files {
+          justify-content: end !important;
+        }
+
+        #poster-left-header-col{
+          display: flex;
+          flex-direction: column;
+
+          #clear_poster_button{
+            padding: 0 !important;
+            text-align: left;
+          }
+        }
+
+        .upload-set{
+          display: flex;
+          flex-direction: column;
+
+          label, input {
+            width: fit-content;
+          }
+        }
+      }
+      .admin-form-image{
+        width: 100%;
+      }
+
+      #poster-preview-img {
+        width: 80%;
+      }
     }
   }
 
   .form-set {
     display: flex;
     flex-flow: column;
-    flex-grow: 1;
-    flex-basis: 100%;
+    // flex-grow: 1;
+    // flex-basis: 100%;
+    width: 50%;
 
     .select-menu {
       width: calc(50% - 15px);
@@ -172,13 +245,15 @@ $table-max-width: 1600px;
     }
 
     &.form-controls {
-      border-top: solid 1px variables.$black-4;
-      margin-top: 20px;
       padding-top: 20px;
 
       * {
         margin: 0;
       }
+    }
+
+    &:nth-of-type(3) {
+      width: 100%;
     }
   }
 
@@ -306,14 +381,6 @@ $table-max-width: 1600px;
     color: variables.$black-5;
     text-decoration: underline;
   }
-}
-
-.admin-form-image {
-  max-width: 80%;
-
-  // &:not(:last-child) {
-  //   margin-bottom: 10px;
-  // }
 }
 
 .removable-image-container {

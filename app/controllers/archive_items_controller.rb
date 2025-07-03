@@ -179,9 +179,14 @@ class ArchiveItemsController < ApplicationController
 
   def delete_medium_photo
     @archive_item = ArchiveItem.find(params[:id])
-    photo = @archive_item.medium_photos.find(params[:medium_photo_id])
-    photo.purge
-    redirect_to edit_archive_item_path(@archive_item), notice: 'Photo was successfully deleted'
+    photo = @archive_item.medium_photos.attachments.find_by(id: params[:medium_photo_id])
+
+    if photo
+      photo.purge
+      redirect_to edit_archive_item_path(@archive_item), notice: 'Photo was successfully deleted'
+    else
+      redirect_to edit_archive_item_path(@archive_item), notice: "Photo could not be found"
+    end
   end
 
   def update

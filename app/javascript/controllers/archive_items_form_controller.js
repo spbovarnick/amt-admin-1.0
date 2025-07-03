@@ -6,7 +6,8 @@ export default class extends Controller {
 
     showOrHidePoster(mediumInput);
     trackMedium(mediumInput);
-    listenForClear();
+    // REDUNDANT JS, SEE BELOW
+    // listenForClear();
 
     function trackMedium(input) {
       input.addEventListener("change", function () {
@@ -24,30 +25,31 @@ export default class extends Controller {
       }
     }
 
-    function listenForClear() {
-      const allClearButtons = document.querySelectorAll(
-        ".clear_attachement_button"
-      );
-      allClearButtons.forEach((button) => {
-        const uploadInput = document.querySelector(
-          `#${button.dataset.baseInputId}`
-        );
-        const input = document.querySelector(`#${button.dataset.input}`);
-        const preview = document.querySelector(`#${button.dataset.preview}`);
+    // REDUNDANT JS -> replaced by native turbo rails delete, saving for posterity, downroad UX updates
+    // function listenForClear() {
+    //   const allClearButtons = document.querySelectorAll(
+    //     ".clear_attachement_button"
+    //   );
+    //   allClearButtons.forEach((button) => {
+    //     const uploadInput = document.querySelector(
+    //       `#${button.dataset.baseInputId}`
+    //     );
+    //     const input = document.querySelector(`#${button.dataset.input}`);
+    //     const preview = document.querySelector(`#${button.dataset.preview}`);
 
-        uploadInput.addEventListener("change", function () {
-          // prevent attachement from being purged if new item is uploaded
-          input.value = "false";
-        });
+    //     uploadInput.addEventListener("change", function () {
+    //       // prevent attachement from being purged if new item is uploaded
+    //       input.value = "false";
+    //     });
 
-        button.addEventListener("click", function () {
-          // pass "true" to controller, so it knows to purge the attachement
-          input.value = "true";
-          // hide the preview
-          preview.style.display = "none";
-          button.style.display = "none";
-        });
-      });
-    }
+    //     button.addEventListener("click", function () {
+    //       // pass "true" to controller, so it knows to purge the attachement
+    //       input.value = "true";
+    //       // hide the preview
+    //       preview.style.display = "none";
+    //       button.style.display = "none";
+    //     });
+    //   });
+    // }
   }
 }

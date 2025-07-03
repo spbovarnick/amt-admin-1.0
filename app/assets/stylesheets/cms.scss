@@ -153,54 +153,63 @@ $table-max-width: 1600px;
       display: flex;
       flex-direction: column;
       align-items: end;
-    }
 
-    .file-col{
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 23px;
-
-      &.hidden {
-        display: none;
-      }
-
-      .file-header{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
-
-        &.no-files {
-          justify-content: end !important;
-        }
-
-        #poster-left-header-col{
-          display: flex;
-          flex-direction: column;
-
-          #clear_poster_button{
-            padding: 0 !important;
-            text-align: left;
-          }
-        }
-
-        .upload-set{
-          display: flex;
-          flex-direction: column;
-
-          label, input {
-            width: fit-content;
-          }
-        }
-      }
-      .admin-form-image{
+      .file-col{
         width: 100%;
-      }
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 23px;
 
-      #poster-preview-img {
-        width: 80%;
+        &.hidden {
+          display: none;
+        }
+
+        .file-header{
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 15px;
+
+          &.no-files {
+            justify-content: end !important;
+          }
+
+          #poster-left-header-col{
+            display: flex;
+            flex-direction: column;
+
+            .poster-img-del {
+              color: #9398a0;
+              font-size: 14px;
+              text-decoration: underline;
+              cursor: pointer;
+              margin-top: 10px
+            }
+
+            #clear_poster_button{
+              padding: 0 !important;
+              text-align: left;
+            }
+          }
+
+          .upload-set{
+            display: flex;
+            flex-direction: column;
+
+            label, input {
+              width: fit-content;
+            }
+          }
+        }
+        .admin-form-image{
+          width: 100%;
+        }
+
+        #poster-preview-img {
+          width: 80%;
+        }
       }
     }
+
   }
 
   .form-set {
@@ -517,17 +526,6 @@ body.--is-admin .pagy-nav {
       margin-right: 20px;
     }
   }
-}
-
-.clear_attachement_button {
-  background: none;
-  border: none;
-  color: variables.$black-5;
-  display: inline;
-  margin-top: 10px;
-  font-size: 14px;
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 .carousel-image-preview {

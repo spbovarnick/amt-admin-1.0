@@ -188,15 +188,7 @@
           <% if @archive_item.poster_image.attached?%>
             <div id="poster-left-header-col">
               <label>Poster Image Preview</label>
-              <button
-                type="button"
-                class="clear_attachement_button"
-                id="clear_poster_button"
-                data-input="hidden-clear-input"
-                data-preview="poster-image-preview"
-                data-base-input-id="archive_item_poster_image">
-                Remove current file
-              </button>
+              <%= link_to "Remove current file", delete_poster_image_archive_item_path(@archive_item, poster_image_id: @archive_item.poster_image.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "poster-img-del" %>
             </div>
           <% end %>
           <div class="upload-set">

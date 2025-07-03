@@ -160,8 +160,9 @@
           <label>Medium Photo Preview</label>
           <% @archive_item.medium_photos.each do |medium_photo| %>
               <% if medium_photo.content_type == "image/jpeg" || medium_photo.content_type == "image/png" %>
+              <% p "pic", medium_photo %>
                 <div class="removable-image-container">
-                  <%= link_to 'X', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
+                  <%= link_to 'X', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
                   <%= image_tag medium_photo.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
                 </div>
               <% else %>

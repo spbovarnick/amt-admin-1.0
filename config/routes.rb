@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     end
   end
   resources :people
-  resources :archive_items, only: [:index, :create, :show, :new, :edit, :destroy, :update] do
+  resources :archive_items, only: [:index, :create, :show, :new, :edit, :destroy, :update, :delete] do
     collection do
       post :export_to_csv
     end

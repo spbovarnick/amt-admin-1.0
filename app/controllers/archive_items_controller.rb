@@ -189,6 +189,18 @@ class ArchiveItemsController < ApplicationController
     end
   end
 
+  def delete_poster_image
+    @archive_item = ArchiveItem.find(params[:id])
+    poster_img = @archive_item.poster_image.attachments.find_by(id: params[:poster_image_id])
+
+    if poster_img
+      poster_img.purge
+      redirect_to edit_archive_item_path(@archive_item), notice: 'Poster image was successfully deleted'
+    else
+      redirect_to edit_archive_item_path(@archive_item), notice: "Poster image could not be found"
+    end
+  end
+
   def update
     @archive_item = ArchiveItem.find(params[:id])
 

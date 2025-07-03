@@ -139,7 +139,7 @@
       <% if @archive_item.content_files.attached? %>
         <% @archive_item.content_files.each do |file| %>
         <p>Type: <%= file.content_type %> | Variable? <%= file.variable? %> | Filename: <%= file.filename %></p>
-          <% if @archive_item.medium == "photo" || @archive_item.medium == "article" || @archive_item.medium == "printed_material" %>
+          <% if @archive_item.medium.downcase == "photo" || @archive_item.medium.downcase == "article" || @archive_item.medium.downcase == "printed_material" %>
             <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
               <%= image_tag file.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
             <% else %>

@@ -138,6 +138,7 @@
         </div>
       <% if @archive_item.content_files.attached? %>
         <% @archive_item.content_files.each do |file| %>
+        <p> Medium: <%= @archive_item.medium.downcase %></p>
           <% if @archive_item.medium.downcase == "photo" || @archive_item.medium.downcase == "article" || @archive_item.medium.downcase == "printed_material" %>
             <p>Type: <%= file.content_type %> | Variable? <%= file.variable? %> | Filename: <%= file.filename %></p>
             <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>

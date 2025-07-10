@@ -8,13 +8,8 @@ class WeeklyCsvSnapshotJob < ApplicationJob
     aws_bucket = ENV['CSV_BUCKET_NAME']
 
     puts "Job started at #{Time.now}"
-    # users are selected programmatically from those with the special designation snapshot_recipient: true
+    # users are selected programmatically from those with the special designation snapshot_recipient: true, in both dev and in prod
     users = User.where(snapshot_recipient: true).map { |u| u.email}
-    if Rails.env.development?
-      users = User.where(snapshot_recipient: true).map { |u| u.email }
-      # users = "spbovarnick@gmail.com"
-    end
-    # users = Array.wrap(User.where(snapshot_recipient: true))
     file = Tempfile.new(["archive_items", ".csv"])
 
     # select columns and headers to use

@@ -3,5 +3,7 @@ desc "This task is called by the Heroku scheduler add-on and sends a weekly CSV 
 require 'csv'
 
 task :send_snapshot => :environment do
-  WeeklyCsvSnapshotJob.perform_later
+  if Time.now.friday?
+    WeeklyCsvSnapshotJob.perform_later
+  end
 end

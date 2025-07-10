@@ -1,3 +1,6 @@
+# NOTE to test this in staging, the heroku scheduler add-on must be attached to the staging application. see details here: https://devcenter.heroku.com/articles/scheduler#installing-the-add-on
+
+
 require 'csv'
 class WeeklyCsvSnapshotJob < ApplicationJob
   queue_as :default

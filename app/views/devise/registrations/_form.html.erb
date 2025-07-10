@@ -1,36 +1,45 @@
-<%= form_for(@user, as: :user, url: registration_path(:user), html: { class: ["admin-form", "user-reg-form"], method: user_form_method(@user)}, data: { controller: 'user-registration'}) do |f| %>  
-    <%= render "devise/shared/error_messages", resource: @user %>
+<%= form_for(@user, as: :user, url: registration_path(:user), html: { class: ["admin-form", "user-reg-form"], method: user_form_method(@user)}, data: { controller: 'user-registration'}) do |f| %>
+	<%= render "devise/shared/error_messages", resource: @user %>
 
-		<% if action_name == "edit" %>
-			<%= f.hidden_field :id, value: @user.id %>
-		<% end %>
+	<% if action_name == "edit" %>
+		<%= f.hidden_field :id, value: @user.id %>
+	<% end %>
 
-    <div class="form-row">
+	<div class="form-row">
 		<div class="form-set">
 			<%= f.label :email %>
 			<%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %>
 		</div>
 	</div>
 
-    <div class="form-row" id="admin_radio">
-		<div class="form-set">
+	<div class="form-row" id="admin_radio">
+		<div class="form-set user_form">
 			<%= f.label :admin %>
 			<div class="form-select-wrapper">
 				<%= f.select :admin, [["True", true], ["False", false, { default: true }]] %>
 			</div>
 		</div>
-    </div>
+	</div>
 
-    <div class="form-row" id="page_select_field">
+	<div class="form-row" id="page_select_field">
 		<div class="form-set">
 			<%= f.label :page, "Page Access" %>
 			<div class="form-select-wrapper">
 					<%= f.select :page, options_for_select( @pages, @user.page ) %>
 			</div>
 		</div>
-    </div>
+	</div>
 
-    <div class="form-row">
+	<div class="form-row" id="snapshot_recipient_radio">
+		<div class="form-set">
+			<%= f.label :snapshot_recipient %>
+			<div class="form-select-wrapper">
+				<%= f.select :admin, [["True", true], ["False", false, { default: true }]] %>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-row">
 		<div class="form-set password-initial">
 			<%= f.label :password %>
 			<% if action_name == "edit" || action_name == "update" %>
@@ -41,16 +50,16 @@
 			<% end %>
 			<%= f.password_field :password, autocomplete: "new-password" %>
 		</div>
-    </div>
+	</div>
 
-    <div class="form-row">
+	<div class="form-row">
 		<div class="form-set password-confirm">
 			<%= f.label :password_confirmation %>
 			<%= f.password_field :password_confirmation, autocomplete: "new-password" %>
 		</div>
-    </div>
+	</div>
 
-    <div class="actions">
+	<div class="actions">
 		<%= f.submit @submit_text, class: "button-round" %>
-    </div>
+	</div>
 <% end %>

@@ -581,7 +581,8 @@ CREATE TABLE public.users (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     page character varying,
-    admin boolean DEFAULT false
+    admin boolean DEFAULT false,
+    snapshot_recipient boolean DEFAULT false
 );
 
 
@@ -1080,6 +1081,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250710211947'),
 ('20250417221814'),
 ('20240229063230'),
 ('20240229063019'),

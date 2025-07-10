@@ -93,6 +93,9 @@ Users with archivist authorization can be created through the console with the f
 User.create!({:email => "someone@gmail.com", :password => "testpass", :password_confirmation => "testpass", :page => "Albina Music Trust"})
 ```
 
+<br/>
+Archivists who should receive the weekly CSV snapshot email need to have have their accounts created or updated with `:snapshot_recipient => true`. See `weekly_csv_snapshot_job.rb` for further details.
+
 ### Third Party Tools
 
 **_rails_live_reload_** <br/>

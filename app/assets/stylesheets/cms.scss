@@ -126,7 +126,7 @@ $table-max-width: 1600px;
     margin-bottom: 20px;
 
     &:nth-of-type(2) {
-      .form-set {
+      .form-set:not(.user_form) {
         width: 100% !important;
       }
     }

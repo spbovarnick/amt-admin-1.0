@@ -19,6 +19,7 @@
 		<th>User Email</th>
 		<th>Credential</th>
 		<th>Affiliation</th>
+		<th>CSV Snapshot Recipient?</th>
 		<th></th>
 	</tr>
 	<% @users.each do |user| %>
@@ -35,6 +36,9 @@
 				<% if !user.admin %>
 					<%= user.page %>
 				<% end %>
+			</td>
+			<td>
+				<%= user.snapshot_recipient %>
 			</td>
 			<td class="admin-table-actions">
 				<%= button_to 'Edit', edit_user_registration_path(user), method: 'get', class: "admin-table-button" %>

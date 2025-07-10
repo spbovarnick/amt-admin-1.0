@@ -1,8 +1,8 @@
-class WeeklyCsvMailer > ApplicationMailer
+class WeeklyCsvMailer < ApplicationMailer
   def csv_ready
-    @users = params[:user]
+    @users = params[:users]
     @url = params[:url]
     puts "From Mailer: #{@url}"
-    mail(to: user.email, subject: "Your Weekly Archive Items CSV for #{Date.today} is Ready")
+    mail(to: @users, subject: "Your Weekly CSV for #{Date.today} is Ready")
   end
 end

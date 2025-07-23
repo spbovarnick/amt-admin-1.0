@@ -2,21 +2,21 @@ class Api::V1::ArchiveItemsController < ApplicationController
   include ActiveStorage::SetCurrent
   include Rails.application.routes.url_helpers
   def index
-    archive_items = ArchiveItem.all.where(draft: false)
+    archive_items = base_scope
     archive_items = filter_tags(archive_items)
     archive_items = filter_medium_and_year(archive_items).order(updated_at: :desc)
     render json: archive_items
   end
 
   def page_count
-    archive_items = ArchiveItem.all.where(draft: false)
+    archive_items = base_scope
     archive_items = filter_tags(archive_items)
     archive_items = filter_medium_and_year_for_page_count(archive_items).count
     render json: archive_items
   end
 
   def pages_page_count
-    archive_items = ArchiveItem.all.where(draft: false).tagged_with(params[:page_tags], :any => true)
+    archive_items = base_scope.tagged_with(params[:page_tags], :any => true)
     archive_items = filter_tags(archive_items)
     archive_items = filter_medium_and_year_for_page_count(archive_items).count
     render json: archive_items
@@ -102,6 +102,10 @@ class Api::V1::ArchiveItemsController < ApplicationController
 
   private
 
+  def base_scope
+    ArchiveItem.where(draft: false)
+  end
+
   def filter_tags(archive_items)
     allTags = params.slice(:tags, :locations, :comm_groups, :people, :collections).values.flatten.compact
     allTags.length > 0 ? archive_items.tagged_with(allTags, :any => true) : archive_items
@@ -117,6 +121,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
     else
       archive_items = archive_items.offset(params[:offset]).limit(params[:limit])
     end
+    archive_items
   end
 
   def filter_medium_and_year_for_page_count(archive_items)
@@ -126,9 +131,8 @@ class Api::V1::ArchiveItemsController < ApplicationController
       archive_items = archive_items.where({year: params[:year].to_i..(params[:year].to_i + 9)})
     elsif params[:medium].present?
       archive_items = archive_items.where({medium: params[:medium]})
-    else
-      archive_items = archive_items
     end
+    archive_items
   end
 
   def archive_item

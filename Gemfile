@@ -16,7 +16,7 @@ gem "prawn"
 gem 'pg', '~> 1.5', '>= 1.5.4'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem "puma", ">= 6.4.2"
+gem "puma", ">= 6.4.3"
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
@@ -46,7 +46,7 @@ gem 'active_model_serializers', '~> 0.10.14'
 
 gem 'devise', '~> 4.9', '>= 4.9.3'
 
-gem 'rack-cors'
+gem 'rack-cors', ">= 2.0.2"
 
 gem 'sidekiq'
 
@@ -97,3 +97,13 @@ group :development do
 end
 
 gem 'dalli', '~> 2.7', '>= 2.7.6'
+
+gem "nokogiri", ">= 1.18.9"
+
+gem "rack", ">= 3.0.16"
+
+gem "webrick", ">= 1.8.2"
+
+gem "google-protobuf", ">= 3.25.5"
+
+gem "thor", ">= 1.4.0"

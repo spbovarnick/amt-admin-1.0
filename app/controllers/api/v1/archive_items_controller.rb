@@ -10,20 +10,18 @@ class Api::V1::ArchiveItemsController < ApplicationController
 
   def page_count
     archive_items = base_scope
-    archive_items = filter_tags(archive_items)
-    archive_items = filter_medium_and_year_for_page_count(archive_items).count
-    render json: archive_items
-  end
 
-  def pages_page_count
-    archive_items = base_scope.tagged_with(params[:page_tags], :any => true)
+    if params[:page_tags].present?
+      archive_items = archive_items.tagged_with(params[:page_tags], :any => true)
+    end
+
     archive_items = filter_tags(archive_items)
-    archive_items = filter_medium_and_year_for_page_count(archive_items).count
-    render json: archive_items
+    archive_items = filter_medium_and_year_for_page_count(archive_items)
+    render json: archive_items.count
   end
 
   def pages_index
-    archive_items = ArchiveItem.where(draft: false).tagged_with(params[:page_tags], :any => true)
+    archive_items = base_scope.tagged_with(params[:page_tags], :any => true)
     archive_items = filter_tags(archive_items)
     archive_items = filter_medium_and_year(archive_items).order(updated_at: :desc)
 
@@ -63,33 +61,17 @@ class Api::V1::ArchiveItemsController < ApplicationController
   end
 
   def search
-    # get items with matching tags
-    if params[:page_tags] && params[:page_tags].join.empty?
-      tag_archive_items = ArchiveItem.where(draft: false).tagged_with(params[:page_tags], :on => :tags, :any => true).search_archive_items(params[:q])
-    end
-
-    # get items with matching collections
-    if params[:page_collections] && params[:page_collections].join.empty?
-      collection_archive_items = ArchiveItem.where(draft: false).tagged_with(params[:page_collections], :on => :collections, :any => true).search_archive_items(params[:q])
-    end
-
-    if tag_archive_items && collection_archive_items
-      # if both item and collection items exist, combine them
-      archive_items = tag_archive_items.or(collection_archive_items)
-    elsif tag_archive_items
-      # if only one exists, use that
-      archive_items = filter_tags(tag_archive_items)
-    elsif collection_archive_items
-      archive_items = filter_tags(collection_archive_items)
-    else
-      # if none of the above conditions are met, just search for items
-      archive_items = ArchiveItem.where(draft: false).search_archive_items(params[:q])
-      archive_items = filter_tags(archive_items)
-    end
-
+    archive_items = search_scope
     archive_items = filter_medium_and_year(archive_items)
 
     render json: archive_items
+  end
+
+  def search_page_count
+    archive_items = search_scope
+    archive_items = filter_medium_and_year(archive_items)
+
+    render json: archive_items.count
   end
 
   def show
@@ -133,6 +115,34 @@ class Api::V1::ArchiveItemsController < ApplicationController
       archive_items = archive_items.where({medium: params[:medium]})
     end
     archive_items
+  end
+
+  def search_scope
+# get items with matching tags
+    if params[:page_tags] && params[:page_tags].join.empty?
+      tag_archive_items = base_scope.tagged_with(params[:page_tags], :on => :tags, :any => true).search_archive_items(params[:q])
+    end
+
+    # get items with matching collections
+    if params[:page_collections] && params[:page_collections].join.empty?
+      collection_archive_items = base_scope.tagged_with(params[:page_collections], :on => :collections, :any => true).search_archive_items(params[:q])
+    end
+
+    archive_items =
+      if tag_archive_items && collection_archive_items
+        # if both item and collection items exist, combine them
+        tag_archive_items.or(collection_archive_items)
+      elsif tag_archive_items
+        # if only one exists, use that
+        filter_tags(tag_archive_items)
+      elsif collection_archive_items
+        filter_tags(collection_archive_items)
+      else
+        # if none of the above conditions are met, just search for items
+        base_scope.search_archive_items(params[:q])
+      end
+
+      filter_tags(archive_items)
   end
 
   def archive_item

@@ -2,9 +2,23 @@ class Api::V1::ArchiveItemsController < ApplicationController
   include ActiveStorage::SetCurrent
   include Rails.application.routes.url_helpers
   def index
-    archive_items = ArchiveItem.all.where(draft: false)
+    archive_items = base_scope
     archive_items = filter_tags(archive_items)
     archive_items = filter_medium_and_year(archive_items).order(updated_at: :desc)
+    render json: archive_items
+  end
+
+  def page_count
+    archive_items = base_scope
+    archive_items = filter_tags(archive_items)
+    archive_items = filter_medium_and_year_for_page_count(archive_items).count
+    render json: archive_items
+  end
+
+  def pages_page_count
+    archive_items = base_scope.tagged_with(params[:page_tags], :any => true)
+    archive_items = filter_tags(archive_items)
+    archive_items = filter_medium_and_year_for_page_count(archive_items).count
     render json: archive_items
   end
 
@@ -29,7 +43,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
                     .with_attached_content_files
                     .order(year: :asc)
 
-     items_as_json = Rails.cache.fetch(cache_key, expires_in: 4.hours ) do 
+     items_as_json = Rails.cache.fetch(cache_key, expires_in: 4.hours ) do
       timeline_items.map do |item|
         {
           id: item.id,
@@ -44,10 +58,10 @@ class Api::V1::ArchiveItemsController < ApplicationController
         }
       end
     end
-    
+
     render json: items_as_json
   end
-  
+
   def search
     # get items with matching tags
     if params[:page_tags] && params[:page_tags].join.empty?
@@ -87,7 +101,11 @@ class Api::V1::ArchiveItemsController < ApplicationController
   end
 
   private
-  
+
+  def base_scope
+    ArchiveItem.where(draft: false)
+  end
+
   def filter_tags(archive_items)
     allTags = params.slice(:tags, :locations, :comm_groups, :people, :collections).values.flatten.compact
     allTags.length > 0 ? archive_items.tagged_with(allTags, :any => true) : archive_items
@@ -103,6 +121,18 @@ class Api::V1::ArchiveItemsController < ApplicationController
     else
       archive_items = archive_items.offset(params[:offset]).limit(params[:limit])
     end
+    archive_items
+  end
+
+  def filter_medium_and_year_for_page_count(archive_items)
+    if params[:year].present? && params[:medium].present?
+      archive_items = archive_items.where({year: params[:year].to_i..(params[:year].to_i + 9), medium: params[:medium]})
+    elsif params[:year].present?
+      archive_items = archive_items.where({year: params[:year].to_i..(params[:year].to_i + 9)})
+    elsif params[:medium].present?
+      archive_items = archive_items.where({medium: params[:medium]})
+    end
+    archive_items
   end
 
   def archive_item

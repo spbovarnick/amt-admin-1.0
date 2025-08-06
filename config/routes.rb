@@ -35,6 +35,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'archive_items/search'
       get 'archive_items/index'
+      get 'archive_items/page_count'
+      get 'archive_items/pages_page_count'
       get 'archive_items/pages_index'
       get 'archive_items/timeline'
       get '/archive_items/:id', to: 'archive_items#show'

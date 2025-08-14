@@ -4,7 +4,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
   def index
     archive_items = base_scope
     archive_items = filter_tags(archive_items)
-    archive_items = filter_medium_and_year(archive_items).order(featured_item: :asc, updated_at: :desc)
+    archive_items = filter_medium_and_year(archive_items).order(featured_item: :desc, updated_at: :desc)
     render json: archive_items
   end
 
@@ -23,7 +23,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
   def pages_index
     archive_items = base_scope.tagged_with(params[:page_tags], :any => true)
     archive_items = filter_tags(archive_items)
-    archive_items = filter_medium_and_year(archive_items).order(featured_item: :asc, updated_at: :desc)
+    archive_items = filter_medium_and_year(archive_items).order(featured_item: :desc, updated_at: :desc)
 
     render json: archive_items
   end

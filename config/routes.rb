@@ -22,6 +22,10 @@ Rails.application.routes.draw do
       get 'copy'
       delete 'delete_medium_photo', 'delete_poster_image'
       get :create_uid_pdf
+      patch :update_content_files_order
+      patch :update_medium_photos_order
+      post :upload_content_files
+      post :upload_medium_photos
     end
   end
   resources :archive_tags

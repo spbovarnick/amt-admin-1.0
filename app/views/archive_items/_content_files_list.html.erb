@@ -1,0 +1,15 @@
+<ul id="content-files-list"
+  data-controller="file-manager"
+  data-file-manager-url-value="<%= update_content_files_order_archive_item_path(@archive_item) %>"
+  data-file-manager-upload-url-value="<%= upload_content_files_archive_item_path(@archive_item) %>"
+>
+  <% @archive_item.ordered_content_files.each do |file| %>
+    <li data-id="<%= file.blob.id %>">
+      <%= link_to file.filename, rails_blob_url(file) %>
+    </li>
+  <% end %>
+</ul>
+
+<div class="dropzone">
+  Drop files here or click to upload
+</div>

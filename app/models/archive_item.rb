@@ -44,6 +44,14 @@ class ArchiveItem < ApplicationRecord
     has_rich_text :medium_notes
     has_one_attached :poster_image
 
+    def ordered_content_files
+        sort_attachments(content_files, content_files_order)
+    end
+
+    def ordered_medium_photos
+        sort_attachments(medium_photos, medium_photos_order)
+    end
+
     # validations
     validates :medium, presence: true, inclusion: { in: ["photo","film","audio","article","printed material"] }
     # validates :collections, presence: true
@@ -62,6 +70,13 @@ class ArchiveItem < ApplicationRecord
     end
 
     private
+
+    def sort_attachments(attachments, order_array)
+        attachments.sort_by do |f|
+            idx = order_array.index(f.blob_id.to_s)
+            idx.nil? ? Float::INFINITY : idx
+        end
+    end
 
     MEDIUM_CODES = {
         "photo" => 1,

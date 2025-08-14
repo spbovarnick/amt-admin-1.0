@@ -127,15 +127,7 @@
 
     <div class="aiu-grid-column-right" >
       <div class="file-col">
-        <div class="file-header <%= 'no-files' if !@archive_item.content_files.attached? %>">
-          <% if @archive_item.content_files.attached? %>
-            <label>Content Preview</label>
-          <% end %>
-          <div class="upload-set">
-            <%= form.label :content_files, "Content Files" %>
-            <%= form.file_field :content_files, direct_upload: true, multiple: true %>
-          </div>
-        </div>
+        <%= render "content_files_list" %>
       <% if @archive_item.content_files.attached? %>
         <% @archive_item.content_files.each do |file| %>
           <% if @archive_item.medium.downcase == "photo" || @archive_item.medium.downcase == "article" || @archive_item.medium.downcase == "printed material" %>

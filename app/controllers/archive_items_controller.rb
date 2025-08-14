@@ -247,6 +247,30 @@ class ArchiveItemsController < ApplicationController
     redirect_to archive_items_path
   end
 
+  def update_content_files_order
+    @archive_item = ArchiveItem.find(params[:id])
+    @archive_item.update!(content_files_order: params[:order])
+    head :ok
+  end
+
+  def update_medium_photos_order
+    @archive_item = ArchiveItem.find(params[:id])
+    @archive_item.update!(medium_photos_order: params[:order])
+    head :ok
+  end
+
+  def upload_content_files
+    @archive_item = ArchiveItem.find(params[:id])
+    @archive_item.content_files.attach(params[:files])
+    render partial: "archive_items/content_files_list", locals: { archive_item: @archive_item }
+  end
+
+  def upload_medium_photos
+    @archive_item = ArchiveItem.find(params[:id])
+    @archive_item.medium_photos.attach(params[:files])
+    render partial: "archive_items/medium_photos_list", locals: { archive_item: @archive_item }
+  end
+
   private
 
   def generate_pdf(item)

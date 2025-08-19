@@ -177,6 +177,18 @@ class ArchiveItemsController < ApplicationController
     @current_user = current_user
   end
 
+  def delete_content_file
+    @archive_item = ArchiveItem.find(params[:id])
+    file = @archive_item.content_files.attachments.find_by(id: params[:content_file_id])
+
+    if file
+      file.purge
+      redirect_to edit_archive_item_path(@archive_item)
+    else
+      redirect_to edit_archive_item_path(@archive_item), notice: "File could not be found"
+    end
+  end
+
   def delete_medium_photo
     @archive_item = ArchiveItem.find(params[:id])
     photo = @archive_item.medium_photos.attachments.find_by(id: params[:medium_photo_id])

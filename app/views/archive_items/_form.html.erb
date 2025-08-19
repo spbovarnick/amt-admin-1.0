@@ -128,20 +128,7 @@
     <div class="aiu-grid-column-right" >
       <div class="file-col">
         <%= render "content_files_list" %>
-      <% if @archive_item.content_files.attached? %>
-        <% @archive_item.content_files.each do |file| %>
-          <% if @archive_item.medium.downcase == "photo" || @archive_item.medium.downcase == "article" || @archive_item.medium.downcase == "printed material" %>
-            <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
-              <%= image_tag file.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
-            <% else %>
-              <%= link_to 'View file', file, target: "_blank", class: "download-link" %>
-            <% end %>
-          <% else %>
-              <div class="admin-form-filename">File: <%= file.filename %></div>
-          <% end %>
-        <% end %>
-      <% end %>
-    </div>
+      </div>
 
     <div class="file-col">
       <% if notice %>
@@ -163,12 +150,12 @@
           <% if medium_photo.content_type == "image/jpeg" || medium_photo.content_type == "image/png" %>
           <% p "pic", medium_photo %>
             <div class="removable-image-container">
-              <%= link_to 'X', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
+              <%= link_to 'X Remove File', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachment_button" %>
               <%= image_tag medium_photo.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
             </div>
           <% else %>
             <%= link_to 'View file', medium_photo, target: "_blank", class: "download-link" %>
-            <%= link_to 'Remove file', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
+            <%= link_to 'Remove file', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "clear_one_attachment_button" %>
           <% end %>
         <% end %>
       <% end %>

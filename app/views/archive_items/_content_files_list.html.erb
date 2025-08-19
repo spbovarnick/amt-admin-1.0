@@ -3,13 +3,24 @@
   data-file-manager-url-value="<%= update_content_files_order_archive_item_path(@archive_item) %>"
   data-file-manager-upload-url-value="<%= upload_content_files_archive_item_path(@archive_item) %>"
 >
-  <% @archive_item.ordered_content_files.each do |file| %>
-    <li data-id="<%= file.blob.id %>">
-      <%= link_to file.filename, rails_blob_url(file) %>
-    </li>
+  <% if @archive_item.content_files.attached? %>
+    <% @archive_item.ordered_content_files.each do |file| %>
+      <li data-id="<%= file.blob.id %>" class="content-file-thumbs">
+        <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
+          <div class="removable-image-container">
+            <%= link_to 'X Remove File', delete_content_file_archive_item_path(@archive_item, content_file_id: file.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachment_button" %>
+            <%= image_tag file.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
+          </div>
+        <% else %>
+          <div class="no-thumbnail-content-file">
+            <%= link_to 'View file', file, target: "_blank", class: "download-link" %>
+            <%= link_to 'X Remove File', delete_content_file_archive_item_path(@archive_item, content_file_id: file.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "delete-file-link" %>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
   <% end %>
+  <div class="dropzone">
+    Drop files here or click to upload
+  </div>
 </ul>
-
-<div class="dropzone">
-  Drop files here or click to upload
-</div>

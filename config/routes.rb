@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     end
     member do
       get 'copy'
-      delete 'delete_medium_photo', 'delete_poster_image'
+      delete 'delete_medium_photo', 'delete_poster_image', 'delete_content_file'
       get :create_uid_pdf
       patch :update_content_files_order
       patch :update_medium_photos_order

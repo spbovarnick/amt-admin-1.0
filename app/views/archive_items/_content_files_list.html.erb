@@ -1,11 +1,11 @@
 <ul id="content-files-list"
-  data-controller="file-manager"
-  data-file-manager-url-value="<%= update_content_files_order_archive_item_path(@archive_item) %>"
-  data-file-manager-upload-url-value="<%= upload_content_files_archive_item_path(@archive_item) %>"
+  data-controller="content-files-manager"
+  data-content-files-manager-url-value="<%= update_content_files_order_archive_item_path(@archive_item) %>"
+  data-content-files-manager-upload-url-value="<%= upload_content_files_archive_item_path(@archive_item) %>"
 >
   <% if @archive_item.content_files.attached? %>
     <% @archive_item.ordered_content_files.each do |file| %>
-      <li data-id="<%= file.blob.id %>" class="content-file-thumbs">
+      <li data-id="<%= file.blob.id %>" class="preview-thumbs">
         <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
           <div class="removable-image-container">
             <%= link_to 'X Remove File', delete_content_file_archive_item_path(@archive_item, content_file_id: file.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachment_button" %>
@@ -20,7 +20,7 @@
       </li>
     <% end %>
   <% end %>
-  <div class="dropzone">
+  <div class="cf-dropzone">
     Drop files here or click to upload
   </div>
 </ul>

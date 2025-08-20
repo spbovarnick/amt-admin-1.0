@@ -160,6 +160,18 @@ $table-max-width: 1600px;
         flex-direction: column;
         margin-bottom: 23px;
 
+        .file_col_label {
+          font-size: 14px;
+
+        }
+
+        #content-files-list, #medium-photos-list {
+          border: variables.$black-4 solid;
+          margin: 7px 0 0 0;
+          padding: 10px;
+          border-radius: 4px;
+        }
+
         &.hidden {
           display: none;
         }
@@ -201,7 +213,7 @@ $table-max-width: 1600px;
           }
         }
 
-        .content-file-thumbs {
+        .preview-thumbs  {
           list-style: none;
           cursor: grab;
 
@@ -227,7 +239,7 @@ $table-max-width: 1600px;
           width: 80%;
         }
 
-        .dropzone {
+        .cf-dropzone, .mp-dropzone {
           border: purple dashed;
           padding: 10px;
           cursor: pointer;

@@ -127,39 +127,13 @@
 
     <div class="aiu-grid-column-right" >
       <div class="file-col">
+        <span class="file_col_label">Content Files</span>
         <%= render "content_files_list" %>
       </div>
 
     <div class="file-col">
-      <% if notice %>
-        <div class="err-messages">
-          <div class="notice"><%= notice %></div>
-        </div>
-      <% end %>
-      <div class="file-header <%= 'no-files' if !@archive_item.medium_photos.attached? %>" id="medium_photo-preview">
-        <% if @archive_item.medium_photos.attached? %>
-          <label>Medium Photos Preview</label>
-        <% end %>
-        <div class="upload-set">
-          <%= form.label :medium_photos, "Medium Photos" %>
-          <%= form.file_field :medium_photos, direct_upload: true, multiple: true %>
-        </div>
-      </div>
-      <% if @archive_item.medium_photos.attached? %>
-        <% @archive_item.medium_photos.each do |medium_photo| %>
-          <% if medium_photo.content_type == "image/jpeg" || medium_photo.content_type == "image/png" %>
-          <% p "pic", medium_photo %>
-            <div class="removable-image-container">
-              <%= link_to 'X Remove File', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachment_button" %>
-              <%= image_tag medium_photo.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
-            </div>
-          <% else %>
-            <%= link_to 'View file', medium_photo, target: "_blank", class: "download-link" %>
-            <%= link_to 'Remove file', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "clear_one_attachment_button" %>
-          <% end %>
-        <% end %>
-      <% end %>
-
+      <span class="file_col_label">Medium Photos</span>
+      <%= render "medium_photos_list" %>
     </div>
 
     <div id="poster-image-row" class="file-col hidden">

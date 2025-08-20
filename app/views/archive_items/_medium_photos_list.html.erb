@@ -1,0 +1,26 @@
+<ul id="medium-photos-list"
+  data-controller="medium-photos-manager"
+  data-medium-photos-manager-url-value="<%= update_medium_photos_order_archive_item_path(@archive_item) %>"
+  data-medium-photos-manager-upload-url-value="<%= upload_medium_photos_archive_item_path(@archive_item) %>"
+>
+  <% if @archive_item.medium_photos.attached? %>
+    <% @archive_item.ordered_medium_photos.each do |medium_photo| %>
+      <li data-id="<%= medium_photo.blob.id %>" class="preview-thumbs">
+        <% if medium_photo.content_type == "image/jpeg" || medium_photo.content_type == "image/png" %>
+          <div class="removable-image-container">
+            <%= link_to 'X Remove File', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachment_button" %>
+            <%= image_tag medium_photo.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
+          </div>
+        <% else %>
+          <div class="no-thumbnail-content-file">
+            <%= link_to 'View photo', photo, target: "_blank", class: "download-link" %>
+            <%= link_to 'X Remove File', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "delete-file-link" %>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+  <% end %>
+  <div class="mp-dropzone">
+    Drop photos here or click to upload
+  </div>
+</ul>

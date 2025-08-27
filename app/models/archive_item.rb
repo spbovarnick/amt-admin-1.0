@@ -44,6 +44,8 @@ class ArchiveItem < ApplicationRecord
     has_rich_text :medium_notes
     has_one_attached :poster_image
 
+    attr_accessor :content_files_order
+
     def ordered_content_files
         return content_files unless content_files_order.present?
 

@@ -349,6 +349,6 @@ class ArchiveItemsController < ApplicationController
   end
 
   def archive_item_params
-    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, :featured_item, content_files: [], content_files_order: [], :medium_photos => [])
+    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, :featured_item, content_files: [], content_files_order: [], :medium_photos => [], medium_photos_order: [])
   end
 end

@@ -227,8 +227,10 @@ $table-max-width: 1600px;
           margin-bottom: 20px;
           padding: 10px;
           display: flex;
+          flex-direction: column;
           border-radius: 4px;
-          justify-content: space-around;
+          align-items: center;
+          line-height: 2;
         }
 
         .admin-form-image{

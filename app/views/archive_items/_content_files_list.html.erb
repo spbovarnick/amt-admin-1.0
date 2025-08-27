@@ -15,7 +15,7 @@
           </div>
         <% else %>
           <div class="no-thumbnail-content-file">
-            <%= link_to 'View file', file, target: "_blank", class: "download-link" %>
+            <%= link_to "View #{file.blob.filename}", file, target: "_blank", class: "download-link" %>
             <%= link_to 'X Remove File', delete_content_file_archive_item_path(@archive_item, content_file_id: file.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "delete-file-link" %>
           </div>
         <% end %>
@@ -23,7 +23,7 @@
     <% end %>
   <% end %>
 
-  <%= hidden_field_tag "archive_item[content_files_order]", "", id: "content-file-order" %>
+  <%= hidden_field_tag "archive_item[content_files_order]", "", id: "content-files-order" %>
   <%= file_field_tag "archive_item[content_files][]", multiple: true, id: "new-content-files-input", style: "display:none;" %>
 
   <div class="cf-dropzone">

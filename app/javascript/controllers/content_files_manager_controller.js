@@ -41,7 +41,7 @@ export default class extends Controller {
         body: JSON.stringify({ order: ids })
       });
     } else {
-      const hiddenOrderInput = document.querySelector("#content-file-order");
+      const hiddenOrderInput = document.querySelector("#content-files-order");
       hiddenOrderInput.value = JSON.stringify(ids);
     }
   }
@@ -85,7 +85,6 @@ export default class extends Controller {
       Array.from(files).forEach(file => {
         const li = document.createElement("li");
         li.dataset.id = file.name;
-        console.log(li.dataset.id)
         li.classList.add("preview-thumbs");
 
         if (file.type.startsWith("image/")) {
@@ -96,15 +95,20 @@ export default class extends Controller {
                 <span class="clear_one_attachment_button" data-action="click->content-files-manager#handleRemove">X Remove File</span>
                 <img src=${e.target.result} class="admin-form-image" />
               </div>
-            `
+            `;
           };
           reader.readAsDataURL(file);
         } else {
           li.innerHTML = `
             <div class="no-thumbnail-content-file">
-              <span class="no_thumbnail_new_record_del_one" data-action="click->content-files-manager#handleRemove">X Remove File</span>
+              <a
+                href="${URL.createObjectURL(file)}"
+                target="_blank"
+                class="download-link"
+              >View ${file.name}</a>
+              <span class="no_thumbnail_new_record_del_one download-link" data-action="click->content-files-manager#handleRemove">X Remove File</span>
             </div>
-          `
+          `;
         };
         this.element.insertBefore(li, this.dropzone);
       });

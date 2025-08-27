@@ -1,9 +1,11 @@
 <ul id="content-files-list"
   data-controller="content-files-manager"
-  data-content-files-manager-url-value="<%= update_content_files_order_archive_item_path(@archive_item) %>"
-  data-content-files-manager-upload-url-value="<%= upload_content_files_archive_item_path(@archive_item) %>"
+  <% if @archive_item.persisted? %>
+    data-content-files-manager-url-value="<%= update_content_files_order_archive_item_path(@archive_item) %>"
+    data-content-files-manager-upload-url-value="<%= upload_content_files_archive_item_path(@archive_item) %>"
+  <% end %>
 >
-  <% if @archive_item.content_files.attached? %>
+  <% if @archive_item.persisted? &&  @archive_item.content_files.attached? %>
     <% @archive_item.ordered_content_files.each do |file| %>
       <li data-id="<%= file.blob.id %>" class="preview-thumbs">
         <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
@@ -20,6 +22,10 @@
       </li>
     <% end %>
   <% end %>
+
+  <%= hidden_field_tag "archive_item[content_files_order]", "", id: "content-file-order" %>
+  <%= file_field_tag "archive_item[content_files][]", multiple: true, id: "new-content-files-input", style: "display:none;" %>
+
   <div class="cf-dropzone">
     Drop files here or click to upload
   </div>

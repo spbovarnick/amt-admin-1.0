@@ -29,12 +29,26 @@ export default class extends Controller {
   }
 
   saveOrder() {
-    const ids = Array.from(this.element.querySelectorAll("li")).map(li => li.dataset.id)
-    fetch(this.urlValue, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", "X-CSRF-Token": this.getMetaValue("csrf-token") },
-      body: JSON.stringify({ order: ids })
-    });
+    const ids = Array.from(this.element.querySelectorAll("li[data-id]")).map(li => li.dataset.id);
+
+    if (this.hasUrlValue) {
+      fetch(this.urlValue, {
+        method: "PATCH",
+        headers: {
+          "X-CSRF-Token": this.getMetaValue("csrf-token"),
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ order: ids })
+      });
+    } else {
+      const hiddenOrderInput = document.querySelector("#content-file-order");
+      hiddenOrderInput.value = JSON.stringify(ids);
+    }
+  }
+
+  handleRemove(e) {
+    e.preventDefault();
+    e.target.parentElement.remove();
   }
 
   handleDrop(e) {
@@ -46,19 +60,57 @@ export default class extends Controller {
   };
 
   uploadFiles(files) {
-    const formData = new FormData()
-    Array.from(files).forEach(file => formData.append("files[]", file));
+    if (this.hasUploadUrlValue) {
+      const formData = new FormData();
+      Array.from(files).forEach(file => formData.append("files[]", file))
 
-    fetch(this.uploadUrlValue, {
-      method: "POST",
-      headers: { "X-CSRF-Token": this.getMetaValue("csrf-token") },
-      body: formData
-    })
-      .then(res => res.text())
-      .then(html => {
-        this.element.outerHTML = html
-        this.connect()
+      fetch(this.uploadUrlValue, {
+        method: "POST",
+        headers: { "X-CSRF-Token": this.getMetaValue("csrf-token") },
+        body: formData
+      })
+        .then(res => res.text())
+        .then(html => {
+          this.element.outerHTML = html;
+          this.connect();
+        })
+    } else {
+      const input = document.querySelector("#new-content-files-input");
+      const dataTransfer = new DataTransfer();
+
+      Array.from(input.files).forEach(file => dataTransfer.items.add(file));
+      Array.from(files).forEach(file => dataTransfer.items.add(file));
+      input.files = dataTransfer.files;
+
+      Array.from(files).forEach(file => {
+        const li = document.createElement("li");
+        li.dataset.id = file.name;
+        console.log(li.dataset.id)
+        li.classList.add("preview-thumbs");
+
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            li.innerHTML = `
+              <div class="removable-image-container">
+                <span class="clear_one_attachment_button" data-action="click->content-files-manager#handleRemove">X Remove File</span>
+                <img src=${e.target.result} class="admin-form-image" />
+              </div>
+            `
+          };
+          reader.readAsDataURL(file);
+        } else {
+          li.innerHTML = `
+            <div class="no-thumbnail-content-file">
+              <span class="no_thumbnail_new_record_del_one" data-action="click->content-files-manager#handleRemove">X Remove File</span>
+            </div>
+          `
+        };
+        this.element.insertBefore(li, this.dropzone);
       });
+
+      this.saveOrder();
+    };
   };
 
   getMetaValue(name) {

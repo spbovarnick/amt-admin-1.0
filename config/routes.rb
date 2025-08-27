@@ -17,17 +17,18 @@ Rails.application.routes.draw do
   resources :archive_items, only: [:index, :create, :show, :new, :edit, :destroy, :update, ] do
     collection do
       post :export_to_csv
+      post :upload_temp_content_file
     end
     member do
+      patch :update_content_files_order
+      patch :update_medium_photos_order
+      post :upload_content_files
+      post :upload_medium_photos
       get 'copy'
       delete 'delete_medium_photo'
       delete 'delete_poster_image'
       delete 'delete_content_file'
       get :create_uid_pdf
-      patch :update_content_files_order
-      patch :update_medium_photos_order
-      post :upload_content_files
-      post :upload_medium_photos
     end
   end
   resources :archive_tags

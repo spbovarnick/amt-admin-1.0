@@ -139,14 +139,30 @@ class ArchiveItemsController < ApplicationController
   end
 
   def create
-    @archive_item = ArchiveItem.create(archive_item_params)
+    @archive_item = ArchiveItem.new(archive_item_params)
 
-    # Update search fields
-    @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
-    # ^ collection_list param is split here, because of concatenated value passed into #new view
 
-    flash.alert = "An item has been created."
-    redirect_to session.delete(:return_to) || archive_items_path
+    if @archive_item.save
+      if params[:archive_item][:content_files_order].present?
+        filenames = JSON.parse(params[:archive_item][:content_files_order])
+
+        resolved_order = filenames.map do |fname|
+          blob = @archive_item.content_files.find { |file| file.filename.to_s == fname}&.blob
+          blob&.id.to_s if blob
+        end.compact
+
+        @archive_item.update!(content_files_order: resolved_order)
+      end
+      flash.alert = "An item has been created."
+      redirect_to session.delete(:return_to) || archive_items_path
+
+      # Update search fields
+      @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
+      # ^ collection_list param is split here, because of concatenated value passed into #new view
+    else
+      render :new
+    end
+
   end
 
   def show
@@ -283,6 +299,20 @@ class ArchiveItemsController < ApplicationController
     render partial: "archive_items/medium_photos_list", locals: { archive_item: @archive_item }
   end
 
+  def upload_temp_content_file
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: params[:file].tempfile,
+      filename: params[:file].original_filename,
+      content_type: params[:file].content_type
+    )
+
+    render json: {
+      blob_id: blob.id,
+      filename: blob.filename.to_s,
+      url: url_for(blob)
+    }
+  end
+
   private
 
   def generate_pdf(item)
@@ -319,6 +349,6 @@ class ArchiveItemsController < ApplicationController
   end
 
   def archive_item_params
-    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, content_files: [], :medium_photos => [])
+    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, content_files: [], content_files_order: [], :medium_photos => [])
   end
 end

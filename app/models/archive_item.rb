@@ -45,11 +45,20 @@ class ArchiveItem < ApplicationRecord
     has_one_attached :poster_image
 
     def ordered_content_files
-        sort_attachments(content_files, content_files_order)
+        return content_files unless content_files_order.present?
+
+        ids = content_files_order.map(&:to_s)
+        content_files.sort_by { |f| ids.index(f.blob_id.to_s) || ids.length }
     end
 
     def ordered_medium_photos
         sort_attachments(medium_photos, medium_photos_order)
+    end
+
+    def reorder_content_files!(new_order)
+        blob_ids = new_order.map(&:to_s)
+        ordered = content_files.sort_by { |file| blob_ids.index(file.blob_id.to_s) || blob_ids.length }
+        update!(content_files_order: ordered.map { |file| file.blob_id.to_s })
     end
 
     # validations

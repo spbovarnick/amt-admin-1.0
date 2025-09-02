@@ -26,9 +26,13 @@ class ArchiveItemSerializer < ActiveModel::Serializer
   def content_file_urls
     return [] unless object.content_files.attached?
 
-
-      object.ordered_content_files.map { |file| rails_blob_url(file)}
-
+    object.ordered_content_files.map do |file|
+      if file.respond_to?(:url) # legacy uploader
+        file.url
+      else
+        rails_blob_url(file, only_path: false) # ActiveStorage
+      end
+    end
   end
 
   def medium_photo_urls

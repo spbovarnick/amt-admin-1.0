@@ -299,20 +299,6 @@ class ArchiveItemsController < ApplicationController
     render partial: "archive_items/medium_photos_list", locals: { archive_item: @archive_item }
   end
 
-  def upload_temp_content_file
-    blob = ActiveStorage::Blob.create_and_upload!(
-      io: params[:file].tempfile,
-      filename: params[:file].original_filename,
-      content_type: params[:file].content_type
-    )
-
-    render json: {
-      blob_id: blob.id,
-      filename: blob.filename.to_s,
-      url: url_for(blob)
-    }
-  end
-
   private
 
   def generate_pdf(item)

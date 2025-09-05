@@ -17,7 +17,6 @@ Rails.application.routes.draw do
   resources :archive_items, only: [:index, :create, :show, :new, :edit, :destroy, :update, ] do
     collection do
       post :export_to_csv
-      post :upload_temp_content_file
     end
     member do
       patch :update_content_files_order

@@ -66,7 +66,9 @@ export default class extends Controller {
 
       fetch(this.uploadUrlValue, {
         method: "POST",
-        headers: { "X-CSRF-Token": this.getMetaValue("csrf-token") },
+        headers: {
+          "X-CSRF-Token": this.getMetaValue("csrf-token")
+        },
         body: formData
       })
         .then(res => res.text())

@@ -35,7 +35,10 @@ export default class extends Controller {
     if (this.hasUrlValue) {
       fetch(this.urlValue, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", "X-CSRF-Token": this.getMetaValue("csrf-token") },
+        headers: {
+          "X-CSRF-Token": this.getMetaValue("csrf-token"),
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({ order: ids })
       });
     } else {
@@ -71,7 +74,9 @@ export default class extends Controller {
 
       fetch(this.uploadUrlValue, {
         method: "POST",
-        headers: { "X-CSRF-Token": this.getMetaValue("csrf-token") },
+        headers: {
+          "X-CSRF-Token": this.getMetaValue("csrf-token")
+        },
         body: formData,
       })
         .then(res => res.text())

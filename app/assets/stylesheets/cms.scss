@@ -241,7 +241,7 @@ $table-max-width: 1600px;
           width: 80%;
         }
 
-        .cf-dropzone, .mp-dropzone {
+        .dropzone, .mp-dropzone {
           border: purple dashed;
           padding: 10px;
           cursor: pointer;
@@ -252,6 +252,36 @@ $table-max-width: 1600px;
         color: variables.$black-5;
         text-decoration: underline;
       }
+
+                     .progress {
+                       list-style: none;
+                       margin: .25rem 0;
+                     }
+
+                     .progress__meta {
+                       display: flex;
+                       justify-content: space-between;
+                       font-size: .85rem;
+                       margin-bottom: .25rem;
+                     }
+
+                     .progress__track {
+                       height: 6px;
+                       background: rgba(0, 0, 0, .1);
+                       border-radius: 3px;
+                       overflow: hidden;
+                     }
+
+                     .progress__bar {
+                       height: 100%;
+                       width: 0%;
+                       background: #4b8bf4;
+                       transition: width 120ms linear;
+                     }
+
+                     .progress--error .progress__bar {
+                       background: #e24a4a;
+                     }
     }
 
   }

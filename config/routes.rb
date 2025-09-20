@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       delete 'delete_poster_image'
       delete 'delete_content_file'
       get :create_uid_pdf
+      get :content_files_list
     end
   end
   resources :archive_tags

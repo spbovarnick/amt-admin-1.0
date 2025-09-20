@@ -141,27 +141,13 @@ class ArchiveItemsController < ApplicationController
   def create
     @archive_item = ArchiveItem.new(archive_item_params)
 
+    flash.alert = "An item has been created."
 
-    if @archive_item.save
-      if params[:archive_item][:content_files_order].present?
-        filenames = JSON.parse(params[:archive_item][:content_files_order])
+    # Update search fields
+    @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
+    # ^ collection_list param is split here, because of concatenated value passed into #new view
 
-        resolved_order = filenames.map do |fname|
-          blob = @archive_item.content_files.find { |file| file.filename.to_s == fname}&.blob
-          blob&.id.to_s if blob
-        end.compact
-
-        @archive_item.update!(content_files_order: resolved_order)
-      end
-      flash.alert = "An item has been created."
-      redirect_to session.delete(:return_to) || archive_items_path
-
-      # Update search fields
-      @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
-      # ^ collection_list param is split here, because of concatenated value passed into #new view
-    else
-      render :new
-    end
+    redirect_to edit_archive_item_path
 
   end
 

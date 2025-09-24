@@ -11,7 +11,7 @@ import {
 Dropzone.autoDiscover = false;
 
 export default class extends Controller {
-  static targets = ["input"]
+  static targets = ["input", "previewsContainer"]
 
   connect() {
     this.dropzone = createDropzone(this);
@@ -40,6 +40,10 @@ export default class extends Controller {
     })
   };
 
+  get previewsContainer() {
+    return `#${this.previewsContainerTarget.id}`
+  };
+
   get headers() {
     return { "X-CSRF-Token": getMetaValue("csrf-token") };
   };
@@ -56,17 +60,17 @@ export default class extends Controller {
     return this.data.get("maxFileSize") || 1000;
   };
 
-  get addRemoveLinks() {
-    return this.data.get("addRemoveLinks") || true;
-  }
-
   get form() {
     return this.element.closest("form");
   };
 
-  // get submitButton() {
-  //   return findElement(this.form, "input[type=submit], button[type=submit]");
-  // };
+  get submitButton() {
+    return findElement(this.form, "input[type=submit], button[type=submit]");
+  };
+
+  removeExisting(event) {
+    this.removeElement(event.target.parentNode)
+  };
 }
 
 class DirectUploadController {
@@ -149,6 +153,7 @@ function createDropzone(controller) {
     headers: controller.headers,
     maxFilesize: controller.maxFileSize,
     maxFiles: controller.maxFiles,
+    previewsContainer: controller.previewsContainer,
     addRemoveLinks: true,
     uploadMultiple: true,
     autoQueue: false,

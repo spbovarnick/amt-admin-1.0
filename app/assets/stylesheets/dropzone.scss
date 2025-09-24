@@ -1,0 +1,25 @@
+@use "variables";
+
+.dz-button, .dz-success-mark, .dz-error-mark, .dz-size {
+  display: none;
+}
+
+#dz-previews-container {
+  cursor: default;
+}
+
+.preview-template:first-child {
+  margin-top: 30px;
+}
+
+.dz-remove {
+  color: red !important;
+  text-decoration: underline !important;
+  font-weight: bold;
+}
+
+.dz-preview {
+  border: 1px solid variables.$black-5;
+  border-radius: 6px;
+  padding: 5px;
+}

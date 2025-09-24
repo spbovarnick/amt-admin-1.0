@@ -1,5 +1,5 @@
 <ul id="medium-photos-list"
-  data-controller="medium-photos-manager"
+
   <% if @archive_item.persisted? %>
     data-medium-photos-manager-url-value="<%= update_medium_photos_order_archive_item_path(@archive_item) %>"
     data-medium-photos-manager-upload-url-value="<%= upload_medium_photos_archive_item_path(@archive_item) %>"
@@ -23,10 +23,27 @@
     <% end %>
   <% end %>
 
-  <%= hidden_field_tag "archive_item[medium_photos_order]", "", id: "medium-photos-order" %>
-  <%= file_field_tag "archive_item[medium_photos][]", multiple: true, id: "new-medium-photos-input", accept: "image/*", style: "display:none;" %>
+  <% if @archive_item.persisted? %>
+    <%= hidden_field_tag "archive_item[medium_photos_order]", "", id: "medium-photos-order" %>
+  <% end %>
 
-  <div class="mp-dropzone">
+  <div
+    class="dropzone"
+    data-controller="dropzone"
+    data-upload-multiple="true"
+    data-dropzone-accepted-files="image/*"
+  >
+    <%=
+      file_field_tag "archive_item[medium_photos][]",
+      multiple: true,
+      direct_upload: true,
+      id: "medium-photos-input",
+      data: { dropzone_target: "input" }
+    %>
     Drop photos here or click to upload
+    <div
+      data-dropzone-target="previewsContainer"
+      class="previews-container"
+    ></div>
   </div>
 </ul>

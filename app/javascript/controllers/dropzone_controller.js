@@ -26,6 +26,10 @@ export default class extends Controller {
 
   bindEvents() {
     this.dropzone.on("addedfile", (file) => {
+      if (!/^image\//.test(file.type)) {
+        file.previewElement?.classList.add("dz-non-image");
+        file.previewElement?.querySelector(".dz-image")?.remove();
+      }
       setTimeout(() => {
         file.accepted && createDirectUploadController(this, file).start();
       });
@@ -41,7 +45,7 @@ export default class extends Controller {
   };
 
   get previewsContainer() {
-    return `#${this.previewsContainerTarget.id}`
+    return this.previewsContainerTarget;
   };
 
   get headers() {
@@ -50,6 +54,10 @@ export default class extends Controller {
 
   get url() {
     return this.inputTarget.dataset.directUploadUrl;
+  };
+
+  get acceptedFiles() {
+    return this.data.get("acceptedFiles");
   };
 
   get maxFiles() {
@@ -153,6 +161,7 @@ function createDropzone(controller) {
     headers: controller.headers,
     maxFilesize: controller.maxFileSize,
     maxFiles: controller.maxFiles,
+    acceptedFiles: controller.acceptedFiles,
     previewsContainer: controller.previewsContainer,
     addRemoveLinks: true,
     uploadMultiple: true,

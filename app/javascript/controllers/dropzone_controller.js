@@ -133,23 +133,24 @@ class DirectUploadController {
     this.bindProgressEvent(xhr);
     this.emitDropzoneUploading();
   }
+
   bindProgressEvent(xhr) {
     this.xhr = xhr;
-    this.xhr.upload.addEventListener("progress", (event) =>
+    this.xhr.upload.addEventListener("progress", (event) => {
       this.uploadRequestDidProgress(event)
-    );
+    });
   }
+
   uploadRequestDidProgress(event) {
-    const element = this.source.element;
     const progress = (event.loaded / event.total) * 100;
-    findElement(
-      this.file.previewTemplate,
-      ".dz-upload"
-    ).style.width = `${progress}%`;
+    const progressBar = findElement(this.file.previewTemplate, ".dz-upload");
+    progressBar.style.width = `${progress}%`;
   }
 
   emitDropzoneUploading() {
     this.file.status = Dropzone.UPLOADING;
+    const progressBar = findElement(this.file.previewTemplate, ".dz-upload");
+    progressBar.style = "height:12px; background-color:#2b55ca; border: solid white 1px; display: block; border-radius: 6px";
     this.source.dropzone.emit("processing", this.file);
   }
 

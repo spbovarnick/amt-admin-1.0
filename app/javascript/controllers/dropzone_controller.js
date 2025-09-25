@@ -6,7 +6,7 @@ import {
   findElement,
   removeElement,
   insertAfter
-} from './helpers/dropzone';
+} from "../helpers/dropzone";
 
 Dropzone.autoDiscover = false;
 

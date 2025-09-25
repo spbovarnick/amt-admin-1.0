@@ -52,6 +52,12 @@ export default class extends Controller {
       setTimeout(() => {
         file.accepted && createDirectUploadController(this, file).start();
       });
+
+    });
+
+    this.dropzone.on("processing", (file) => {
+      const removeLink = findElement(file.previewTemplate, ".dz-remove");
+      if (removeLink) removeLink.textContent = "Cancel upload";
     });
 
     this.dropzone.on("removedfile", (file) => {
@@ -61,6 +67,23 @@ export default class extends Controller {
     this.dropzone.on("canceled", (file) => {
       file.controller && file.controller.xhr.abort();
     })
+
+    this.dropzone.on("success", (file) => {
+      const progressWrap = findElement(file.previewTemplate, ".dz-progress");
+      if (progressWrap) progressWrap.style.display = "none";
+
+      const nameEl = findElement(file.previewTemplate, "[data-dz-name]");
+      if (nameEl && !nameEl.querySelector(".dz-check")) {
+        const check = document.createElement("span");
+        check.className = "dz-check";
+        check.textContent = " ✅";
+        nameEl.appendChild(check);
+      }
+
+      // change remove link label
+      const removeLink = findElement(file.previewTemplate, ".dz-remove");
+      if (removeLink) removeLink.textContent = "Remove file";
+    });
   };
 
   get previewsContainer() {

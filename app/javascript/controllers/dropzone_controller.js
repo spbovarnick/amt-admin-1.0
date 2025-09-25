@@ -1,14 +1,33 @@
 import { Controller } from "@hotwired/stimulus";
 import { DirectUpload } from "@rails/activestorage";
 import Dropzone from "dropzone";
-import {
-  getMetaValue,
-  findElement,
-  removeElement,
-  insertAfter
-} from "../helpers/dropzone";
 
 Dropzone.autoDiscover = false;
+
+function getMetaValue(name) {
+  const element = findElement(document.head, `meta[name="${name}"]`);
+  if (element) {
+    return element.getAttribute("content");
+  }
+}
+
+function findElement(root, selector) {
+  if (typeof root == "string") {
+    selector = root;
+    root = document;
+  }
+  return root.querySelector(selector);
+}
+
+function removeElement(el) {
+  if (el && el.parentNode) {
+    el.parentNode.removeChild(el);
+  }
+}
+
+function insertAfter(el, referenceNode) {
+  return referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
+}
 
 export default class extends Controller {
   static targets = ["input", "previewsContainer"]

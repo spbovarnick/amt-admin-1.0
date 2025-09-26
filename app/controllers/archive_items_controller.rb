@@ -147,8 +147,8 @@ class ArchiveItemsController < ApplicationController
     @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
     # ^ collection_list param is split here, because of concatenated value passed into #new view
 
+    flash.alert = "#{@archive_item.title}, UID #{@archive_item.uid} has been created."
     redirect_to edit_archive_item_path(@archive_item.id)
-
   end
 
   def show
@@ -185,7 +185,7 @@ class ArchiveItemsController < ApplicationController
 
     if file
       file.purge
-      redirect_to edit_archive_item_path(@archive_item)
+      redirect_to edit_archive_item_path(@archive_item), notice: "File was successfully deleted"
     else
       redirect_to edit_archive_item_path(@archive_item), notice: "File could not be found"
     end
@@ -250,8 +250,8 @@ class ArchiveItemsController < ApplicationController
     @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
     # ^ collection_list param is split here, because of concatenated value passed into #edit view)
 
-    flash.alert = "An item has been updated."
-    redirect_to session.delete(:return_to) || archive_items_path
+    flash.alert = "#{@archive_item.title}, UID #{@archive_item.uid} has been updated."
+    redirect_to edit_archive_item_path(@archive_item.id)
   end
 
   def destroy
@@ -273,17 +273,17 @@ class ArchiveItemsController < ApplicationController
     head :ok
   end
 
-  def upload_content_files
-    @archive_item = ArchiveItem.find(params[:id])
-    @archive_item.content_files.attach(params[:files])
-    render partial: "archive_items/content_files_list", locals: { archive_item: @archive_item }
-  end
+  # def upload_content_files
+  #   @archive_item = ArchiveItem.find(params[:id])
+  #   @archive_item.content_files.attach(params[:files])
+  #   render partial: "archive_items/content_files_list", locals: { archive_item: @archive_item }
+  # end
 
-  def upload_medium_photos
-    @archive_item = ArchiveItem.find(params[:id])
-    @archive_item.medium_photos.attach(params[:files])
-    render partial: "archive_items/medium_photos_list", locals: { archive_item: @archive_item }
-  end
+  # def upload_medium_photos
+  #   @archive_item = ArchiveItem.find(params[:id])
+  #   @archive_item.medium_photos.attach(params[:files])
+  #   render partial: "archive_items/medium_photos_list", locals: { archive_item: @archive_item }
+  # end
 
   private
 

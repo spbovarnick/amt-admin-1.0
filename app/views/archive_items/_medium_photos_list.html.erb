@@ -28,7 +28,7 @@
   <% end %>
 
   <div
-    class="dropzone"
+    class="upload-container"
     data-controller="dropzone"
     data-upload-multiple="true"
     data-dropzone-accepted-files="image/*"
@@ -40,7 +40,7 @@
       id: "medium-photos-input",
       data: { dropzone_target: "input" }
     %>
-    Drop photos here or click to upload
+    <div class="dropzone">Drop photos here or click to upload</div>
     <div
       data-dropzone-target="previewsContainer"
       class="previews-container"

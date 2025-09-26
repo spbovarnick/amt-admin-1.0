@@ -1,5 +1,14 @@
 <%= form_with( model: [@archive_item], local: true, html: { multipart: true, class: ["admin-form", "archive-item-form"] }, data: { controller: 'draft-select tag-input archive-items-form direct-uploads uid featured-item'} ) do |form| %>
 
+  <% if notice || alert %>
+    <div class="err-messages">
+      <% unless notice == "Photo was successfully deleted"%>
+        <div class="notice"><%= notice %></div>
+      <% end %>
+      <div class="alert"><%= alert %></div>
+    </div>
+  <% end %>
+
   <div class="form-row">
     <div class="form-set">
       <%= form.label :uid, "Unique ID #" %>

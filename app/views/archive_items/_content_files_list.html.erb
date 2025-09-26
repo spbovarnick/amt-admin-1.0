@@ -1,5 +1,5 @@
 <ul id="content-files-list"
-
+  data-controller="content-files-manager"
   <% if @archive_item.persisted? %>
     data-content-files-manager-url-value="<%= update_content_files_order_archive_item_path(@archive_item) %>"
     data-content-files-manager-upload-url-value="<%= upload_content_files_archive_item_path(@archive_item) %>"
@@ -28,7 +28,7 @@
   <% end %>
 
   <div
-    class="dropzone"
+    class="upload-container"
     data-controller="dropzone"
     data-upload-multiple="true"
   >
@@ -39,7 +39,7 @@
       id: "content-files-input",
       data: { dropzone_target: "input" }
     %>
-    Drop files here or click to upload
+    <div class="dropzone">Drop files here or click to upload</div>
     <div
       data-dropzone-target="previewsContainer"
       class="previews-container"

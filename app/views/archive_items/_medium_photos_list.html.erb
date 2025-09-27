@@ -1,27 +1,29 @@
-<ul id="medium-photos-list"
-
-  <% if @archive_item.persisted? %>
-    data-medium-photos-manager-url-value="<%= update_medium_photos_order_archive_item_path(@archive_item) %>"
-    data-medium-photos-manager-upload-url-value="<%= upload_medium_photos_archive_item_path(@archive_item) %>"
-  <% end %>
->
-  <% if @archive_item.persisted? && @archive_item.medium_photos.attached? %>
-    <% @archive_item.ordered_medium_photos.each do |file| %>
-      <li data-id="<%= file.blob.id %>" class="preview-thumbs">
-        <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
-          <div class="removable-image-container">
-            <%= link_to 'X Remove File', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: file.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachment_button" %>
-            <%= image_tag file.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
-          </div>
-        <% else %>
-          <div class="no-thumbnail-content-file">
-            <%= link_to 'View photo', file, target: "_blank", class: "download-link" %>
-            <%= link_to 'X Remove File', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: file.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "delete-file-link" %>
-          </div>
-        <% end %>
-      </li>
+<div id="medium-photos-list">
+  <ul
+    data-controller="sortable"
+    <% if @archive_item.persisted? %>
+      data-sortable-url-value="<%= update_medium_photos_order_archive_item_path(@archive_item) %>"
+      data-sortable-hidden-input-value="#medium-photos-order"
     <% end %>
-  <% end %>
+  >
+    <% if @archive_item.persisted? && @archive_item.medium_photos.attached? %>
+      <% @archive_item.ordered_medium_photos.each do |file| %>
+        <li data-id="<%= file.id %>" class="preview-thumbs">
+          <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
+            <div class="removable-image-container">
+              <%= link_to 'X Remove File', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: file.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachment_button" %>
+              <%= image_tag file.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
+            </div>
+          <% else %>
+            <div class="no-thumbnail-content-file">
+              <%= link_to 'View photo', file, target: "_blank", class: "download-link" %>
+              <%= link_to 'X Remove File', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: file.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "delete-file-link" %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
 
   <% if @archive_item.persisted? %>
     <%= hidden_field_tag "archive_item[medium_photos_order]", "", id: "medium-photos-order" %>
@@ -46,4 +48,4 @@
       class="previews-container"
     ></div>
   </div>
-</ul>
+</div>

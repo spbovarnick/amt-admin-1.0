@@ -48,24 +48,21 @@ class ArchiveItem < ApplicationRecord
         return content_files unless content_files_order.present?
 
         ids = content_files_order.map(&:to_s)
-        content_files.sort_by { |f| ids.index(f.blob_id.to_s) || ids.length }
+        content_files.sort_by { |f| ids.index(f.id.to_s) || ids.length }
     end
 
     def ordered_medium_photos
-        sort_attachments(medium_photos, medium_photos_order)
-    end
+        return medium_photos unless medium_photos_order.present?
 
-    def reorder_content_files!(new_order)
-        blob_ids = new_order.map(&:to_s)
-        ordered = content_files.sort_by { |file| blob_ids.index(file.blob_id.to_s) || blob_ids.length }
-        update!(content_files_order: ordered.map { |file| file.blob_id.to_s })
+        ids = medium_photos_order.map(&:to_s)
+        medium_photos.sort_by { |f| ids.index(f.id.to_s) || ids.length }
     end
 
     # validations
     validates :medium, presence: true, inclusion: { in: ["photo","film","audio","article","printed material"] }
     # validates :collections, presence: true
 
-    before_commit :strip_title, on: [:create, :update]
+    before_validation :strip_title, on: [:create, :update]
     # sets uid upon record creation, update
     after_commit :set_uid!, on: [:create, :update]
 
@@ -80,13 +77,6 @@ class ArchiveItem < ApplicationRecord
 
     private
 
-    def sort_attachments(attachments, order_array)
-        attachments.sort_by do |f|
-            idx = order_array.index(f.blob_id.to_s)
-            idx.nil? ? Float::INFINITY : idx
-        end
-    end
-
     MEDIUM_CODES = {
         "photo" => 1,
         "film" => 2,
@@ -98,7 +88,7 @@ class ArchiveItem < ApplicationRecord
     # method for setting UID upon record creation
     # UID is set here, because including record ID in #new UI, requires manipulating values in real time
     def set_uid!
-
+        return if collection_list.blank? || medium.blank?
         coll = Collection.find_by(name: collection_list.first)
         coll_id = coll.id
         medium_code = MEDIUM_CODES[medium]
@@ -115,6 +105,6 @@ class ArchiveItem < ApplicationRecord
     end
 
     def strip_title
-        update_column(:title, title.strip)
+        self.title = title.to_s.strip
     end
 end

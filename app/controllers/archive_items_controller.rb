@@ -273,18 +273,6 @@ class ArchiveItemsController < ApplicationController
     head :ok
   end
 
-  # def upload_content_files
-  #   @archive_item = ArchiveItem.find(params[:id])
-  #   @archive_item.content_files.attach(params[:files])
-  #   render partial: "archive_items/content_files_list", locals: { archive_item: @archive_item }
-  # end
-
-  # def upload_medium_photos
-  #   @archive_item = ArchiveItem.find(params[:id])
-  #   @archive_item.medium_photos.attach(params[:files])
-  #   render partial: "archive_items/medium_photos_list", locals: { archive_item: @archive_item }
-  # end
-
   private
 
   def generate_pdf(item)

@@ -21,8 +21,6 @@ Rails.application.routes.draw do
     member do
       patch :update_content_files_order
       patch :update_medium_photos_order
-      post :upload_content_files
-      post :upload_medium_photos
       get 'copy'
       delete 'delete_medium_photo'
       delete 'delete_poster_image'

@@ -141,12 +141,14 @@ class ArchiveItemsController < ApplicationController
   def create
     @archive_item = ArchiveItem.create(archive_item_params)
 
+    flash.alert = "An item has been created."
+
     # Update search fields
     @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
     # ^ collection_list param is split here, because of concatenated value passed into #new view
 
-    flash.alert = "An item has been created."
-    redirect_to session.delete(:return_to) || archive_items_path
+    flash.alert = "#{@archive_item.title}, UID #{@archive_item.uid} has been created."
+    redirect_to edit_archive_item_path(@archive_item.id)
   end
 
   def show
@@ -175,6 +177,18 @@ class ArchiveItemsController < ApplicationController
     @collection_options = Collection.all.order(name: :desc).pluck(:name)
     @comm_group_options = CommGroup.all.order(name: :desc).pluck(:name)
     @current_user = current_user
+  end
+
+  def delete_content_file
+    @archive_item = ArchiveItem.find(params[:id])
+    file = @archive_item.content_files.attachments.find_by(id: params[:content_file_id])
+
+    if file
+      file.purge
+      redirect_to edit_archive_item_path(@archive_item), notice: "File was successfully deleted"
+    else
+      redirect_to edit_archive_item_path(@archive_item), notice: "File could not be found"
+    end
   end
 
   def delete_medium_photo
@@ -236,8 +250,8 @@ class ArchiveItemsController < ApplicationController
     @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
     # ^ collection_list param is split here, because of concatenated value passed into #edit view)
 
-    flash.alert = "An item has been updated."
-    redirect_to session.delete(:return_to) || archive_items_path
+    flash.alert = "#{@archive_item.title}, UID #{@archive_item.uid} has been updated."
+    redirect_to edit_archive_item_path(@archive_item.id)
   end
 
   def destroy
@@ -245,6 +259,18 @@ class ArchiveItemsController < ApplicationController
     @archive_item.destroy
 
     redirect_to archive_items_path
+  end
+
+  def update_content_files_order
+    @archive_item = ArchiveItem.find(params[:id])
+    @archive_item.update!(content_files_order: params[:order])
+    head :ok
+  end
+
+  def update_medium_photos_order
+    @archive_item = ArchiveItem.find(params[:id])
+    @archive_item.update!(medium_photos_order: params[:order])
+    head :ok
   end
 
   private
@@ -283,6 +309,6 @@ class ArchiveItemsController < ApplicationController
   end
 
   def archive_item_params
-    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, :featured_item, content_files: [], :medium_photos => [])
+    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, :featured_item, content_files: [], content_files_order: [], :medium_photos => [], medium_photos_order: [])
   end
 end

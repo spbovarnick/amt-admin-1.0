@@ -20,16 +20,16 @@ class ArchiveItemSerializer < ActiveModel::Serializer
   def content_file_names
     return [] unless object.content_files.attached?
 
-    object.content_files.map { |file| file.filename.to_s }
+    object.ordered_content_files.map { |file| file.filename.to_s }
   end
 
   def content_file_urls
     return [] unless object.content_files.attached?
 
     if Rails.env.production?
-      object.content_files.map { |file| file.url()}
+      object.ordered_content_files.map { |file| file.url()}
     else
-      object.content_files.map { |file| rails_blob_url(file)}
+      object.ordered_content_files.map { |file| rails_blob_url(file)}
     end
   end
 
@@ -37,16 +37,16 @@ class ArchiveItemSerializer < ActiveModel::Serializer
     return [] unless object.medium_photos.attached?
 
     if Rails.env.production?
-      object.medium_photos.map { |photo| photo.url()}
+      object.ordered_medium_photos.map { |photo| photo.url()}
     else
-      object.medium_photos.map { |photo| rails_blob_url(photo)}
+      object.ordered_medium_photos.map { |photo| rails_blob_url(photo)}
     end
   end
 
   def medium_photos_file_names
     return [] unless object.medium_photos.attached?
 
-    object.medium_photos.map { |file| file.filename.to_s }
+    object.ordered_medium_photos.map { |file| file.filename.to_s }
   end
 
 end

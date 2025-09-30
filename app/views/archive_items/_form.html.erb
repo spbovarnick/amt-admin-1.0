@@ -1,5 +1,14 @@
 <%= form_with( model: [@archive_item], local: true, html: { multipart: true, class: ["admin-form", "archive-item-form"] }, data: { controller: 'draft-select tag-input archive-items-form direct-uploads uid featured-item'} ) do |form| %>
 
+  <% if notice || alert %>
+    <div class="err-messages">
+      <% unless notice == "Photo was successfully deleted"%>
+        <div class="notice"><%= notice %></div>
+      <% end %>
+      <div class="alert"><%= alert %></div>
+    </div>
+  <% end %>
+
   <div class="form-row">
     <div class="form-set">
       <%= form.label :uid, "Unique ID #" %>
@@ -127,60 +136,19 @@
 
     <div class="aiu-grid-column-right" >
       <div class="file-col">
-        <div class="file-header <%= 'no-files' if !@archive_item.content_files.attached? %>">
-          <% if @archive_item.content_files.attached? %>
-            <label>Content Preview</label>
-          <% end %>
-          <div class="upload-set">
-            <%= form.label :content_files, "Content Files" %>
-            <%= form.file_field :content_files, direct_upload: true, multiple: true %>
-          </div>
-        </div>
-      <% if @archive_item.content_files.attached? %>
+        <span class="file_col_label">Content Files</span>
         <% @archive_item.content_files.each do |file| %>
-          <% if @archive_item.medium.downcase == "photo" || @archive_item.medium.downcase == "article" || @archive_item.medium.downcase == "printed material" %>
-            <% if file.content_type == "image/jpeg" || file.content_type == "image/png" %>
-              <%= image_tag file.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
-            <% else %>
-              <%= link_to 'View file', file, target: "_blank", class: "download-link" %>
-            <% end %>
-          <% else %>
-              <div class="admin-form-filename">File: <%= file.filename %></div>
-          <% end %>
+          <%= form.hidden_field :content_files, multiple: true, value: file.signed_id %>
         <% end %>
-      <% end %>
-    </div>
+        <%= render "content_files_list" %>
+      </div>
 
     <div class="file-col">
-      <% if notice %>
-        <div class="err-messages">
-          <div class="notice"><%= notice %></div>
-        </div>
+      <span class="file_col_label">Medium Photos</span>
+      <% @archive_item.medium_photos.each do |photo| %>
+       <%= form.hidden_field :medium_photos, multiple: true, value: photo.signed_id %>
       <% end %>
-      <div class="file-header <%= 'no-files' if !@archive_item.medium_photos.attached? %>" id="medium_photo-preview">
-        <% if @archive_item.medium_photos.attached? %>
-          <label>Medium Photos Preview</label>
-        <% end %>
-        <div class="upload-set">
-          <%= form.label :medium_photos, "Medium Photos" %>
-          <%= form.file_field :medium_photos, direct_upload: true, multiple: true %>
-        </div>
-      </div>
-      <% if @archive_item.medium_photos.attached? %>
-        <% @archive_item.medium_photos.each do |medium_photo| %>
-          <% if medium_photo.content_type == "image/jpeg" || medium_photo.content_type == "image/png" %>
-          <% p "pic", medium_photo %>
-            <div class="removable-image-container">
-              <%= link_to 'X', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
-              <%= image_tag medium_photo.variant(resize_to_limit: [600, nil]), class: "admin-form-image" %>
-            </div>
-          <% else %>
-            <%= link_to 'View file', medium_photo, target: "_blank", class: "download-link" %>
-            <%= link_to 'Remove file', delete_medium_photo_archive_item_path(@archive_item, medium_photo_id: medium_photo.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "clear_one_attachement_button" %>
-          <% end %>
-        <% end %>
-      <% end %>
-
+      <%= render "medium_photos_list" %>
     </div>
 
     <div id="poster-image-row" class="file-col hidden">

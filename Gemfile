@@ -107,3 +107,5 @@ gem "webrick", ">= 1.8.2"
 gem "google-protobuf", ">= 3.25.5"
 
 gem "thor", ">= 1.4.0"
+
+gem "sortablejs-rails"

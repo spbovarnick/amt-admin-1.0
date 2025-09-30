@@ -44,11 +44,25 @@ class ArchiveItem < ApplicationRecord
     has_rich_text :medium_notes
     has_one_attached :poster_image
 
+    def ordered_content_files
+        return content_files unless content_files_order.present?
+
+        ids = content_files_order.map(&:to_s)
+        content_files.sort_by { |f| ids.index(f.id.to_s) || ids.length }
+    end
+
+    def ordered_medium_photos
+        return medium_photos unless medium_photos_order.present?
+
+        ids = medium_photos_order.map(&:to_s)
+        medium_photos.sort_by { |f| ids.index(f.id.to_s) || ids.length }
+    end
+
     # validations
     validates :medium, presence: true, inclusion: { in: ["photo","film","audio","article","printed material"] }
     # validates :collections, presence: true
 
-    before_commit :strip_title, on: [:create, :update]
+    before_validation :strip_title, on: [:create, :update]
     # sets uid upon record creation, update
     after_commit :set_uid!, on: [:create, :update]
 
@@ -74,7 +88,7 @@ class ArchiveItem < ApplicationRecord
     # method for setting UID upon record creation
     # UID is set here, because including record ID in #new UI, requires manipulating values in real time
     def set_uid!
-
+        return if collection_list.blank? || medium.blank?
         coll = Collection.find_by(name: collection_list.first)
         coll_id = coll.id
         medium_code = MEDIUM_CODES[medium]
@@ -91,6 +105,6 @@ class ArchiveItem < ApplicationRecord
     end
 
     def strip_title
-        update_column(:title, title.strip)
+        self.title = title.to_s.strip
     end
 end

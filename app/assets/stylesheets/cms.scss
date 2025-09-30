@@ -160,6 +160,24 @@ $table-max-width: 1600px;
         flex-direction: column;
         margin-bottom: 23px;
 
+        .file_col_label {
+          font-size: 14px;
+
+        }
+
+        #content-files-list, #medium-photos-list {
+          border: variables.$black-4 solid;
+          padding: 10px;
+          border-radius: 4px;
+
+          ul {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+        }
+
         &.hidden {
           display: none;
         }
@@ -200,6 +218,27 @@ $table-max-width: 1600px;
             }
           }
         }
+
+        .preview-thumbs  {
+          list-style: none;
+          cursor: grab;
+
+          &:active {
+            cursor: grabbing;
+          }
+        }
+
+        .no-thumbnail-content-file {
+          border: white solid 2px;
+          margin-bottom: 20px;
+          padding: 10px;
+          display: flex;
+          flex-direction: column;
+          border-radius: 4px;
+          align-items: center;
+          line-height: 2;
+        }
+
         .admin-form-image{
           width: 100%;
         }
@@ -208,6 +247,41 @@ $table-max-width: 1600px;
           width: 80%;
         }
       }
+
+      .delete-file-link {
+        color: variables.$black-5;
+        text-decoration: underline;
+      }
+
+                     .progress {
+                       list-style: none;
+                       margin: .25rem 0;
+                     }
+
+                     .progress__meta {
+                       display: flex;
+                       justify-content: space-between;
+                       font-size: .85rem;
+                       margin-bottom: .25rem;
+                     }
+
+                     .progress__track {
+                       height: 6px;
+                       background: rgba(0, 0, 0, .1);
+                       border-radius: 3px;
+                       overflow: hidden;
+                     }
+
+                     .progress__bar {
+                       height: 100%;
+                       width: 0%;
+                       background: #4b8bf4;
+                       transition: width 120ms linear;
+                     }
+
+                     .progress--error .progress__bar {
+                       background: #e24a4a;
+                     }
     }
 
   }
@@ -400,12 +474,12 @@ $table-max-width: 1600px;
   margin-bottom: 20px;
 }
 
-.clear_one_attachement_button {
+.clear_one_attachment_button {
   font-size: 120%;
   position: absolute;
   top: 6px;
   left: 6px;
-  color: variables.$black-5;
+  // color: variables.$black-5;
   cursor: pointer;
   text-decoration: none;
   filter: drop-shadow(3px 3px 2px #000);
@@ -415,10 +489,6 @@ $table-max-width: 1600px;
     filter: drop-shadow(4px 4px 3px #000);
     font-weight: 500;
     font-size: 130%;
-
-    &::after {
-      content: "  Remove File";
-    }
   }
 }
 

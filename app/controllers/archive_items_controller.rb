@@ -4,8 +4,29 @@ require "prawn/measurement_extensions"
 
 class ArchiveItemsController < ApplicationController
   layout 'admin'
-  before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index, :get_items, :sync_search_strings]
+  before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index,  :sync_search_strings]
   before_action :store_return_to_session, only: [:new, :edit]
+  before_action :persist_sort_and_page_items, only: :index
+
+  SORT_MAP = {
+    'subject' => { title: :asc},
+    'subject-desc' => { title: :desc },
+    'draft' => { draft: :asc },
+    'draft-desc' => { draft: :desc },
+    'collection' => { search_collections: :asc },
+    'collection-desc' => { search_collections: :desc },
+    'medium' => { medium: :asc },
+    'medium-desc' => { medium: :desc },
+    'year' => { year: :asc },
+    'year-desc' => { year: :desc },
+    'location' => { search_locations: :asc },
+    'location-desc' => { search_locations: :desc },
+    'edited' => { updated_at: :asc },
+    'edited-desc' => { updated_at: :desc },
+    'file_type' => :file_type,
+    'file_type-desc' => :file_type_desc,
+    'flaged' => :flagged
+}.freeze
 
   def create_uid_pdf
     item = ArchiveItem.find(params[:id])
@@ -15,55 +36,72 @@ class ArchiveItemsController < ApplicationController
   end
 
   def index
-    page_items = params[:page_items].present? ? params[:page_items] : 25
+    page_items = session[:archive_items_page_items] || 25
+    sort_key = session[:archive_items_sort] || 'created_at-desc'
 
-    if params[:sort] == 'subject'
-      @pagy, @archive_items = get_items({title: :asc}, page_items)
-    elsif params[:sort] == 'subject-desc'
-      @pagy, @archive_items = get_items({title: :desc}, page_items)
-    elsif params[:sort] == 'draft'
-      @pagy, @archive_items = get_items({draft: :asc}, page_items)
-    elsif params[:sort] == 'draft-desc'
-      @pagy, @archive_items = get_items({draft: :desc}, page_items)
-    elsif params[:sort] == 'collection'
-      @pagy, @archive_items = get_items({draft: :asc}, page_items)
-    elsif params[:sort] == 'collection-desc'
-      @pagy, @archive_items = get_items({draft: :desc}, page_items)
-    elsif params[:sort] == 'medium'
-      @pagy, @archive_items = get_items({medium: :asc}, page_items)
-    elsif params[:sort] == 'medium-desc'
-      @pagy, @archive_items = get_items({medium: :desc}, page_items)
-    elsif params[:sort] == 'year'
-      @pagy, @archive_items = get_items({year: :asc}, page_items)
-    elsif params[:sort] == 'year-desc'
-      @pagy, @archive_items = get_items({year: :desc}, page_items)
-    elsif params[:sort] == 'location'
-      @pagy, @archive_items = get_items({search_locations: :asc}, page_items)
-    elsif params[:sort] == 'location-desc'
-      @pagy, @archive_items = get_items({search_locations: :desc}, page_items)
-    elsif params[:sort] == 'edited'
-      @pagy, @archive_items = get_items({updated_at: :asc}, page_items)
-    elsif params[:sort] == 'edited-desc'
-      @pagy, @archive_items = get_items({updated_at: :desc}, page_items)
-    elsif params[:sort] == 'flagged'
-      if current_user.page == "global"
-        @pagy, @archive_items = pagy(ArchiveItem.left_outer_joins(:content_files_attachments).where(active_storage_attachments: {id: nil}), page: params[:page], items: page_items)
+    @pagy, @archive_items =
+      case SORT_MAP[sort_key]
+      when :flagged
+        scope = ArchiveItem.left_joins(:content_files_attachments).where(active_storage_attachments: { id: nil })
+        scope = filter_by_user_page(scope)
+        pagy(scope, page: params[:page], items: page_items)
+      when :file_type, :file_type_desc
+        get_items_by_file_type(SORT_MAP[sort_key] == :file_type ? :asc : :desc, page_items)
+      when Hash
+        get_items(SORT_MAP[sort_key], page_items)
       else
-        @pagy, @archive_items = pagy(ArchiveItem.left_joins(:content_files_attachments).where(active_storage_attachments: {id: nil}), page: params[:page], items: page_items)
+        get_items({ created_at: :desc }, page_items)
       end
-    elsif params[:sort] == 'file_type'
-      @pagy, @archive_items = get_items({file_type: :asc}, page_items)
-    elsif params[:sort] == 'file_type-desc'
-      @pagy, @archive_items = get_items({file_type: :desc}, page_items)
-    elsif params[:archive_q]
-      if current_user.page == "global"
-        @pagy, @archive_items = pagy(ArchiveItem.search_cms_archive_items(params[:archive_q]), page: params[:page], items: page_items)
-      else
-        @pagy, @archive_items = pagy(ArchiveItem.tagged_with(current_user.page).search_cms_archive_items(params[:archive_q]), page: params[:page], items: page_items)
-      end
-    else
-      @pagy, @archive_items = get_items({created_at: :desc}, page_items)
-    end
+
+    @pagy.vars[:params] = request.query_parameters.except(:page)
+
+    # if params[:sort] == 'subject'
+    #   @pagy, @archive_items = get_items({title: :asc}, page_items)
+    # elsif params[:sort] == 'subject-desc'
+    #   @pagy, @archive_items = get_items({title: :desc}, page_items)
+    # elsif params[:sort] == 'draft'
+    #   @pagy, @archive_items = get_items({draft: :asc}, page_items)
+    # elsif params[:sort] == 'draft-desc'
+    #   @pagy, @archive_items = get_items({draft: :desc}, page_items)
+    # elsif params[:sort] == 'collection'
+    #   @pagy, @archive_items = get_items({search_collections: :asc}, page_items)
+    # elsif params[:sort] == 'collection-desc'
+    #   @pagy, @archive_items = get_items({search_collections: :desc}, page_items)
+    # elsif params[:sort] == 'medium'
+    #   @pagy, @archive_items = get_items({medium: :asc}, page_items)
+    # elsif params[:sort] == 'medium-desc'
+    #   @pagy, @archive_items = get_items({medium: :desc}, page_items)
+    # elsif params[:sort] == 'year'
+    #   @pagy, @archive_items = get_items({year: :asc}, page_items)
+    # elsif params[:sort] == 'year-desc'
+    #   @pagy, @archive_items = get_items({year: :desc}, page_items)
+    # elsif params[:sort] == 'location'
+    #   @pagy, @archive_items = get_items({search_locations: :asc}, page_items)
+    # elsif params[:sort] == 'location-desc'
+    #   @pagy, @archive_items = get_items({search_locations: :desc}, page_items)
+    # elsif params[:sort] == 'edited'
+    #   @pagy, @archive_items = get_items({updated_at: :asc}, page_items)
+    # elsif params[:sort] == 'edited-desc'
+    #   @pagy, @archive_items = get_items({updated_at: :desc}, page_items)
+    # elsif params[:sort] == 'flagged'
+    #   if current_user.page == "global"
+    #     @pagy, @archive_items = pagy(ArchiveItem.left_outer_joins(:content_files_attachments).where(active_storage_attachments: {id: nil}), page: params[:page], items: page_items)
+    #   else
+    #     @pagy, @archive_items = pagy(ArchiveItem.left_joins(:content_files_attachments).where(active_storage_attachments: {id: nil}), page: params[:page], items: page_items)
+    #   end
+    # elsif params[:sort] == 'file_type'
+    #   @pagy, @archive_items = get_items({file_type: :asc}, page_items)
+    # elsif params[:sort] == 'file_type-desc'
+    #   @pagy, @archive_items = get_items({file_type: :desc}, page_items)
+    # elsif params[:archive_q]
+    #   if current_user.page == "global"
+    #     @pagy, @archive_items = pagy(ArchiveItem.search_cms_archive_items(params[:archive_q]), page: params[:page], items: page_items)
+    #   else
+    #     @pagy, @archive_items = pagy(ArchiveItem.tagged_with(current_user.page).search_cms_archive_items(params[:archive_q]), page: params[:page], items: page_items)
+    #   end
+    # else
+    #   @pagy, @archive_items = get_items({created_at: :desc}, page_items)
+    # end
 
     @total_item_count = @pagy.count
 
@@ -73,32 +111,6 @@ class ArchiveItemsController < ApplicationController
   def export_to_csv
     ExportArchiveItemsCsvJob.perform_later(current_user.id)
     redirect_to archive_items_path, notice: "Export started. You'll receive an email when it's ready."
-  end
-
-  def get_items(sort, num_items)
-    if sort.keys.first == :file_type
-
-      # subquery to get only first id of content_files array
-      first_attachment_ids = ActiveStorage::Attachment
-        .where(record_type: 'ArchiveItem', name: 'content_files')
-        .group(:record_id)
-        .select('MIN(id)')
-
-      # make sort SQL friendly
-      order_direction = sort.values.first == :asc ? 'ASC' : 'DESC'
-
-      base_query = ArchiveItem
-        .left_joins(content_files_attachments: :blob)
-        .where(active_storage_attachments: { id: first_attachment_ids }) # only consider first id content_files
-        .or(ArchiveItem.left_joins(content_files_attachments: :blob).where(active_storage_attachments: {id: nil})) # include items with no content_files
-        .select("archive_items.*")
-        .order("active_storage_blobs.content_type #{order_direction}")
-
-    else
-      base_query = current_user.page == "global" ? ArchiveItem.all.order(sort) : ArchiveItem.tagged_with(current_user.page).order(sort)
-    end
-
-    return pagy(base_query, page: params[:page], items: num_items)
   end
 
   def sync_search_strings
@@ -274,6 +286,47 @@ class ArchiveItemsController < ApplicationController
   end
 
   private
+
+  def filter_by_user_page(scope)
+    current_user.page == "global" ? scope : scope.tagged_with(current_user.page)
+  end
+
+  def persist_sort_and_page_items
+    session[:archive_items_sort] = params[:sort].presence || session[:archive_items_sort] || 'created_at-desc'
+    session[:archive_items_page_items] = params[:page_items].presence || session[:archive_items_page_items] || 25
+
+    params_changed = (params[:sort] != session[:archive_items_sort]) || (params[:page_items] != session[:archive_items_page_items])
+    if params_changed && action_name == 'index'
+      redirect_to request.query_parameters.merge(sort: session[:archive_items_sort], page_items: session[:archive_items_page_items]) and return
+    end
+  end
+
+  def get_items(order_hash, num_items)
+    base = filter_by_user_page(ArchiveItem.all).order(order_hash)
+    pagy(base, page: params[:page], items: num_items)
+  end
+
+  def get_items_by_file_type(direction, num_items)
+    # subquery to get only first id of content_files array
+    first_attachment_ids = ActiveStorage::Attachment
+      .where(record_type: 'ArchiveItem', name: 'content_files')
+      .group(:record_id)
+      .select('MIN(id)')
+
+    # make direction SQL friendly
+    order_direction = direction.values.first == :asc ? 'ASC' : 'DESC'
+
+    base_query = ArchiveItem
+      .left_joins(content_files_attachments: :blob)
+      .where(active_storage_attachments: { id: first_attachment_ids }) # only consider first id content_files
+      .or(ArchiveItem.left_joins(content_files_attachments: :blob).where(active_storage_attachments: {id: nil})) # include items with no content_files
+      .select("archive_items.*")
+      .order("active_storage_blobs.content_type #{order_direction}")
+
+    base_query = filter_by_user_page(base_query)
+
+    return pagy(base_query, page: params[:page], items: num_items)
+  end
 
   def generate_pdf(item)
     if Rails.env.development?

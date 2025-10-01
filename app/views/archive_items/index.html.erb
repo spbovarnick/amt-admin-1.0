@@ -27,13 +27,8 @@
   <thead>
     <tr>
         <th>
-          <% if params[:sort] == 'subject' %>
-            <%= link_to 'Subject', archive_items_path(:sort => 'subject-desc'), class: 'sorted-down' %>
-          <% elsif params[:sort] == 'subject-desc' %>
-            <%= link_to 'Subject', archive_items_path(:sort => 'subject'), class: 'sorted-up' %>
-          <% else %>
-            <%= link_to 'Subject', archive_items_path(:sort => 'subject') %>
-          <% end %>
+          <%= sort_link('Subject', 'subject' ) %>
+
         </th>
         <th>
           <% if params[:sort] == 'draft' %>

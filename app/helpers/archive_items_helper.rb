@@ -21,7 +21,19 @@ module ArchiveItemsHelper
       end
 
     link_to label,
-      archive_items_path(request.query_parameters.merge(sort: next_key, page: nil)),
+      archive_items_path(:sort => next_key, page: nil),
       class: css
+  end
+
+  def flagged_link
+    if params[:sort] =='flagged'
+      link_to 'Show All Archive Items',
+        archive_items_path,
+        class: 'table-header-button'
+    else
+      link_to 'Show Only Archive Items Missing Files',
+        archive_items_path(request.query_parameters.merge(sort: 'flagged', page: nil)),
+        class: 'table-header-button'
+    end
   end
 end

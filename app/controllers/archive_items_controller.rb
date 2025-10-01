@@ -25,7 +25,7 @@ class ArchiveItemsController < ApplicationController
     'edited-desc' => { updated_at: :desc },
     'file_type' => :file_type,
     'file_type-desc' => :file_type_desc,
-    'flaged' => :flagged
+    'flagged' => :flagged
 }.freeze
 
   def create_uid_pdf
@@ -36,8 +36,8 @@ class ArchiveItemsController < ApplicationController
   end
 
   def index
-    page_items = session[:archive_items_page_items] || 25
-    sort_key = session[:archive_items_sort] || 'created_at-desc'
+    page_items = (params[:page_items].presence || session[:archive_items_page_items] || 25).to_i
+    sort_key = params[:sort].presence || session[:archive_items_sort].presence || 'created_at-desc'
 
     @pagy, @archive_items =
       case SORT_MAP[sort_key]
@@ -292,13 +292,12 @@ class ArchiveItemsController < ApplicationController
   end
 
   def persist_sort_and_page_items
-    session[:archive_items_sort] = params[:sort].presence || session[:archive_items_sort] || 'created_at-desc'
-    session[:archive_items_page_items] = params[:page_items].presence || session[:archive_items_page_items] || 25
+    session.delete(:archive_items_sort) if !params[:sort].present?
 
-    params_changed = (params[:sort] != session[:archive_items_sort]) || (params[:page_items] != session[:archive_items_page_items])
-    if params_changed && action_name == 'index'
-      redirect_to request.query_parameters.merge(sort: session[:archive_items_sort], page_items: session[:archive_items_page_items]) and return
-    end
+    p "session:", session
+
+    session[:archive_items_sort] = params[:sort] if params.key?(:sort)
+    session[:archive_items_page_items] = params[:page_items] if params.key?(:page_items)
   end
 
   def get_items(order_hash, num_items)
@@ -307,6 +306,7 @@ class ArchiveItemsController < ApplicationController
   end
 
   def get_items_by_file_type(direction, num_items)
+    p 'direction:', direction
     # subquery to get only first id of content_files array
     first_attachment_ids = ActiveStorage::Attachment
       .where(record_type: 'ArchiveItem', name: 'content_files')
@@ -314,7 +314,7 @@ class ArchiveItemsController < ApplicationController
       .select('MIN(id)')
 
     # make direction SQL friendly
-    order_direction = direction.values.first == :asc ? 'ASC' : 'DESC'
+    order_direction = direction == :asc ? 'ASC' : 'DESC'
 
     base_query = ArchiveItem
       .left_joins(content_files_attachments: :blob)

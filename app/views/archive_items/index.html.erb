@@ -26,74 +26,15 @@
 <table class="admin-table">
   <thead>
     <tr>
-        <th>
-          <%= sort_link('Subject', 'subject' ) %>
-
-        </th>
-        <th>
-          <% if params[:sort] == 'draft' %>
-            <%= link_to 'Draft/Published', archive_items_path(:sort => 'draft-desc'), class: 'sorted-down' %>
-          <% elsif params[:sort] == 'draft-desc' %>
-            <%= link_to 'Draft/Published', archive_items_path(:sort => 'draft'), class: 'sorted-up' %>
-          <% else %>
-            <%= link_to 'Draft/Published', archive_items_path(:sort => 'draft-desc') %>
-          <% end %>
-        </th>
-        <th>
-          UID
-        </th>
-        <th>
-          <% if params[:sort] == 'collection' %>
-            <%= link_to 'Collection', archive_items_path(:sort => 'collection-desc'), class: 'sorted-down' %>
-          <% elsif params[:sort] == 'collection-desc' %>
-            <%= link_to 'Collection', archive_items_path(:sort => 'collection'), class: 'sorted-up' %>
-          <% else %>
-            <%= link_to 'Collection', archive_items_path(:sort => 'collection') %>
-          <% end %>
-        </th>
-        <th>
-          <% if params[:sort] == 'medium' %>
-            <%= link_to 'Medium', archive_items_path(:sort => 'medium-desc'), class: 'sorted-down' %>
-          <% elsif params[:sort] == 'medium-desc' %>
-            <%= link_to 'Medium', archive_items_path(:sort => 'medium'), class: 'sorted-up' %>
-          <% else %>
-            <%= link_to 'Medium', archive_items_path(:sort => 'medium') %>
-          <% end %>
-        </th>
-        <th>
-          <% if params[:sort] == 'year' %>
-            <%= link_to 'Year', archive_items_path(:sort => 'year-desc'), class: 'sorted-down' %>
-          <% elsif params[:sort] == 'year-desc' %>
-            <%= link_to 'Year', archive_items_path(:sort => 'year'), class: 'sorted-up' %>
-          <% else %>
-            <%= link_to 'Year', archive_items_path(:sort => 'year') %>
-          <% end %>
-        </th>
-        <th>
-          <% if params[:sort] == 'edited' %>
-            <%= link_to 'Last edited', archive_items_path(:sort => 'edited-desc'), class: 'sorted-down' %>
-          <% elsif params[:sort] == 'edited-desc' %>
-            <%= link_to 'Last edited', archive_items_path(:sort => 'edited'), class: 'sorted-up' %>
-          <% else %>
-            <%= link_to 'Last edited', archive_items_path(:sort => 'edited') %>
-          <% end %>
-        </th>
-        <th>
-          <% unless params[:sort] == 'flagged' %>
-            <%= link_to 'Show Only Archive Items Missing Files', archive_items_path(:sort => 'flagged'), class: "table-header-button" %>
-          <% else %>
-            <%= link_to 'Show All Archive Items', archive_items_path, class: "table-header-button" %></th>
-          <% end %>
-        </th>
-        <th>
-          <% if params[:sort] == "file_type" %>
-            <%= link_to 'File Type', archive_items_path(:sort => 'file_type-desc'), class: 'sorted-down' %>
-          <% elsif params[:sort] == 'file_type-desc' %>
-            <%= link_to 'File Type', archive_items_path(:sort => 'file_type'), class: 'sorted-up' %>
-          <% else %>
-            <%= link_to 'File Type', archive_items_path(:sort => 'file_type') %>
-          <% end %>
-        </th>
+        <th><%= sort_link('Subject', 'subject' ) %></th>
+        <th><%= sort_link( 'Draft/Published', 'draft' ) %></th>
+        <th>UID</th>
+        <th><%= sort_link( 'Collection', 'collection' ) %></th>
+        <th><%= sort_link( 'Medium', 'medium' ) %></th>
+        <th><%= sort_link( 'Year', 'year' ) %></th>
+        <th><%= sort_link( 'Last edited', 'edited' ) %></th>
+        <th><%= flagged_link %></th>
+        <th><%= sort_link( 'File Type', 'file_type' ) %></th>
         <th></th>
     </tr>
   </thead>

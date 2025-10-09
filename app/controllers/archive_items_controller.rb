@@ -6,7 +6,7 @@ class ArchiveItemsController < ApplicationController
   layout 'admin'
   before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index,  :sync_search_strings]
   before_action :store_return_to_session, only: [:new, :edit]
-  before_action :persist_sort_and_page_items, only: :index
+  # before_action :persist_sort_and_page_items, only: :index
 
   SORT_MAP = {
     'subject' => { title: :asc},
@@ -36,7 +36,7 @@ class ArchiveItemsController < ApplicationController
   end
 
   def index
-    page_items = (params[:page_items].presence || session[:archive_items_page_items] || 25).to_i
+    page_items = (params[:page_items].presence || 25).to_i
     sort_key = params[:sort].presence || session[:archive_items_sort].presence || 'created_at-desc'
 
     @pagy, @archive_items =
@@ -54,54 +54,6 @@ class ArchiveItemsController < ApplicationController
       end
 
     @pagy.vars[:params] = request.query_parameters.except(:page)
-
-    # if params[:sort] == 'subject'
-    #   @pagy, @archive_items = get_items({title: :asc}, page_items)
-    # elsif params[:sort] == 'subject-desc'
-    #   @pagy, @archive_items = get_items({title: :desc}, page_items)
-    # elsif params[:sort] == 'draft'
-    #   @pagy, @archive_items = get_items({draft: :asc}, page_items)
-    # elsif params[:sort] == 'draft-desc'
-    #   @pagy, @archive_items = get_items({draft: :desc}, page_items)
-    # elsif params[:sort] == 'collection'
-    #   @pagy, @archive_items = get_items({search_collections: :asc}, page_items)
-    # elsif params[:sort] == 'collection-desc'
-    #   @pagy, @archive_items = get_items({search_collections: :desc}, page_items)
-    # elsif params[:sort] == 'medium'
-    #   @pagy, @archive_items = get_items({medium: :asc}, page_items)
-    # elsif params[:sort] == 'medium-desc'
-    #   @pagy, @archive_items = get_items({medium: :desc}, page_items)
-    # elsif params[:sort] == 'year'
-    #   @pagy, @archive_items = get_items({year: :asc}, page_items)
-    # elsif params[:sort] == 'year-desc'
-    #   @pagy, @archive_items = get_items({year: :desc}, page_items)
-    # elsif params[:sort] == 'location'
-    #   @pagy, @archive_items = get_items({search_locations: :asc}, page_items)
-    # elsif params[:sort] == 'location-desc'
-    #   @pagy, @archive_items = get_items({search_locations: :desc}, page_items)
-    # elsif params[:sort] == 'edited'
-    #   @pagy, @archive_items = get_items({updated_at: :asc}, page_items)
-    # elsif params[:sort] == 'edited-desc'
-    #   @pagy, @archive_items = get_items({updated_at: :desc}, page_items)
-    # elsif params[:sort] == 'flagged'
-    #   if current_user.page == "global"
-    #     @pagy, @archive_items = pagy(ArchiveItem.left_outer_joins(:content_files_attachments).where(active_storage_attachments: {id: nil}), page: params[:page], items: page_items)
-    #   else
-    #     @pagy, @archive_items = pagy(ArchiveItem.left_joins(:content_files_attachments).where(active_storage_attachments: {id: nil}), page: params[:page], items: page_items)
-    #   end
-    # elsif params[:sort] == 'file_type'
-    #   @pagy, @archive_items = get_items({file_type: :asc}, page_items)
-    # elsif params[:sort] == 'file_type-desc'
-    #   @pagy, @archive_items = get_items({file_type: :desc}, page_items)
-    # elsif params[:archive_q]
-    #   if current_user.page == "global"
-    #     @pagy, @archive_items = pagy(ArchiveItem.search_cms_archive_items(params[:archive_q]), page: params[:page], items: page_items)
-    #   else
-    #     @pagy, @archive_items = pagy(ArchiveItem.tagged_with(current_user.page).search_cms_archive_items(params[:archive_q]), page: params[:page], items: page_items)
-    #   end
-    # else
-    #   @pagy, @archive_items = get_items({created_at: :desc}, page_items)
-    # end
 
     @total_item_count = @pagy.count
 
@@ -291,14 +243,14 @@ class ArchiveItemsController < ApplicationController
     current_user.page == "global" ? scope : scope.tagged_with(current_user.page)
   end
 
-  def persist_sort_and_page_items
-    session.delete(:archive_items_sort) if !params[:sort].present?
+  # def persist_sort_and_page_items
+  #   session.delete(:archive_items_sort) if !params[:sort].present?
 
-    p "session:", session
+  #   p "session:", session
 
-    session[:archive_items_sort] = params[:sort] if params.key?(:sort)
-    session[:archive_items_page_items] = params[:page_items] if params.key?(:page_items)
-  end
+  #   session[:archive_items_sort] = params[:sort] if params.key?(:sort)
+  #   session[:archive_items_page_items] = params[:page_items] if params.key?(:page_items)
+  # end
 
   def get_items(order_hash, num_items)
     base = filter_by_user_page(ArchiveItem.all).order(order_hash)

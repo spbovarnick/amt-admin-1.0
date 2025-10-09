@@ -1,5 +1,5 @@
 module ArchiveItemsHelper
-  def sort_link(label, base, default_dir: :asc)
+  def sort_link(label, base, items, default_dir: :asc)
     current = params[:sort].to_s
     asc_key = base
     desc_key = "#{base}-desc"
@@ -21,7 +21,7 @@ module ArchiveItemsHelper
       end
 
     link_to label,
-      archive_items_path(:sort => next_key, page: nil),
+      archive_items_path(:sort => next_key, :page_items => items, page: nil),
       class: css
   end
 

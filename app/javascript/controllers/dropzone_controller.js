@@ -208,7 +208,7 @@ function createDropzone(controller) {
     previewsContainer: controller.previewsContainer,
     addRemoveLinks: true,
     uploadMultiple: true,
-    autoQueue: false,
+    autoQueue: true,
   });
 
   return dropzone;

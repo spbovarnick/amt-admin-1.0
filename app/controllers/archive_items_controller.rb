@@ -42,7 +42,7 @@ class ArchiveItemsController < ApplicationController
     scope =
       case SORT_MAP[sort_key]
       when :flagged
-        scope = left_joins(:content_files_attachments).where(active_storage_attachments: { id: nil })
+        scope = ArchiveItem.left_joins(:content_files_attachments).where(active_storage_attachments: { id: nil })
       when :file_type, :file_type_desc
         order_dir = (SORT_MAP[sort_key] == :file_type ? "ASC" : "DESC")
         get_items_by_file_type(scope, order_dir)

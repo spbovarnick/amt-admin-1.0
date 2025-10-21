@@ -26,18 +26,16 @@ class ArchiveItemsController < ApplicationController
     'file_type' => :file_type,
     'file_type-desc' => :file_type_desc,
     'flagged' => :flagged
-}.freeze
+  }.freeze
 
   def create_uid_pdf
     item = ArchiveItem.find(params[:id])
     send_data generate_pdf(item), filename: "#{item.uid}.pdf", type: 'application/pdf'
-
-
   end
 
   def index
     page_items = (params[:page_items].presence || 25).to_i
-    sort_key = params[:sort].presence || session[:archive_items_sort].presence || 'created_at-desc'
+    sort_key = params[:sort].presence || 'created_at-desc'
 
     scope = base_scope
 
@@ -47,11 +45,11 @@ class ArchiveItemsController < ApplicationController
         scope = left_joins(:content_files_attachments).where(active_storage_attachments: { id: nil })
       when :file_type, :file_type_desc
         order_dir = (SORT_MAP[sort_key] == :file_type ? "ASC" : "DESC")
-        order_by_file_type(scope, order_dir)
+        get_items_by_file_type(scope, order_dir)
       when Hash
-        scope.order(SORT_MAP[sort_key])
+        scope.reorder(SORT_MAP[sort_key])
       else
-        scope.order(created_at: :desc)
+        scope.reorder(created_at: :desc)
       end
 
     @pagy, @archive_items = pagy(scope, page: params[:page], items: page_items)
@@ -246,24 +244,17 @@ class ArchiveItemsController < ApplicationController
     current_user.page == "global" ? scope : scope.tagged_with(current_user.page)
   end
 
- def base_scope
-  scope = ArchiveItem.all
-  scope = filter_by_user_page(scope)
+  def base_scope
+    scope = filter_by_user_page(ArchiveItem.all)
 
-  if params[:archive_q].present?
-    scope = scope.merge(ArchiveItem.search_cms_archive_items(params[:archive_q]))
-  end
+    if params[:archive_q].present?
+      scope = scope.merge(ArchiveItem.search_cms_archive_items(params[:archive_q])) if params[:archive_q].present?
+    end
 
-  scope
- end
-
-  def get_items(order_hash, num_items)
-    base = filter_by_user_page(ArchiveItem.all).order(order_hash)
-    pagy(base, page: params[:page], items: num_items)
+    scope
   end
 
   def get_items_by_file_type(direction, num_items)
-    p 'direction:', direction
     # subquery to get only first id of content_files array
     first_attachment_ids = ActiveStorage::Attachment
       .where(record_type: 'ArchiveItem', name: 'content_files')
@@ -278,7 +269,7 @@ class ArchiveItemsController < ApplicationController
       .where(active_storage_attachments: { id: first_attachment_ids }) # only consider first id content_files
       .or(ArchiveItem.left_joins(content_files_attachments: :blob).where(active_storage_attachments: {id: nil})) # include items with no content_files
       .select("archive_items.*")
-      .order("active_storage_blobs.content_type #{order_direction}")
+      .reorder("active_storage_blobs.content_type #{order_direction}")
 
     base_query = filter_by_user_page(base_query)
 

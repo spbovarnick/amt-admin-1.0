@@ -39,19 +39,22 @@ class ArchiveItemsController < ApplicationController
     page_items = (params[:page_items].presence || 25).to_i
     sort_key = params[:sort].presence || session[:archive_items_sort].presence || 'created_at-desc'
 
-    @pagy, @archive_items =
+    scope = base_scope
+
+    scope =
       case SORT_MAP[sort_key]
       when :flagged
-        scope = ArchiveItem.left_joins(:content_files_attachments).where(active_storage_attachments: { id: nil })
-        scope = filter_by_user_page(scope)
-        pagy(scope, page: params[:page], items: page_items)
+        scope = left_joins(:content_files_attachments).where(active_storage_attachments: { id: nil })
       when :file_type, :file_type_desc
-        get_items_by_file_type(SORT_MAP[sort_key] == :file_type ? :asc : :desc, page_items)
+        order_dir = (SORT_MAP[sort_key] == :file_type ? "ASC" : "DESC")
+        order_by_file_type(scope, order_dir)
       when Hash
-        get_items(SORT_MAP[sort_key], page_items)
+        scope.order(SORT_MAP[sort_key])
       else
-        get_items({ created_at: :desc }, page_items)
+        scope.order(created_at: :desc)
       end
+
+    @pagy, @archive_items = pagy(scope, page: params[:page], items: page_items)
 
     @pagy.vars[:params] = request.query_parameters.except(:page)
 
@@ -243,14 +246,16 @@ class ArchiveItemsController < ApplicationController
     current_user.page == "global" ? scope : scope.tagged_with(current_user.page)
   end
 
-  # def persist_sort_and_page_items
-  #   session.delete(:archive_items_sort) if !params[:sort].present?
+ def base_scope
+  scope = ArchiveItem.all
+  scope = filter_by_user_page(scope)
 
-  #   p "session:", session
+  if params[:archive_q].present?
+    scope = scope.merge(ArchiveItem.search_cms_archive_items(params[:archive_q]))
+  end
 
-  #   session[:archive_items_sort] = params[:sort] if params.key?(:sort)
-  #   session[:archive_items_page_items] = params[:page_items] if params.key?(:page_items)
-  # end
+  scope
+ end
 
   def get_items(order_hash, num_items)
     base = filter_by_user_page(ArchiveItem.all).order(order_hash)

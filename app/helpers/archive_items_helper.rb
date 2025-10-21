@@ -20,8 +20,10 @@ module ArchiveItemsHelper
         'sorted-up'
       end
 
+      base_url = request.query_parameters.except(:page)
+
     link_to label,
-      archive_items_path(:sort => next_key, :page_items => items, page: nil),
+      archive_items_path(base_url.merge(:sort => next_key, :page_items => items, page: nil)),
       class: css
   end
 

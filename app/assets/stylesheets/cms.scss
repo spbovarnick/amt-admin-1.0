@@ -427,6 +427,19 @@ $table-max-width: 1600px;
     }
   }
 
+  .redirect-select {
+    select {
+      margin: 0 0 5px 0;
+    }
+    width: 50%;
+  }
+
+  .cf-label_select {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+  }
+
   .checkbox-wrapper {
     flex-direction: row;
     align-items: center;

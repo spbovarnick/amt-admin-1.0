@@ -184,7 +184,9 @@ CREATE TABLE public.archive_items (
     uid character varying,
     featured_item boolean DEFAULT false,
     content_files_order text[] DEFAULT '{}'::text[],
-    medium_photos_order text[] DEFAULT '{}'::text[]
+    medium_photos_order text[] DEFAULT '{}'::text[],
+    redirect_url character varying,
+    content_redirect boolean DEFAULT false
 );
 
 
@@ -1084,6 +1086,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251021230952'),
 ('20250814205556'),
 ('20250807212013'),
 ('20250807211603'),

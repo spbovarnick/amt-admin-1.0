@@ -138,8 +138,11 @@
       <div class="file-col">
         <div class="cf-label_select">
           <span class="file_col_label">Content Files</span>
-          <div class="form-select-wrapper redirect-select">
-            <%= form.select :content_redirect, [["Hosted File Upload", false, { selected: true }], ["External Redirect URL", true]] %>
+          <div
+            class="form-select-wrapper redirect-select"
+            data-controller="content-select"
+          >
+            <%= form.select :content_redirect, [["Hosted File Upload", false, { selected: true }], ["External Redirect URL", true]], {}, data: { content_select_target: "select" } %>
           </div>
 
         </div>

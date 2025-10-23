@@ -6,7 +6,6 @@ export default class extends Controller {
   static targets = ["container", "template"]
 
   connect() {
-    console.log(this.containerTarget)
     // Optional: drag to reorder, then write positions
     this.sortable = new Sortable(this.containerTarget, {
       animation: 150,

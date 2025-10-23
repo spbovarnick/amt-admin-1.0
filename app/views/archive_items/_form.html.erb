@@ -1,4 +1,4 @@
-<%= form_with( model: [@archive_item], local: true, html: { multipart: true, class: ["admin-form", "archive-item-form"] }, data: { controller: 'draft-select tag-input archive-items-form direct-uploads uid featured-item'} ) do |form| %>
+<%= form_with( model: [@archive_item], local: true, html: { multipart: true, class: ["admin-form", "archive-item-form"] }, data: { controller: 'draft-select tag-input archive-items-form direct-uploads uid featured-item '} ) do |form| %>
 
   <% if notice || alert %>
     <div class="err-messages">
@@ -139,7 +139,22 @@
         <div class="cf-label_select">
           <span class="file_col_label">Content Files</span>
           <div class="form-select-wrapper redirect-select">
-            <%= form.select :content_redirect, [["Hosted File Upload", false, :selected], ["External Redirect URL", true]] %>
+            <%= form.select :content_redirect, [["Hosted File Upload", false, { selected: true }], ["External Redirect URL", true]] %>
+          </div>
+
+        </div>
+        <div id="redirect-links-list">
+          <div class="form-row">
+            <div class="form-set">
+
+
+              <%= form.fields_for :redirect_links do |rlf|%>
+                <%= rlf.label :url, "Redirect URL" %>
+                <%= rlf.text_field :url %>
+                <%= rlf.label :text, "URL Text to Display" %>
+                <%= rlf.text_field :url_label %>
+              <% end %>
+            </div>
           </div>
         </div>
         <% @archive_item.content_files.each do |file| %>

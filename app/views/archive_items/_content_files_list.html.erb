@@ -1,5 +1,6 @@
 <div id="content-files-list">
   <ul
+    id="content-files-list-el"
     data-controller="sortable"
     <% if @archive_item.persisted? %>
       data-sortable-url-value="<%= update_content_files_order_archive_item_path(@archive_item) %>"

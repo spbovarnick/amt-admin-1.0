@@ -185,7 +185,6 @@ CREATE TABLE public.archive_items (
     featured_item boolean DEFAULT false,
     content_files_order text[] DEFAULT '{}'::text[],
     medium_photos_order text[] DEFAULT '{}'::text[],
-    redirect_url character varying,
     content_redirect boolean DEFAULT false
 );
 
@@ -495,6 +494,40 @@ ALTER SEQUENCE public.people_id_seq OWNED BY public.people.id;
 
 
 --
+-- Name: redirect_links; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.redirect_links (
+    id bigint NOT NULL,
+    archive_item_id bigint NOT NULL,
+    url character varying,
+    url_label character varying,
+    "position" integer,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: redirect_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.redirect_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: redirect_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.redirect_links_id_seq OWNED BY public.redirect_links.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -702,6 +735,13 @@ ALTER TABLE ONLY public.people ALTER COLUMN id SET DEFAULT nextval('public.peopl
 
 
 --
+-- Name: redirect_links id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_links ALTER COLUMN id SET DEFAULT nextval('public.redirect_links_id_seq'::regclass);
+
+
+--
 -- Name: taggings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -832,6 +872,14 @@ ALTER TABLE ONLY public.pages
 
 ALTER TABLE ONLY public.people
     ADD CONSTRAINT people_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: redirect_links redirect_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_links
+    ADD CONSTRAINT redirect_links_pkey PRIMARY KEY (id);
 
 
 --
@@ -972,6 +1020,13 @@ CREATE UNIQUE INDEX index_people_on_name ON public.people USING btree (name);
 
 
 --
+-- Name: index_redirect_links_on_archive_item_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_redirect_links_on_archive_item_id ON public.redirect_links USING btree (archive_item_id);
+
+
+--
 -- Name: index_taggings_on_context; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1056,6 +1111,14 @@ CREATE INDEX taggings_taggable_context_idx ON public.taggings USING btree (tagga
 
 
 --
+-- Name: redirect_links fk_rails_5070bed88d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.redirect_links
+    ADD CONSTRAINT fk_rails_5070bed88d FOREIGN KEY (archive_item_id) REFERENCES public.archive_items(id);
+
+
+--
 -- Name: active_storage_variant_records fk_rails_993965df05; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1086,6 +1149,10 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251023203900'),
+('20251023201423'),
+('20251023190415'),
+('20251023185514'),
 ('20251021230952'),
 ('20250814205556'),
 ('20250807212013'),

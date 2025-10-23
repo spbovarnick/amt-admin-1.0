@@ -26,7 +26,8 @@ class ArchiveItem < ApplicationRecord
             search_locations: 'C',
             search_collections: 'D',
             created_by: 'D',
-            updated_by: 'D'
+            updated_by: 'D',
+            redirect_links: 'D'
     },
         using: {
             tsearch: {
@@ -35,6 +36,8 @@ class ArchiveItem < ApplicationRecord
     }
 
     # has_one_attached :content_file
+    has_many :redirect_links, dependent: :destroy, inverse_of: :archive_item
+    accepts_nested_attributes_for :redirect_links, allow_destroy: true
     has_many_attached :content_files
     has_one_attached :medium_photo
     has_many_attached :medium_photos

@@ -143,18 +143,22 @@
           </div>
 
         </div>
-        <div id="redirect-links-list">
-          <div class="form-row">
-            <div class="form-set">
+          <div id="redirect-links-list" data-controller="redirect-links">
+            <span class="">External Redirects</span>
+            <button type="button" class="button-round" data-action="redirect-links#add">Add link</button>
 
-
-              <%= form.fields_for :redirect_links do |rlf|%>
-                <%= rlf.label :url, "Redirect URL" %>
-                <%= rlf.text_field :url %>
-                <%= rlf.label :text, "URL Text to Display" %>
-                <%= rlf.text_field :url_label %>
+            <div class="links-rows" data-redirect-links-target="container">
+              <%= form.fields_for :redirect_links do |lf| %>
+                <%= render "redirect_links", f: lf %>
               <% end %>
             </div>
+
+            <!-- template for new rows -->
+            <template data-redirect-links-target="template">
+              <%= form.fields_for :redirect_links, RedirectLink.new, child_index: "NEW_RECORD" do |lf| %>
+                <%= render "redirect_links", f: lf %>
+              <% end %>
+            </template>
           </div>
         </div>
         <% @archive_item.content_files.each do |file| %>

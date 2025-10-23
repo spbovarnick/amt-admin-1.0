@@ -286,12 +286,17 @@ $table-max-width: 1600px;
 
   }
 
+  .remove_redirect-set {
+    justify-content: center;
+  }
+
   .form-set {
     display: flex;
     flex-flow: column;
     // flex-grow: 1;
     // flex-basis: 100%;
     width: 50%;
+
 
     .select-menu {
       width: calc(50% - 15px);
@@ -376,6 +381,7 @@ $table-max-width: 1600px;
     input[type="number"],
   input[type="password"],
   input[type="text"],
+  input[type="url"],
   textarea {
     border: solid 1px transparent;
     background: variables.$black-4;

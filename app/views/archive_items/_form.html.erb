@@ -148,8 +148,6 @@
         </div>
           <div id="redirect-links-list" data-controller="redirect-links">
             <span class="">External Redirects</span>
-            <button type="button" class="button-round" data-action="redirect-links#add">Add link</button>
-
             <div class="links-rows" data-redirect-links-target="container">
               <%= form.fields_for :redirect_links do |lf| %>
                 <%= render "redirect_links", f: lf %>
@@ -159,9 +157,10 @@
             <!-- template for new rows -->
             <template data-redirect-links-target="template">
               <%= form.fields_for :redirect_links, RedirectLink.new, child_index: "NEW_RECORD" do |lf| %>
-                <%= render "redirect_links", f: lf %>
+                <%= render "redirect_links", f: lf, draft: true %>
               <% end %>
             </template>
+            <button type="button" class="button-round redirect_add-button" data-redirect-links-target="add" data-action="redirect-links#add">Add</button>
           </div>
         </div>
         <% @archive_item.content_files.each do |file| %>

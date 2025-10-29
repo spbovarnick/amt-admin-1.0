@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ["select"]
 
   connect(){
-    console.log(this.selectTarget)
+
   }
 
   redirectSelectUI(input) {

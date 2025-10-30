@@ -10,8 +10,12 @@
     </div>
     <%= f.hidden_field :position, value: f.object.position || 9999 %>
     <div class="form-set remove_redirect-set">
-
-      <button type="button" class="button-round redirect_x-button" data-redirect-links-target="del" data-action="redirect-links#remove">X</button>
+      <button
+        type="button"
+        class="button-round redirect_x-button"
+        data-redirect-links-target="del"
+        data-action="redirect-links#remove"
+      >X</button>
       <%= f.check_box :_destroy, style: "display:none" %>
     </div>
   </div>

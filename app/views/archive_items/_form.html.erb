@@ -146,63 +146,66 @@
           </div>
 
         </div>
-          <div id="redirect-links-list" data-controller="redirect-links">
-            <span class="">External Redirects</span>
-            <div class="links-rows" data-redirect-links-target="container">
-              <%= form.fields_for :redirect_links do |lf| %>
-                <%= render "redirect_links", f: lf %>
-              <% end %>
-            </div>
 
-            <!-- template for new rows -->
-            <template data-redirect-links-target="template">
-              <%= form.fields_for :redirect_links, RedirectLink.new, child_index: "NEW_RECORD" do |lf| %>
-                <%= render "redirect_links", f: lf, draft: true %>
-              <% end %>
-            </template>
-            <button type="button" class="button-round redirect_add-button" data-redirect-links-target="add" data-action="redirect-links#add">Add</button>
+        <div id="redirect-links-list" data-controller="redirect-links">
+          <span class="">External Redirects</span>
+          <div class="links-rows" data-redirect-links-target="container">
+            <%= form.fields_for :redirect_links do |lf| %>
+              <%= render "redirect_links", f: lf %>
+            <% end %>
           </div>
+
+          <!-- template for new rows -->
+          <template data-redirect-links-target="template">
+            <%= form.fields_for :redirect_links, RedirectLink.new, child_index: "NEW_RECORD" do |lf| %>
+              <%= render "redirect_links", f: lf, draft: true %>
+            <% end %>
+          </template>
+          <button type="button" class="button-round redirect_add-button" data-redirect-links-target="add" data-action="redirect-links#add">
+            Add
+          </button>
         </div>
+
         <% @archive_item.content_files.each do |file| %>
           <%= form.hidden_field :content_files, multiple: true, value: file.signed_id %>
         <% end %>
         <%= render "content_files_list" %>
+
+      <div class="file-col">
+        <span class="file_col_label">Medium Photos</span>
+        <% @archive_item.medium_photos.each do |photo| %>
+        <%= form.hidden_field :medium_photos, multiple: true, value: photo.signed_id %>
+        <% end %>
+        <%= render "medium_photos_list" %>
       </div>
-
-    <div class="file-col">
-      <span class="file_col_label">Medium Photos</span>
-      <% @archive_item.medium_photos.each do |photo| %>
-       <%= form.hidden_field :medium_photos, multiple: true, value: photo.signed_id %>
-      <% end %>
-      <%= render "medium_photos_list" %>
-    </div>
-
-    <div id="poster-image-row" class="file-col hidden">
-        <div id="poster-image-preview" class="file-header <%= 'no-files' if !@archive_item.poster_image.attached? %> ">
-          <% if @archive_item.poster_image.attached?%>
-            <div id="poster-left-header-col">
-              <label>Poster Image Preview</label>
-              <%= link_to "Remove current file", delete_poster_image_archive_item_path(@archive_item, poster_image_id: @archive_item.poster_image.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "poster-img-del" %>
+        <div id="poster-image-row" class="file-col hidden">
+            <div id="poster-image-preview" class="file-header <%= 'no-files' if !@archive_item.poster_image.attached? %> ">
+              <% if @archive_item.poster_image.attached?%>
+                <div id="poster-left-header-col">
+                  <label>Poster Image Preview</label>
+                  <%= link_to "Remove current file", delete_poster_image_archive_item_path(@archive_item, poster_image_id: @archive_item.poster_image.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "poster-img-del" %>
+                </div>
+              <% end %>
+              <div class="upload-set">
+                <%= form.label :poster_image, "Poster Image" %>
+                <%= form.file_field :poster_image, direct_upload: true %>
+              </div>
+            <% if @archive_item.poster_image.attached? %>
+              <%= hidden_field_tag 'clear_poster_image', false, id: "hidden-clear-input"  %>
+          </div>
+              <% if @archive_item.poster_image.content_type == "image/jpeg" || @archive_item.poster_image.content_type == "image/png" %>
+                <%= image_tag @archive_item.poster_image.variant(resize_to_limit: [600, nil]), id: "poster-preview-img" %>
+              <% else %>
+                  <%= link_to 'View file', @archive_item.poster_image, target: "_blank", class: "download-link" %>
+              <% end %>
             </div>
           <% end %>
-          <div class="upload-set">
-            <%= form.label :poster_image, "Poster Image" %>
-            <%= form.file_field :poster_image, direct_upload: true %>
           </div>
-        <% if @archive_item.poster_image.attached? %>
-          <%= hidden_field_tag 'clear_poster_image', false, id: "hidden-clear-input"  %>
-      </div>
-          <% if @archive_item.poster_image.content_type == "image/jpeg" || @archive_item.poster_image.content_type == "image/png" %>
-            <%= image_tag @archive_item.poster_image.variant(resize_to_limit: [600, nil]), id: "poster-preview-img" %>
-          <% else %>
-              <%= link_to 'View file', @archive_item.poster_image, target: "_blank", class: "download-link" %>
-          <% end %>
         </div>
-      <% end %>
+        </div>
       </div>
     </div>
-    </div>
-  </div>
+
 
   <div class="form-row">
     <div class="form-set">

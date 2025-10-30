@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 
 export default class extends Controller {
-  static targets = ["container", "template",]
+  static targets = ["container", "template", "row"]
   static values = { handle: String }
 
   connect() {
@@ -13,20 +13,28 @@ export default class extends Controller {
       handle: this.hanldeValue || ".link-row",
       onEnd: () => this.reindex()
     })
-
+    const delBtn = this.containerTarget.querySelector(".remove_redirect-set");
+    delBtn.style.display = "none"
   }
 
   add() {
     const draft = this.containerTarget.querySelector(".link-row[data-draft='true']");
+    const delBtns = this.containerTarget.querySelectorAll(".remove_redirect-set")
     if (draft && this.rowHasAnyInput(draft)) this.lock(draft);
+    if (delBtns.length >= 1) {delBtns[0].style.display = "block" }
     this.ensureDraftRow();
     this.reindex();
   }
 
   remove(event) {
     const row = event.target.closest(".link-row");
+    const delBtns = this.containerTarget.querySelectorAll(".remove_redirect-set")
     const destroy = row.querySelector('input[name*="[_destroy]"]');
     if (destroy) { destroy.checked = true };
+    if (delBtns.length <= 2) {
+      delBtns[0].style.display = "none"
+
+    }
     row.style.display = "none";
     this.reindex();
   }

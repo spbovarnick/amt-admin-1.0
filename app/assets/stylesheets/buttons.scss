@@ -42,9 +42,15 @@
     }
 }
 
-.redirect_x-button {
-    color: red;
-    padding: 10px 15px !important;
+.remove_redirect-set {
+    padding-top: 18px;
+
+    .redirect_x-button {
+        color: red;
+        padding: 10px 15px !important;
+        margin: 0 !important;
+
+    }
 }
 
 .admin-table-button {

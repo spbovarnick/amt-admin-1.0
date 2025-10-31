@@ -142,7 +142,8 @@
             class="form-select-wrapper redirect-select"
             data-controller="content-select"
           >
-            <%= form.select :content_redirect, [["Hosted File Upload", false, { selected: true }], ["External Redirect URL", true]], {}, data: { content_select_target: "select" } %>
+            <% content_redirect = form.object.new_record? ? false : form.object.content_redirect %>
+            <%= form.select :content_redirect, [["Hosted File Upload", false], ["External Redirect URL", true]], {selected: content_redirect}, data: { content_select_target: "select" } %>
           </div>
 
         </div>

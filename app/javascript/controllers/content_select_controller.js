@@ -5,12 +5,28 @@ export default class extends Controller {
 
   connect(){
     this.redirectSelectUI(this.selectTarget)
+
   }
 
   redirectSelectUI(input) {
     const linksList = document.querySelector("#redirect-links-list")
     const filesList = document.querySelector("#content-files-list")
-    linksList.style.display = "none";
+
+    if (input.value === "true") {
+      linksList.style.display = "block";
+      linksList.disabled = false;
+
+      filesList.style.display = "none";
+      filesList.disabled = true;
+    } else if (input.value === "false") {
+      linksList.style.display = "none";
+      linksList.disabled = true;
+
+      filesList.style.display = "block";
+      filesList.disabled = false;
+    }
+
+
     input.addEventListener("change", function () {
 
       if (input.value === "true") {
@@ -26,7 +42,7 @@ export default class extends Controller {
           posterRow.classList.remove("hidden");
         }
 
-      } else {
+      } else if (input.value === "false") {
         const posterRow = document.querySelector("#poster-image-row");
 
         linksList.style.display = "none";

@@ -1,11 +1,12 @@
 class ArchiveItemSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
 
-  attributes :id, :medium, :year, :title, :content_notes, :credit, :draft, :poster_url, :content_file_urls, :content_file_names, :medium_photo_urls, :medium_photos_file_names, :collections, :credit, :featured_item
+  attributes :id, :medium, :year, :title, :content_notes, :credit, :draft, :poster_url, :content_file_urls, :content_file_names, :medium_photo_urls, :medium_photos_file_names, :collections, :credit, :featured_item, :redirect_links, :content_redirect
   has_many :tags, embed: :id, include: true
   has_many :locations, embed: :id, include: true
   has_many :comm_groups, embed: :id, include: true
   has_many :people, embed: :id, include: true
+  has_many :redirect_links, include: true
 
   def poster_url
     return nil unless object.poster_image.attached?

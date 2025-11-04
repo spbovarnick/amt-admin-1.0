@@ -60,7 +60,7 @@ export default class extends Controller {
 
   buildRow() {
     const frag = this.templateTarget.content.cloneNode(true);
-    const newKey = `n_${Date.now()}`;
+    const newKey = `${Date.now()}`;
     frag.querySelectorAll("[name], [id], label[for]").forEach(el => {
       if (el.name) el.name = el.name.replace(/NEW_RECORD/g, newKey);
       if (el.id) el.id = el.id.replace(/NEW_RECORD/g, newKey);

@@ -18,10 +18,9 @@ class RedirectLink < ApplicationRecord
 
   def url_is_valid
     return if url.blank?
-    begin
-      URI.open(url).status
-    rescue
-      errors.add(:url, "is not a valid URL")
+    uri = URI.parse(url) rescue nil
+    unless uri && uri.is_a?(URI::HTTP) && uri.host.present?
+      errors.add(:url, "must be a valid http or https URL!")
     end
   end
 end

@@ -1,6 +1,6 @@
 <div class="link-row" data-draft="<%= [:draft] ? 'true' : 'false' %>" data-redirect-links-target="row">
   <div class="form-row">
-    <%= render_svg 'grabber', classes: "grabber" %>
+    <div class="grabber-div"><%= render_svg 'grabber', classes: "grabber" %></div>
     <div class="form-set">
       <%= f.label :url_label, "Link text" %>
       <%= f.text_field :url_label, placeholder: "e.g. Project homepage" %>

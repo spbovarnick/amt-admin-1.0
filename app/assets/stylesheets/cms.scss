@@ -125,6 +125,11 @@ $table-max-width: 1600px;
     justify-content: space-between;
     margin-bottom: 20px;
 
+    .grabber {
+      align-self: end;
+      cursor: move;
+    }
+
     &:nth-of-type(2) {
       .form-set:not(.user_form) {
         width: 100% !important;

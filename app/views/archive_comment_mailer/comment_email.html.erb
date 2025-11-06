@@ -4,8 +4,8 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <% archive_url = Rails.env == "production" ? "https://www.worldartsfoundation.org/" : "http://localhost:3333/" %>
-    <%= link_to 'View Item', "https://www.worldartsfoundation.org/albina-community-archive/" + @id, form: {target: "_blank"}%>
+    <% archive_url = Rails.env == "production" ? "https://www.albinacommunityarchive.org/" : "http://localhost:3333/" %>
+    <%= link_to 'View Item', Rails.env == "production" ? "https://www.albinacommunityarchive.org/?modal=true&id=" : "http://localhost:3333/?modal=true&id=" + @id, form: {target: "_blank"}%>
     <h3>User Comment:</h3>
     <p><%= @comment %></p>
   </body>

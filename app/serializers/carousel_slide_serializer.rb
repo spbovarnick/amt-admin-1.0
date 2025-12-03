@@ -8,6 +8,12 @@ class CarouselSlideSerializer < ActiveModel::Serializer
   end
 
   def image_url
-    object.image.url()
+    return nil unless object.image.attached?
+
+    if Rails.env.production?
+      object.image.url()
+    else
+      rails_blob_url(object.image)
+    end
   end
 end

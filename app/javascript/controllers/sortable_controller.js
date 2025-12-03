@@ -14,8 +14,6 @@ export default class extends Controller {
       direction: "vertical",
       draggable: "li",
     });
-
-    console.log(this.hiddenInputValue)
   }
 
   debounce(fn, wait) {

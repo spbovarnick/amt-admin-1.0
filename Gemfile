@@ -109,3 +109,5 @@ gem "google-protobuf", ">= 3.25.5"
 gem "thor", ">= 1.4.0"
 
 gem "sortablejs-rails"
+
+gem "open-uri"

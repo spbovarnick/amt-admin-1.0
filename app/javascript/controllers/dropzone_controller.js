@@ -200,15 +200,18 @@ function createDirectUpload(file, url, controller) {
 
 function createDropzone(controller) {
   let dropzone = new Dropzone(controller.element, {
-    url: controller.url,
-    headers: controller.headers,
+    // url: controller.url,
+    // headers: controller.headers,
+    url: "#",
     maxFilesize: controller.maxFileSize,
     maxFiles: controller.maxFiles,
     acceptedFiles: controller.acceptedFiles,
     previewsContainer: controller.previewsContainer,
     addRemoveLinks: true,
     uploadMultiple: true,
-    autoQueue: true,
+    autoQueue: false,
+    autoProcessQueue: false,
+    parallelUploads: 1,
   });
 
   return dropzone;

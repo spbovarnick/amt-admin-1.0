@@ -101,6 +101,7 @@ class ArchiveItemsController < ApplicationController
     @collection_options = Collection.all.order(name: :desc).pluck(:name)
     @comm_group_options = CommGroup.all.order(name: :desc).pluck(:name)
     @current_user = current_user
+    @archive_item.redirect_links.build if @archive_item.redirect_links.empty?
   end
 
   def create
@@ -142,6 +143,7 @@ class ArchiveItemsController < ApplicationController
     @collection_options = Collection.all.order(name: :desc).pluck(:name)
     @comm_group_options = CommGroup.all.order(name: :desc).pluck(:name)
     @current_user = current_user
+    @archive_item.redirect_links.build if @archive_item.redirect_links.empty?
   end
 
   def delete_content_file
@@ -310,6 +312,6 @@ class ArchiveItemsController < ApplicationController
   end
 
   def archive_item_params
-    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, :featured_item, content_files: [], content_files_order: [], :medium_photos => [], medium_photos_order: [])
+    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, :featured_item, :content_redirect, :content_files_order, :medium_photos_order, content_files: [], content_files_order: [], :medium_photos => [], medium_photos_order: [], redirect_links_attributes: [:id, :url, :url_label, :_destroy, :position])
   end
 end

@@ -62,7 +62,7 @@
       <td><%= archive_item.updated_at.strftime("%-m/%-d/%Y") %></td>
       <td >
         <div class="flag">
-          <% if !archive_item.content_files.attached?  %>
+          <% if !archive_item.content_files.attached? && !archive_item.content_redirect  %>
               <%= image_tag('flag-icon-red.svg') %>  <span>Missing media files!</span>
           <% end %>
         </div>

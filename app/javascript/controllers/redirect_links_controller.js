@@ -8,13 +8,20 @@ export default class extends Controller {
 
   connect() {
     this.ensureDraftRow();
+
+    this.element.closest("form").addEventListener("submit", () => {
+      this.cleanupEmptyDrafts();
+    });
+
     this.sortable = new Sortable(this.containerTarget, {
       animation: 150,
       handle: this.hanldeValue || ".link-row",
       onEnd: () => this.reindex()
-    })
+    });
+
     const delBtn = this.containerTarget.querySelector(".remove_redirect-set");
-    delBtn.style.display = "none"
+
+    delBtn.style.display = "none";
   }
 
   add() {
@@ -95,6 +102,16 @@ export default class extends Controller {
         const pos = row.querySelector('input[name*="[position]"]')
         if (pos) pos.value = idx + 1
       })
+  }
+
+  cleanupEmptyDrafts() {
+    const drafts = this.containerTarget.querySelectorAll(".link-row[data-draft='true']");
+
+    drafts.forEach(row => {
+      if (!this.rowHasAnyInput(row)) {
+        row.remove();
+      }
+    });
   }
 
   disconnect() {

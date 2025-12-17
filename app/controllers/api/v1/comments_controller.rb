@@ -6,6 +6,6 @@ class Api::V1::CommentsController < ApplicationController
         render json: { status: 'success', message: "Email sent!"}
     rescue => e
         Rails.logger.error(e)
-        render json: { status: "error": error: e.message }, status: 500
+        render json: { status: "error", error: e.message }, status: 500
     end
 end

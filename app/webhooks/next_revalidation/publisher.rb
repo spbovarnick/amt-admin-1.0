@@ -14,6 +14,10 @@ module NextRevalidation
     end
 
     def call
+
+      Rails.logger.info(
+        "Posting revalidation to #{next_app_url}/api/revalidate tags=#{@tags.inspect} paths=#{@paths.inspect}"
+      )
       return if @tags.empty? && @paths.empty?
       return unless enabled?
 

@@ -21,7 +21,7 @@ module NextRevalidation
       return if @tags.empty? && @paths.empty?
       return unless enabled?
 
-      uri = URI("#{next_app_url}/api/revalidate")
+      uri = URI("#{next_app_url.to_s.chomp('/')}/api/revalidate")
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = (uri.scheme == "https")

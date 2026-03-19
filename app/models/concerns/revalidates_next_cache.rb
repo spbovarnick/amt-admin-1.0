@@ -10,12 +10,12 @@ module RevalidatesNextCache
   def publish_next_revalidation
     return if previous_changes.except("updated_at").blank?
 
+    payload = NextRevalidation::Registry.for(self)
+
     Rails.logger.info(
       "Revalidation callback model=#{self.class.name} id=#{id} payload=#{payload.inspect}"
     )
 
-
-    payload = NextRevalidation::Registry.for(self)
     NextRevalidation::Publisher.call(tags: payload[:tags], paths: payload[:paths])
   rescue => e
     Rails.logger.error(

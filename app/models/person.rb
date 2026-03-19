@@ -1,5 +1,7 @@
 class Person < ApplicationRecord
-   def self.ransackable_attributes(auth_object = nil)
+  include RevalidatesNextCache
+
+  def self.ransackable_attributes(auth_object = nil)
     ["created_by", "name", "updated_by"]
   end
 end

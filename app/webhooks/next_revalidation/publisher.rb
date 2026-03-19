@@ -68,7 +68,8 @@ module NextRevalidation
     def headers
       {
         "Content-Type" => "application/json",
-        "X-Revalidate-Secret" => revalidate_secret
+        "X-Revalidate-Secret" => revalidate_secret,
+        "x-vercel-protection-bypass" => ENV["VERCEL_AUTOMATION_BYPASS_SECRET"]
       }
     end
   end

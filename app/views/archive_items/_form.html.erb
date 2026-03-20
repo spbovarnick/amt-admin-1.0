@@ -207,17 +207,6 @@
       </div>
     </div>
 
-
-  <div class="form-row">
-    <div class="form-set">
-    <%= form.label :featured_item, "Feature This Item in Frontend Search Results" %>
-    <div class="form-select-wrapper">
-      <% default_selection = form.object.new_record? ? false : form.object.featured_item %>
-      <%= form.select :featured_item, [["Featured in frontend search results", true], ["Not featured in frontend search results", false]], { selected: default_selection }, {class: "featured-item-select"} %>
-    </div>
-    </div>
-  </div>
-
   <div class="form-row">
     <div class="form-set">
       <%= form.label :draft, "Published or Saved as Draft" %>

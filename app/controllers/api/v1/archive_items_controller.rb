@@ -5,7 +5,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
     archive_items = base_scope
     archive_items = filter_tags(archive_items)
     archive_items = filter_medium_and_year(archive_items)
-    archive_items = archive_items.order(featured_item: :desc, updated_at: :desc)
+    archive_items = archive_items.shuffle
     render json: archive_items
   end
 

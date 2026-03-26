@@ -148,7 +148,8 @@ class DirectUploadController {
     const input = document.createElement("input");
     input.type = "hidden";
     input.name = this.source.inputTarget.name;
-    insertAfter(input, this.source.inputTarget);
+    const lastHidden = [...this.source.inputTarget.parentNode.querySelectorAll(`input[type="hidden"][name="${this.source.inputTarget.name}"]`)].pop();
+    insertAfter(input, lastHidden || this.source.inputTarget);
     return input;
   }
 

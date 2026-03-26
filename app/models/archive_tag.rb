@@ -1,5 +1,7 @@
 class ArchiveTag < ApplicationRecord
   include RevalidatesNextCache
+
+  normalizes :name, with: -> name { name.squish }
   # ransack requires ransackable attributes be required. this is a boiler plate method
   def self.ransackable_attributes(auth_object = nil)
     ["created_by", "name", "updated_by"]

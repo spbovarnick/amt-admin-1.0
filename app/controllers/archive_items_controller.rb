@@ -203,6 +203,15 @@ class ArchiveItemsController < ApplicationController
       update_params.delete(:poster_image)
     end
 
+    # check if order fields are empty and remove them to preserve existing saved order
+    if update_params[:content_files_order].blank? || update_params[:content_files_order] == [""]
+      update_params.delete(:content_files_order)
+    end
+
+    if update_params[:medium_photos_order].blank? || update_params[:medium_photos_order] == [""]
+      update_params.delete(:medium_photos_order)
+    end
+
     @archive_item.update(update_params)
 
     if params[:clear_poster_image] === "true"

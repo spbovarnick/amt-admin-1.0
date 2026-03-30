@@ -25,9 +25,9 @@ function removeElement(el) {
   }
 }
 
-// function insertAfter(el, referenceNode) {
-//   return referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
-// }
+function insertAfter(el, referenceNode) {
+  return referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
+}
 
 export default class extends Controller {
   static targets = ["input", "previewsContainer"]
@@ -148,7 +148,7 @@ class DirectUploadController {
     const input = document.createElement("input");
     input.type = "hidden";
     input.name = this.source.inputTarget.name;
-    this.source.inputTarget.parentNode.appendChild(input);
+    insertAfter(input, this.source.inputTarget);
     return input;
   }
 

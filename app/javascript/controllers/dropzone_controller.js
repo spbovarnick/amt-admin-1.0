@@ -148,7 +148,9 @@ class DirectUploadController {
     const input = document.createElement("input");
     input.type = "hidden";
     input.name = this.source.inputTarget.name;
-    const lastHidden = [...this.source.inputTarget.parentNode.querySelectorAll(`input[type="hidden"][name="${this.source.inputTarget.name}"]`)].pop();
+    // const escapedName = CSS.escape(this.source.inputTarget.name);
+    // const lastHidden = [...this.source.inputTarget.parentNode.querySelectorAll(`input[type="hidden"][name="${escapedName}"]`)].pop();
+    this.source.inputTarget.parentNode.appendChild(input)
     insertAfter(input, lastHidden || this.source.inputTarget);
     return input;
   }

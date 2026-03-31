@@ -17,6 +17,19 @@ class ArchiveItem < ApplicationRecord
             }
     }
 
+    pg_search_scope :search_archive_items_names,
+        against: {
+            search_people: 'A',
+            search_comm_groups: 'B',
+            search_tags: 'C',
+            search_locations: 'C'
+        },
+        using: {
+            tsearch: {
+                dictionary: 'simple', tsvector_column: 'ft_names_search'
+            }
+        }
+
     pg_search_scope :search_cms_archive_items,
         against: {
             title: 'A',

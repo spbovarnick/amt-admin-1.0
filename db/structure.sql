@@ -1,3 +1,8 @@
+\restrict ICP63bwXOqSHztCurc4i5rGA9HL5d14uot4uJ231myHRk2JCNcFMDSM0Bg88EJF
+
+-- Dumped from database version 15.17 (Postgres.app)
+-- Dumped by pg_dump version 15.17 (Postgres.app)
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
@@ -185,7 +190,8 @@ CREATE TABLE public.archive_items (
     featured_item boolean DEFAULT false,
     content_files_order text[] DEFAULT '{}'::text[],
     medium_photos_order text[] DEFAULT '{}'::text[],
-    content_redirect boolean DEFAULT false
+    content_redirect boolean DEFAULT false,
+    ft_names_search tsvector GENERATED ALWAYS AS ((((setweight(to_tsvector('simple'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('simple'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char"))) STORED
 );
 
 
@@ -964,6 +970,13 @@ CREATE INDEX index_archive_items_on_draft ON public.archive_items USING btree (d
 
 
 --
+-- Name: index_archive_items_on_ft_names_search; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archive_items_on_ft_names_search ON public.archive_items USING gin (ft_names_search);
+
+
+--
 -- Name: index_archive_items_on_medium; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1146,9 +1159,12 @@ ALTER TABLE ONLY public.active_storage_attachments
 -- PostgreSQL database dump complete
 --
 
+\unrestrict ICP63bwXOqSHztCurc4i5rGA9HL5d14uot4uJ231myHRk2JCNcFMDSM0Bg88EJF
+
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260331225350'),
 ('20251023203900'),
 ('20251023201423'),
 ('20251023190415'),

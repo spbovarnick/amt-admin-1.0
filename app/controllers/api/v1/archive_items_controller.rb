@@ -58,7 +58,6 @@ class Api::V1::ArchiveItemsController < ApplicationController
   end
 
   def search
-    Rails.logger.info params.inspect
     archive_items = search_scope
     archive_items = filter_medium_and_year(archive_items)
 

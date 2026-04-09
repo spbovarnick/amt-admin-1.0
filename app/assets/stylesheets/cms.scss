@@ -125,6 +125,10 @@ $table-max-width: 1600px;
     justify-content: space-between;
     margin-bottom: 20px;
 
+    &.form-row--column-left {
+      width: calc(50% - 11.5px);
+    }
+
     .grabber-div {
       align-self: end;
       cursor: move;

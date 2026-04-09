@@ -9,7 +9,7 @@
     </div>
   <% end %>
 
-  <div class="form-row">
+  <div class="form-row form-row--column-left">
     <div class="form-set">
       <%= form.label :uid, "Unique ID #" %>
       <div id="uid-box">
@@ -17,6 +17,10 @@
           <span id="uid-collection-str"><% if @archive_item.uid %><%= @archive_item.uid.slice(0, 3) %><% else %>XXX<% end %></span>-<span id="uid-medium-str"><% if @archive_item.uid %><%= @archive_item.uid.slice(4, 3) %><% else %>XXX<% end %></span>-<span id="uid-item-str"><% if @item_uid_str %><%= @item_uid_str %><% else %><%= @part1 %>-<%= @part2 %><% end %></span>
         </div>
       </div>
+    </div>
+    <div class="form-set">
+      <%= form.label :location, "Item's Physical Location" %>
+      <%= form.text_field :location, autocomplete: "off", "data-lpignore": true %>
     </div>
   </div>
 

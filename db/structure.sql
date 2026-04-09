@@ -1,4 +1,4 @@
-\restrict ICP63bwXOqSHztCurc4i5rGA9HL5d14uot4uJ231myHRk2JCNcFMDSM0Bg88EJF
+\restrict QTeFKgVAjbH5yzxOM9QmvDtZ9E7UDQRdLmgNMyh7l2qkmzp8R4yc4JtfPCHqWz8
 
 -- Dumped from database version 15.17 (Postgres.app)
 -- Dumped by pg_dump version 15.17 (Postgres.app)
@@ -191,7 +191,8 @@ CREATE TABLE public.archive_items (
     content_files_order text[] DEFAULT '{}'::text[],
     medium_photos_order text[] DEFAULT '{}'::text[],
     content_redirect boolean DEFAULT false,
-    ft_names_search tsvector GENERATED ALWAYS AS ((((setweight(to_tsvector('simple'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('simple'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char"))) STORED
+    ft_names_search tsvector GENERATED ALWAYS AS ((((setweight(to_tsvector('simple'::regconfig, (COALESCE(search_people, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('simple'::regconfig, (COALESCE(search_comm_groups, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(search_tags, ''::character varying))::text), 'C'::"char")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(search_locations, ''::character varying))::text), 'C'::"char"))) STORED,
+    location character varying
 );
 
 
@@ -1159,11 +1160,12 @@ ALTER TABLE ONLY public.active_storage_attachments
 -- PostgreSQL database dump complete
 --
 
-\unrestrict ICP63bwXOqSHztCurc4i5rGA9HL5d14uot4uJ231myHRk2JCNcFMDSM0Bg88EJF
+\unrestrict QTeFKgVAjbH5yzxOM9QmvDtZ9E7UDQRdLmgNMyh7l2qkmzp8R4yc4JtfPCHqWz8
 
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260409180646'),
 ('20260331225350'),
 ('20251023203900'),
 ('20251023201423'),

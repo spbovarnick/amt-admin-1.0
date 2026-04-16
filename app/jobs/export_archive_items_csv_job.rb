@@ -12,8 +12,8 @@ class ExportArchiveItemsCsvJob < ApplicationJob
     file = Tempfile.new(["archive_items", ".csv"])
 
     # select columns and headers to use
-    attributes = %w{ uid search_collections title created_by created_at updated_at medium credit year search_comm_groups search_people search_locations search_tags }
-    headers = [ "UID",  "Collection",  "Title",  "Created By",  "Created At", "Last Updated",  "Medium",  "Credit",  "Year",  "Community Groups",  "People", "Location", "Tags", "Content Notes", "Medium Technical Notes", "Content Files", "Filenames", "Published" ]
+    attributes = %w{ uid search_collections title created_by created_at updated_at medium credit year search_comm_groups search_people search_locations search_tags location }
+    headers = [ "UID",  "Collection",  "Title",  "Created By",  "Created At", "Last Updated",  "Medium",  "Credit",  "Year",  "Community Groups",  "People", "Location", "Tags", "Physical Location", "Content Notes", "Medium Technical Notes", "Content Files", "Filenames", "Published" ]
 
     # write csv
     CSV.open(file.path, "w") do |csv|
@@ -120,6 +120,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       item.search_people,
       item.search_locations,
       item.search_tags,
+      item.location,
       content_notes,
       medium_notes,
       urls,

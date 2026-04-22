@@ -295,24 +295,37 @@ class ArchiveItemsController < ApplicationController
       output_path = "#{item.uid}.pdf"
     end
 
-    Prawn::Document.generate(output_path, page_size: [25.in, 16.667.in], background: "app/assets/images/UID_TEMPLATE_DEV.jpg", print_scaling: :fit) do
-      font("app/assets/font/Arial Black.ttf")
-      font_size 50
+    Prawn::Document.generate(output_path,
+      page_size: [286.299, 144.567],
+      margin: 0
+    ) do
+      font "Helvetica"
 
-      text_box(
-        "#{item.uid}",
-        at: [1.25.in, 12.in],
-        width: 16.667.in,
-        height: 1.in,
-        rotate: -90,
-        valign: :center
-        # rotate_around: :center
-      )
+      image Rails.root.join("app/assets/images/AMT_ITEM_STICKER.jpg").to_s,
+        at: [0, 144.567],
+        width: 286.299,
+        height: 144.567
 
-      text_box "#{item.uid}",
-        at: [12.076.in, 12.649.in]
-      text_box "#{item.search_collections}",
-        at: [12.076.in, 3.279.in]
+      font_size 8
+
+      text_box item.uid, at: [85, 119], width: 120, height: 11
+      text_box item.search_collections, at: [62, 96], width: 120, height: 17
+      text_box item.medium, at: [109, 77.6], width: 120, height: 11
+      text_box item.content_notes.to_plain_text, at: [96, 65], width: 176, height: 43
+
+      if item.content_files.attached?
+        text_box "X", at: [64, 19], width: 14, height: 14, size: 12, align: :center
+      end
+
+      unless item.draft
+        text_box "X", at: [141, 19], width: 14, height: 14, size: 12, align: :center, align: :center
+      end
+
+      ## left edge
+      text_box item.search_collections, at: [38, 144], width: 134, height: 12, rotate: -90, size: 10, align: :right
+
+      text_box item.uid, at: [18, 144], width: 134, height: 12, rotate: -90, size: 10, align: :right
+
     end
   end
 

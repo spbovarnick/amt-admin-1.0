@@ -36,7 +36,7 @@
       <td><%= archive_tag.name %></td>
       <td class="admin-table-actions">
         <%= button_to 'Edit', edit_archive_tag_path(archive_tag), method: 'get', class: "admin-table-button"%>
-        <%= button_to 'Remove', archive_tag_path(archive_tag), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        <%= button_to 'Remove', archive_tag_path(archive_tag), method: 'delete', data: { turbo_confirm: 'Are you sure?' }, class: "admin-table-button" %>
       </td>
   <% end %>
   </tbody>

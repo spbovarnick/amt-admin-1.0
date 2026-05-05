@@ -36,7 +36,7 @@
       <td><%= person.name %></td>
       <td class="admin-table-actions">
         <%= button_to 'Edit', edit_person_path(person), method: 'get', class: "admin-table-button"%>
-        <%= button_to 'Remove', person_path(person), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        <%= button_to 'Remove', person_path(person), method: 'delete', data: { turbo_confirm: 'Are you sure?' }, class: "admin-table-button" %>
       </td>
   <% end %>
   </tbody>

@@ -36,7 +36,7 @@
       <td><%= collection.name %></td>
       <td class="admin-table-actions">
         <%= button_to 'Edit', edit_collection_path(collection), method: 'get', class: "admin-table-button"%>
-        <%= button_to 'Remove', collection_path(collection), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        <%= button_to 'Remove', collection_path(collection), method: 'delete', data: { turbo_confirm: 'Are you sure?' }, class: "admin-table-button" %>
       </td>
   <% end %>
   </tbody>

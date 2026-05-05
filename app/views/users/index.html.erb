@@ -42,7 +42,7 @@
 			</td>
 			<td class="admin-table-actions">
 				<%= button_to 'Edit', edit_user_registration_path(user), method: 'get', class: "admin-table-button" %>
-				<%= button_to 'Remove', user_registration_path(user.id), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+				<%= button_to 'Remove', user_registration_path(user.id), method: 'delete', data: { turbo_confirm: 'Are you sure?' }, class: "admin-table-button" %>
 			</td>
 		</tr>
 	<% end %>

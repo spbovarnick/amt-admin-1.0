@@ -26,7 +26,7 @@
       <td><%= slide.title %></td>
       <td class="admin-table-actions">
         <%= button_to 'Edit', edit_carousel_slide_path(slide), method: 'get', class: "admin-table-button"%>
-        <%= button_to 'Remove', carousel_slide_path(slide), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        <%= button_to 'Remove', carousel_slide_path(slide), method: 'delete', data: { turbo_confirm: 'Are you sure?' }, class: "admin-table-button" %>
       </td>
   <% end %>
   </tbody>

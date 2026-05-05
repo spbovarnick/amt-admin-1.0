@@ -36,7 +36,7 @@
       <td><%= comm_group.name %></td>
       <td class="admin-table-actions">
         <%= button_to 'Edit', edit_comm_group_path(comm_group), method: 'get', class: "admin-table-button"%>
-        <%= button_to 'Remove', comm_group_path(comm_group), method: 'delete', data: { confirm: 'Are you sure?' }, class: "admin-table-button" %>
+        <%= button_to 'Remove', comm_group_path(comm_group), method: 'delete', data: { turbo_confirm: 'Are you sure?' }, class: "admin-table-button" %>
       </td>
   <% end %>
   </tbody>

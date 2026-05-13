@@ -98,9 +98,15 @@ end
 
 gem 'dalli', '~> 2.7', '>= 2.7.6'
 
-gem "nokogiri", ">= 1.18.9"
+gem "nokogiri", ">= 1.19.3"
 
-gem "rack", ">= 3.0.16"
+gem "rack", ">= 3.2.6"
+
+gem "rack-session", ">= 2.1.2"
+
+gem "net-imap", ">= 0.6.4"
+
+gem "addressable", ">= 2.9.0"
 
 gem "webrick", ">= 1.8.2"
 

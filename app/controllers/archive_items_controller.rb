@@ -252,7 +252,7 @@ class ArchiveItemsController < ApplicationController
   private
 
   def filter_by_user_page(scope)
-    current_user.page == "global" ? scope : scope.tagged_with(current_user.page)
+    (current_user.admin? || current_user.page == "global") ? scope : scope.tagged_with(current_user.page)
   end
 
   def base_scope

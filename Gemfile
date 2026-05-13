@@ -104,6 +104,8 @@ gem "rack", ">= 3.2.6"
 
 gem "rack-session", ">= 2.1.2"
 
+gem "connection_pool", "< 3.0"
+
 gem "net-imap", ">= 0.6.4"
 
 gem "addressable", ">= 2.9.0"

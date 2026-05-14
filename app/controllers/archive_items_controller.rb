@@ -122,13 +122,13 @@ class ArchiveItemsController < ApplicationController
   end
 
   def edit
-    if current_user.page == "global"
+    if current_user.admin? || current_user.page == "global"
       @archive_item = ArchiveItem.find(params[:id])
     else
       begin
         @archive_item = ArchiveItem.tagged_with(current_user.page).find(params[:id])
       rescue
-        redirect_to archive_items_path
+        redirect_to archive_items_path and return
       end
     end
 

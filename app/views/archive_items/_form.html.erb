@@ -85,12 +85,12 @@
       <div class="form-row">
         <div class="form-set">
           <%= form.label :tag_list, "Tags" %>
-          <% unless @current_user.page == "global" %>
+          <% unless @current_user.admin? || @current_user.page == "global" %>
             <div class="user-page-tag-input" style="display:none;">
               <%= @current_user.page %>
             </div>
           <% end %>
-          <%= form.hidden_field :tag_list, :value => @current_user.page != "global" && !@archive_item.tag_list.include?(@current_user.page)? @archive_item.tag_list.join(', ').concat(@current_user.page) : @archive_item.tag_list.join(', ') , class: "js-tag-input tag-input archive-tags", "data-tag-options": @tag_options.join(', ') %>
+          <%= form.hidden_field :tag_list, :value => !@current_user.admin? && @current_user.page != "global" && !@archive_item.tag_list.include?(@current_user.page)? @archive_item.tag_list.join(', ').concat(@current_user.page) : @archive_item.tag_list.join(', ') , class: "js-tag-input tag-input archive-tags", "data-tag-options": @tag_options.join(', ') %>
         </div>
       </div>
 

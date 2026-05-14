@@ -28,7 +28,7 @@
     <div class="aiu-grid-column-left" >
       <div class="form-row">
         <div class="form-set">
-          <%= form.label :medium, "Medium" %>
+          <%= form.label :medium, "Format" %>
           <div class="form-select-wrapper" >
             <%= form.select :medium, [["Photo", "photo"], ["Film", "film"], ["Audio", "audio"], ["Article", "article"], ["Printed Material", "printed material"]], :include_blank => true, :required => true %>
           </div>
@@ -103,7 +103,7 @@
 
       <div class="form-row">
         <div class="form-set">
-          <%= form.label :medium_notes, "Medium technical notes" %>
+          <%= form.label :medium_notes, "Format technical notes" %>
           <%= form.rich_text_area :medium_notes %>
         </div>
       </div>

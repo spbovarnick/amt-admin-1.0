@@ -13,7 +13,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
 
     # select columns and headers to use
     attributes = %w{ uid search_collections title created_by created_at updated_at medium credit year search_comm_groups search_people search_locations search_tags location }
-    headers = [ "UID",  "Collection",  "Title",  "Created By",  "Created At", "Last Updated",  "Medium",  "Credit",  "Year",  "Community Groups",  "People", "Location", "Tags", "Physical Location", "Content Notes", "Medium Technical Notes", "Content Files", "Filenames", "Published" ]
+    headers = [ "UID",  "Collection",  "Title",  "Created By",  "Created At", "Last Updated",  "Format",  "Credit",  "Year",  "Community Groups",  "People", "Location", "Tags", "Physical Location", "Content Notes", "Format Technical Notes", "Content Files", "Filenames", "Published" ]
 
     # write csv
     CSV.open(file.path, "w") do |csv|

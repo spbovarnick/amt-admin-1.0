@@ -177,7 +177,7 @@
         <%= render "content_files_list" %>
 
       <div class="file-col">
-        <span class="file_col_label">Medium Photos</span>
+        <span class="file_col_label">Format Photos</span>
         <% @archive_item.medium_photos.each do |photo| %>
         <%= form.hidden_field :medium_photos, multiple: true, value: photo.signed_id %>
         <% end %>

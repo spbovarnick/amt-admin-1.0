@@ -70,7 +70,14 @@ class ArchiveItemsController < ApplicationController
     @archive_items = ArchiveItem.all
     @archive_items.each do |item|
       # Sync all tag fields
-      item.update_columns(search_locations: item.location_list.join(', '), search_tags: item.tag_list.join(', '), search_people: item.person_list.join(', '), search_comm_groups: item.comm_group_list.join(', '), search_collections: item.collection_list.join(', '))
+      item.update_columns(
+        search_locations: item.location_list.join(', '),
+        search_tags: item.tag_list.join(', '),
+        search_people: item.person_list.join(', '),
+        search_comm_groups: item.comm_group_list.join(', '),
+        search_collections: item.collection_list.join(', '),
+        search_medium_notes: item.medium_notes.body&.to_plain_text
+      )
     end
   end
 

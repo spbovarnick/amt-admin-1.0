@@ -40,6 +40,7 @@ class ArchiveItem < ApplicationRecord
             uid: 'C',
             physical_location: 'C',
             search_collections: 'D',
+            search_medium_notes: 'D',
             created_by: 'D',
             updated_by: 'D',
             redirect_links: 'D'

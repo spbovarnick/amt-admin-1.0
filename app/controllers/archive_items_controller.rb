@@ -70,7 +70,14 @@ class ArchiveItemsController < ApplicationController
     @archive_items = ArchiveItem.all
     @archive_items.each do |item|
       # Sync all tag fields
-      item.update_columns(search_locations: item.location_list.join(', '), search_tags: item.tag_list.join(', '), search_people: item.person_list.join(', '), search_comm_groups: item.comm_group_list.join(', '), search_collections: item.collection_list.join(', '))
+      item.update_columns(
+        search_locations: item.location_list.join(', '),
+        search_tags: item.tag_list.join(', '),
+        search_people: item.person_list.join(', '),
+        search_comm_groups: item.comm_group_list.join(', '),
+        search_collections: item.collection_list.join(', '),
+        search_medium_notes: item.medium_notes.body&.to_plain_text
+      )
     end
   end
 
@@ -334,6 +341,6 @@ class ArchiveItemsController < ApplicationController
   end
 
   def archive_item_params
-    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, :featured_item, :content_redirect, :content_files_order, :medium_photos_order, content_files: [], content_files_order: [], :medium_photos => [], medium_photos_order: [], redirect_links_attributes: [:id, :url, :url_label, :_destroy, :position])
+    params.require(:archive_item).permit(:poster_image, :title, :medium, :year, :credit, :physical_location, :tag_list, :location_list, :person_list, :comm_group_list, :collection_list, :date_is_approx, :content_notes, :medium_notes, :medium_photo, :search_tags, :search_locations, :search_people, :search_comm_groups, :search_collections, :created_by, :updated_by, :updated_at, :draft, :featured_item, :content_redirect, :content_files_order, :medium_photos_order, content_files: [], content_files_order: [], :medium_photos => [], medium_photos_order: [], redirect_links_attributes: [:id, :url, :url_label, :_destroy, :position])
   end
 end

@@ -120,7 +120,7 @@ class ExportArchiveItemsCsvJob < ApplicationJob
       item.search_people,
       item.search_locations,
       item.search_tags,
-      item.location,
+      item.physical_location,
       content_notes,
       medium_notes,
       urls,

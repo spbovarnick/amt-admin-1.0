@@ -3,9 +3,6 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
-  resources :page_carousel_slides
-  resources :carousel_slides
-  resources :pages
   resources :comm_groups
   resources :collections do
     collection do
@@ -45,16 +42,12 @@ Rails.application.routes.draw do
       get 'archive_items/pages_index'
       get 'archive_items/timeline'
       get '/archive_items/:id', to: 'archive_items#show'
-      get 'pages/index'
-      get '/pages/:slug', to: 'pages#show'
       get 'locations/index'
       get 'locations/:name', to: 'locations#show'
       get 'tags/index'
       get 'comm_groups/index'
       get 'people/index'
-      get 'carousel_slides/index'
       get 'collections/index'
-      get 'page_carousel_slides/index'
       post 'comments', to: 'comments#create'
     end
   end

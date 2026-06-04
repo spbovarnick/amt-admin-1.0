@@ -129,15 +129,7 @@ class ArchiveItemsController < ApplicationController
   end
 
   def edit
-    if current_user.admin? || current_user.page == "global"
-      @archive_item = ArchiveItem.find(params[:id])
-    else
-      begin
-        @archive_item = ArchiveItem.tagged_with(current_user.page).find(params[:id])
-      rescue
-        redirect_to archive_items_path and return
-      end
-    end
+    @archive_item = ArchiveItem.find(params[:id])
 
     item_id = format('%06d', @archive_item.id)
     @part1 = item_id[0, 3]
@@ -258,17 +250,9 @@ class ArchiveItemsController < ApplicationController
 
   private
 
-  def filter_by_user_page(scope)
-    (current_user.admin? || current_user.page == "global") ? scope : scope.tagged_with(current_user.page)
-  end
-
   def base_scope
-    scope = filter_by_user_page(ArchiveItem.all)
-
-    if params[:archive_q].present?
-      scope = scope.merge(ArchiveItem.search_cms_archive_items(params[:archive_q])) if params[:archive_q].present?
-    end
-
+    scope = ArchiveItem.all
+    scope = scope.merge(ArchiveItem.search_cms_archive_items(params[:archive_q])) if params[:archive_q].present?
     scope
   end
 
@@ -288,8 +272,6 @@ class ArchiveItemsController < ApplicationController
       .or(ArchiveItem.left_joins(content_files_attachments: :blob).where(active_storage_attachments: {id: nil})) # include items with no content_files
       .select("archive_items.*")
       .reorder("active_storage_blobs.content_type #{order_direction}")
-
-    base_query = filter_by_user_page(base_query)
 
     return pagy(base_query, page: params[:page], items: num_items)
   end

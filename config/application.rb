@@ -20,6 +20,11 @@ module WafAdmin10
 
     config.active_job.queue_adapter = :sidekiq
 
+    # Default (5 minutes) is too short for large direct-to-S3 video uploads on slow
+    # connections; the presigned PUT URL expires mid-upload and the whole file has
+    # to be re-uploaded from scratch.
+    config.active_storage.service_urls_expire_in = 1.hour
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

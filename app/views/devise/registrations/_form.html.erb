@@ -21,15 +21,6 @@
 		</div>
 	</div>
 
-	<div class="form-row" id="page_select_field">
-		<div class="form-set">
-			<%= f.label :page, "Page Access" %>
-			<div class="form-select-wrapper">
-					<%= f.select :page, options_for_select( @pages, @user.page ) %>
-			</div>
-		</div>
-	</div>
-
 	<div class="form-row" id="snapshot_recipient_radio">
 		<div class="form-set">
 			<%= f.label :snapshot_recipient %>

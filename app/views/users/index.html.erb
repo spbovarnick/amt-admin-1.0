@@ -18,7 +18,6 @@
 	<tr>
 		<th>User Email</th>
 		<th>Credential</th>
-		<th>Affiliation</th>
 		<th>CSV Snapshot Recipient?</th>
 		<th></th>
 	</tr>
@@ -30,11 +29,6 @@
 				Admin
 				<% else %>
 				Archivist
-				<% end %>
-			</td>
-			<td>
-				<% if !user.admin %>
-					<%= user.page %>
 				<% end %>
 			</td>
 			<td>

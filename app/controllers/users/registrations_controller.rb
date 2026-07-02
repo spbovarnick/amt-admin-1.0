@@ -11,14 +11,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
-    @pages = Page.all.map { |page| [page.tag, page.tag] }.append(["All Pages", "global"], ["Archivist must be true to select page access", nil, {id: "nil-value"}]).reverse()
     @submit_text = "Register New User"
     @user = User.new
   end
 
   # POST /resource
   def create
-    @pages = Page.all.map { |page| [page.tag, page.tag] }.append(["All Pages", "global"], ["Archivist must be true to select page access", nil, {id: "nil-value"}]).reverse()
     @user = User.new(sign_up_params)
 
     if @user.save
@@ -31,14 +29,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # GET /resource/edit
   def edit
     @user = User.find(params[:format])
-    @pages = Page.all.map { |page| [page.tag, page.tag] }.append(["All Pages", "global"], ["Archivist must be true to select page access", nil, {id: "nil-value"}]).reverse()
     super
   end
 
   # PUT /resource
   def update
     @user = User.find(params[:user][:id])
-    @pages = Page.all.map { |page| [page.tag, page.tag] }.append(["All Pages", "global"], ["Archivist must be true to select page access", nil, {id: "nil-value"}]).reverse()
     @submit_text = "Update User Account"
     if @user.update(account_update_params)
       flash.alert = "#{@user.email}'s account successfully updated"
@@ -74,17 +70,17 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:page, :admin])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:admin])
   end
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    devise_parameter_sanitizer.permit(:account_update, keys: [:page, :admin, :snapshot_recipient])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:admin, :snapshot_recipient])
   end
 
   # method overrides some of Devise's built-in to allow for blank password field on update
   def account_update_params
-    update_params = params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :admin, :page, :snapshot_recipient)
+    update_params = params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :admin, :snapshot_recipient)
 
     if update_params[:password].blank? && update_params[:password_confirmation].blank?
       update_params.delete(:password)

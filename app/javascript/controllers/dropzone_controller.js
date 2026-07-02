@@ -29,6 +29,49 @@ function insertAfter(el, referenceNode) {
   return referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
 }
 
+// Shared across every dropzone_controller instance on the page (content files,
+// format photos, etc. each get their own instance but submit the same form), so
+// the count has to live outside any single controller.
+const pendingUploadsByForm = new WeakMap();
+
+function findSubmitButton(form) {
+  return findElement(form, "input[type=submit], button[type=submit]");
+}
+
+function uploadStarted(form) {
+  if (!form) return;
+  const count = (pendingUploadsByForm.get(form) || 0) + 1;
+  pendingUploadsByForm.set(form, count);
+  if (count !== 1) return;
+
+  const button = findSubmitButton(form);
+  if (!button) return;
+  button.disabled = true;
+  button.dataset.uploadingText ||= "Uploading files…";
+  button.dataset.originalText = button.tagName === "INPUT" ? button.value : button.textContent;
+  if (button.tagName === "INPUT") {
+    button.value = button.dataset.uploadingText;
+  } else {
+    button.textContent = button.dataset.uploadingText;
+  }
+}
+
+function uploadFinished(form) {
+  if (!form) return;
+  const count = Math.max((pendingUploadsByForm.get(form) || 1) - 1, 0);
+  pendingUploadsByForm.set(form, count);
+  if (count !== 0) return;
+
+  const button = findSubmitButton(form);
+  if (!button || button.dataset.originalText === undefined) return;
+  button.disabled = false;
+  if (button.tagName === "INPUT") {
+    button.value = button.dataset.originalText;
+  } else {
+    button.textContent = button.dataset.originalText;
+  }
+}
+
 export default class extends Controller {
   static targets = ["input", "previewsContainer"]
 
@@ -133,7 +176,9 @@ class DirectUploadController {
   start() {
     this.file.controller = this;
     this.hiddenInput = this.createHiddenInput();
+    uploadStarted(this.source.form);
     this.directUpload.create((error, attributes) => {
+      uploadFinished(this.source.form);
       if (error) {
         removeElement(this.hiddenInput);
         this.emitDropzoneError(error);

@@ -1,4 +1,4 @@
-\restrict i9glqLOEH2qmxQW0FK49d6FIW58wh1La0quWWosamQ77NG58bsQT61WdOGVQzck
+\restrict 5nw82sqnwLOPPhxEx0MJEZCxn7sTnBCpgDaIOd0nJPsmFmKtBdarKfWHTimS82w
 
 -- Dumped from database version 15.17 (Postgres.app)
 -- Dumped by pg_dump version 15.17 (Postgres.app)
@@ -250,40 +250,6 @@ ALTER SEQUENCE public.archive_tags_id_seq OWNED BY public.archive_tags.id;
 
 
 --
--- Name: carousel_slides; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.carousel_slides (
-    id bigint NOT NULL,
-    title character varying,
-    description text,
-    link character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    "position" integer
-);
-
-
---
--- Name: carousel_slides_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.carousel_slides_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: carousel_slides_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.carousel_slides_id_seq OWNED BY public.carousel_slides.id;
-
-
---
 -- Name: collections; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -383,89 +349,6 @@ CREATE SEQUENCE public.locations_id_seq
 --
 
 ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
-
-
---
--- Name: page_carousel_slides; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.page_carousel_slides (
-    id bigint NOT NULL,
-    title character varying,
-    description text,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    collections character varying,
-    page character varying,
-    "position" integer,
-    year integer,
-    comm_groups character varying,
-    medium character varying,
-    people character varying,
-    locations character varying,
-    tags character varying
-);
-
-
---
--- Name: page_carousel_slides_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.page_carousel_slides_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: page_carousel_slides_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.page_carousel_slides_id_seq OWNED BY public.page_carousel_slides.id;
-
-
---
--- Name: pages; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pages (
-    id bigint NOT NULL,
-    title character varying,
-    description text,
-    tag character varying,
-    created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL,
-    slug character varying,
-    comm_groups character varying,
-    ctatext character varying,
-    ctalink character varying,
-    subtitle text,
-    donate_url character varying,
-    collection character varying,
-    draft boolean DEFAULT false,
-    mail_list_url character varying
-);
-
-
---
--- Name: pages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.pages_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.pages_id_seq OWNED BY public.pages.id;
 
 
 --
@@ -694,13 +577,6 @@ ALTER TABLE ONLY public.archive_tags ALTER COLUMN id SET DEFAULT nextval('public
 
 
 --
--- Name: carousel_slides id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.carousel_slides ALTER COLUMN id SET DEFAULT nextval('public.carousel_slides_id_seq'::regclass);
-
-
---
 -- Name: collections id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -719,20 +595,6 @@ ALTER TABLE ONLY public.comm_groups ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
-
-
---
--- Name: page_carousel_slides id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.page_carousel_slides ALTER COLUMN id SET DEFAULT nextval('public.page_carousel_slides_id_seq'::regclass);
-
-
---
--- Name: pages id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pages ALTER COLUMN id SET DEFAULT nextval('public.pages_id_seq'::regclass);
 
 
 --
@@ -827,14 +689,6 @@ ALTER TABLE ONLY public.archive_tags
 
 
 --
--- Name: carousel_slides carousel_slides_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.carousel_slides
-    ADD CONSTRAINT carousel_slides_pkey PRIMARY KEY (id);
-
-
---
 -- Name: collections collections_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -856,22 +710,6 @@ ALTER TABLE ONLY public.comm_groups
 
 ALTER TABLE ONLY public.locations
     ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
-
-
---
--- Name: page_carousel_slides page_carousel_slides_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.page_carousel_slides
-    ADD CONSTRAINT page_carousel_slides_pkey PRIMARY KEY (id);
-
-
---
--- Name: pages pages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pages
-    ADD CONSTRAINT pages_pkey PRIMARY KEY (id);
 
 
 --
@@ -1161,11 +999,12 @@ ALTER TABLE ONLY public.active_storage_attachments
 -- PostgreSQL database dump complete
 --
 
-\unrestrict i9glqLOEH2qmxQW0FK49d6FIW58wh1La0quWWosamQ77NG58bsQT61WdOGVQzck
+\unrestrict 5nw82sqnwLOPPhxEx0MJEZCxn7sTnBCpgDaIOd0nJPsmFmKtBdarKfWHTimS82w
 
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260528004257'),
 ('20260522013037'),
 ('20260514180246'),
 ('20260409180646'),

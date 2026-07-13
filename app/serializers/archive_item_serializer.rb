@@ -3,10 +3,14 @@ class ArchiveItemSerializer < ActiveModel::Serializer
 
   attributes :id, :medium, :year, :title, :content_notes, :credit, :draft, :poster_url, :content_file_urls, :content_file_names, :medium_photo_urls, :medium_photos_file_names, :collections, :credit, :featured_item, :redirect_links, :content_redirect, :uid
   has_many :tags, embed: :id, include: true
-  has_many :locations, embed: :id, include: true
+  has_many :locations
   has_many :comm_groups, embed: :id, include: true
   has_many :people, embed: :id, include: true
   has_many :redirect_links, include: true
+
+  def locations
+    Location.where(name: object.location_list)
+  end
 
   def poster_url
     return nil unless object.poster_image.attached?

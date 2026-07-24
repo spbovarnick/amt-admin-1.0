@@ -131,6 +131,20 @@
           </div>
         </div>
       <% end %>
+
+      <div class="form-row">
+        <div class="form-set">
+          <%= form.label :draft, "Published or Saved as Draft" %>
+          <div class="form-select-wrapper">
+            <% default_selection = form.object.new_record? ? true : form.object.draft %>
+            <%= form.select :draft, [["Saved as draft", true], ["Published to live site", false]], {selected: default_selection}, {class: "draft-select"} %>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-set form-controls">
+        <%= form.submit @submit_text, class: "button-round" %>
+      </div>
     </div>
 
     <div class="aiu-grid-column-right" >
@@ -206,16 +220,6 @@
       </div>
     </div>
 
-  <div class="form-row">
-    <div class="form-set">
-      <%= form.label :draft, "Published or Saved as Draft" %>
-      <div class="form-select-wrapper">
-        <% default_selection = form.object.new_record? ? true : form.object.draft %>
-        <%= form.select :draft, [["Saved as draft", true], ["Published to live site", false]], {selected: default_selection}, {class: "draft-select"} %>
-      </div>
-    </div>
-  </div>
-
   <% if notice || alert %>
     <div class="err-messages">
       <% unless notice == "Photo was successfully deleted"%>
@@ -224,8 +228,4 @@
       <div class="alert"><%= alert %></div>
     </div>
   <% end %>
-
-  <div class="form-set form-controls">
-    <%= form.submit @submit_text, class: "button-round" %>
-  </div>
 <% end %>

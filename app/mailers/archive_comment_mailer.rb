@@ -1,5 +1,5 @@
 class ArchiveCommentMailer < ApplicationMailer
-  default from: -> { Rails.application.credentials[Rails.env.to_sym][:gmail] }
+  default from: -> { ENV['GMAIL_USER'] || Rails.application.credentials[Rails.env.to_sym][:gmail] }
 
     def comment_email(item_comment, title, id, uid, first_name, last_name, email_addy, subject, comment)
         @item_comment = item_comment
@@ -12,9 +12,9 @@ class ArchiveCommentMailer < ApplicationMailer
             @title = title
             @id = id
             @uid = uid
-            @subject = subject + " " + uid
+            @subject = uid.present? ? "#{subject} #{uid}" : subject
         end
-        mail(to: Rails.application.credentials[Rails.env.to_sym][:gmail],
+        mail(to: ENV['GMAIL_USER'] || Rails.application.credentials[Rails.env.to_sym][:gmail],
             subject: @subject,
         )
     end

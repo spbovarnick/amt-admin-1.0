@@ -6,7 +6,7 @@
   <body>
     <% archive_url = Rails.env == "production" ? "https://www.albinacommunityarchive.org/" : "http://localhost:3333/" %>
     <% if @item_comment %>
-      <%= link_to 'View Item', Rails.env == "production" ? "https://www.albinacommunityarchive.org/" : "http://localhost:3333/" + @id.to_s, form: {target: "_blank"}%>
+      <%= link_to 'View Item', archive_url + @id.to_s, target: "_blank" %>
     <% end %>
     <h3>
       <a href="mailto:#{@email_addy}"><%= "#{@first_name} #{@last_name}" %></a> Comment:

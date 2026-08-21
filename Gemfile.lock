@@ -372,6 +372,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uri (1.0.4)
+    wahwah (1.6.7)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.1)
@@ -438,6 +439,7 @@ DEPENDENCIES
   thor (>= 1.4.0)
   turbo-rails
   tzinfo-data
+  wahwah
   web-console
   webrick (>= 1.8.2)
 

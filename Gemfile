@@ -119,3 +119,5 @@ gem "thor", ">= 1.4.0"
 gem "sortablejs-rails"
 
 gem "open-uri"
+
+gem "wahwah"

@@ -1,7 +1,7 @@
 class ArchiveItemSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
 
-  attributes :id, :medium, :year, :title, :content_notes, :credit, :draft, :poster_url, :content_file_urls, :content_file_names, :medium_photo_urls, :medium_photos_file_names, :collections, :credit, :featured_item, :redirect_links, :content_redirect, :uid
+  attributes :id, :medium, :year, :title, :content_notes, :credit, :draft, :poster_url, :content_file_urls, :content_file_names, :content_files_id3_tags, :medium_photo_urls, :medium_photos_file_names, :collections, :credit, :featured_item, :redirect_links, :content_redirect, :uid
   has_many :tags, embed: :id, include: true
   has_many :locations
   has_many :comm_groups, embed: :id, include: true
@@ -35,6 +35,12 @@ class ArchiveItemSerializer < ActiveModel::Serializer
       object.ordered_content_files.map { |file| file.url()}
     else
       object.ordered_content_files.map { |file| rails_blob_url(file)}
+    end
+  end
+
+  def content_files_id3_tags
+    object.content_files_id3_tags.zip(content_file_urls).map do |tags, url|
+      tags.merge("url" => url)
     end
   end
 

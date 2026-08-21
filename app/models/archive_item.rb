@@ -79,6 +79,15 @@ class ArchiveItem < ApplicationRecord
         medium_photos.sort_by { |f| ids.index(f.id.to_s) || ids.length }
     end
 
+    # ID3 tags (title, artist, album, etc) for each attached audio file, in the same
+    # order as #ordered_content_files. Extracted once by #extract_id3_tags! below,
+    # whenever the item is saved in the CMS; this reads the cached result back
+    # off the blob, so it's cheap to call from the API on every request. A blank hash
+    # means the file isn't audio or has no tags.
+    def content_files_id3_tags
+        ordered_content_files.map { |file| file.blob.metadata["id3"] || {} }
+    end
+
     # validations
     validates :medium, presence: true, inclusion: { in: ["photo","film","audio","article","printed material"] }
     # validates :collections, presence: true
@@ -86,6 +95,8 @@ class ArchiveItem < ApplicationRecord
     before_validation :strip_title, on: [:create, :update]
     # sets uid upon record creation, update
     after_commit :set_uid!, on: [:create, :update]
+    # reads ID3 tags (title/artist/album/etc) off any newly attached audio files
+    after_commit :extract_id3_tags!, on: [:create, :update]
 
     # this method copies the taggable 'metadata' from on archive_item to the form for a new one
     def copy_tags_from(other_item)
@@ -123,6 +134,30 @@ class ArchiveItem < ApplicationRecord
         part1, part2 = item_str[0, 3], item_str[3, 3]
 
         update_column(:uid, "#{coll_str}-#{medium_str}-#{part1}-#{part2}")
+    end
+
+    # reads ID3 tags off any attached audio file that hasn't been read yet, and
+    # caches the result on blob.metadata["id3"] (see #content_files_id3_tags).
+    def extract_id3_tags!
+        return unless content_files.attached?
+
+        content_files.each do |file|
+            blob = file.blob
+            next unless blob.audio?
+            next if blob.metadata.key?("id3")
+
+            tag = blob.open { |tempfile| WahWah.open(tempfile) }
+
+            blob.update!(metadata: blob.metadata.merge("id3" => {
+                "title" => tag.title,
+                "artist" => tag.artist,
+                "album" => tag.album,
+                "track" => tag.track,
+                "duration" => tag.duration
+            }.compact))
+        rescue => e
+            Rails.logger.warn("Id3 extraction failed for ArchiveItem##{id}, blob ##{blob&.id}: #{e.class}: #{e.message}")
+        end
     end
 
     def strip_title

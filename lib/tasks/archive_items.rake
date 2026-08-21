@@ -41,4 +41,17 @@ namespace :archive_items do
     end
     puts "✅ Generated #{counter} UIDs"
   end
+
+  task backfill_id3_tags: :environment do
+    counter = 0
+
+    ArchiveItem.where(medium: "audio").find_each do |item|
+      next unless item.content_files.attached?
+
+      item.extract_id3_tags!
+      counter += 1
+    end
+
+    puts "✅ Checked ID3 tags for #{counter} audio items"
+  end
 end

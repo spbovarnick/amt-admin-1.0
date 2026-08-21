@@ -88,6 +88,33 @@ class ArchiveItem < ApplicationRecord
         ordered_content_files.map { |file| file.blob.metadata["id3"] || {} }
     end
 
+    # reads ID3 tags off any attached audio file that hasn't been read yet, and
+    # caches the result on blob.metadata["id3"] (see #content_files_id3_tags).
+    # Public (rather than a private callback-only method) because the
+    # archive_items:backfill_id3_tags rake task calls it directly on items whose
+    # audio was attached before this feature existed.
+    def extract_id3_tags!
+        return unless content_files.attached?
+
+        content_files.each do |file|
+            blob = file.blob
+            next unless blob.audio?
+            next if blob.metadata.key?("id3")
+
+            tag = blob.open { |tempfile| WahWah.open(tempfile) }
+
+            blob.update!(metadata: blob.metadata.merge("id3" => {
+                "title" => tag.title,
+                "artist" => tag.artist,
+                "album" => tag.album,
+                "track" => tag.track,
+                "duration" => tag.duration
+            }.compact))
+        rescue => e
+            Rails.logger.warn("Id3 extraction failed for ArchiveItem##{id}, blob ##{blob&.id}: #{e.class}: #{e.message}")
+        end
+    end
+
     # validations
     validates :medium, presence: true, inclusion: { in: ["photo","film","audio","article","printed material"] }
     # validates :collections, presence: true
@@ -134,30 +161,6 @@ class ArchiveItem < ApplicationRecord
         part1, part2 = item_str[0, 3], item_str[3, 3]
 
         update_column(:uid, "#{coll_str}-#{medium_str}-#{part1}-#{part2}")
-    end
-
-    # reads ID3 tags off any attached audio file that hasn't been read yet, and
-    # caches the result on blob.metadata["id3"] (see #content_files_id3_tags).
-    def extract_id3_tags!
-        return unless content_files.attached?
-
-        content_files.each do |file|
-            blob = file.blob
-            next unless blob.audio?
-            next if blob.metadata.key?("id3")
-
-            tag = blob.open { |tempfile| WahWah.open(tempfile) }
-
-            blob.update!(metadata: blob.metadata.merge("id3" => {
-                "title" => tag.title,
-                "artist" => tag.artist,
-                "album" => tag.album,
-                "track" => tag.track,
-                "duration" => tag.duration
-            }.compact))
-        rescue => e
-            Rails.logger.warn("Id3 extraction failed for ArchiveItem##{id}, blob ##{blob&.id}: #{e.class}: #{e.message}")
-        end
     end
 
     def strip_title

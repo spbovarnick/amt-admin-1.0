@@ -39,8 +39,8 @@ class ArchiveItemSerializer < ActiveModel::Serializer
   end
 
   def content_files_id3_tags
-    object.content_files_id3_tags.zip(content_file_urls).map do |tags, url|
-      tags.merge("url" => url)
+    object.content_files_id3_tags.zip(content_file_urls, content_file_names).map do |tags, url, filename|
+      tags.merge("url" => url, "filename" => filename.slice(0..(filename.index(".")-1)))
     end
   end
 

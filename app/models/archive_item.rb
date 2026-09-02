@@ -79,20 +79,12 @@ class ArchiveItem < ApplicationRecord
         medium_photos.sort_by { |f| ids.index(f.id.to_s) || ids.length }
     end
 
-    # ID3 tags (title, artist, album, etc) for each attached audio file, in the same
-    # order as #ordered_content_files. Extracted once by #extract_id3_tags! below,
-    # whenever the item is saved in the CMS; this reads the cached result back
-    # off the blob, so it's cheap to call from the API on every request. A blank hash
-    # means the file isn't audio or has no tags.
+    # ID3 tags (title, artist, album, etc) for each attached audio file, in the same order as #ordered_content_files. Extracted once by #extract_id3_tags! below, whenever the item is saved in the CMS; this reads the cached result back off the blob, so it's cheap to call from the API on every request. A blank hash means the file isn't audio or has no tags.
     def content_files_id3_tags
         ordered_content_files.map { |file| file.blob.metadata["id3"] || {} }
     end
 
-    # reads ID3 tags off any attached audio file that hasn't been read yet, and
-    # caches the result on blob.metadata["id3"] (see #content_files_id3_tags).
-    # Public (rather than a private callback-only method) because the
-    # archive_items:backfill_id3_tags rake task calls it directly on items whose
-    # audio was attached before this feature existed.
+    # reads ID3 tags off any attached audio file that hasn't been read yet, and caches the result on blob.metadata["id3"] (see #content_files_id3_tags). Public (rather than a private callback-only method) because the archive_items:backfill_id3_tags rake task calls it directly on items whose audio was attached before this feature existed.
     def extract_id3_tags!
         return unless content_files.attached?
 
@@ -101,7 +93,7 @@ class ArchiveItem < ApplicationRecord
             next unless blob.audio?
             next if blob.metadata.key?("id3")
 
-            tag = blob.open { |tempfile| WahWah.open(tempfile) }
+            tag = parse_id3_tag(blob)
 
             blob.update!(metadata: blob.metadata.merge("id3" => {
                 "title" => tag.title,
@@ -143,6 +135,33 @@ class ArchiveItem < ApplicationRecord
         "article" => 4,
         "printed material" => 5
     }.freeze
+
+    # How much of the file's head we peek at first, just to read the ID3v2 header's own declared tag size (a few bytes) without guessing a fixed chunk size.
+    ID3_PEEK_SIZE = 4.kilobytes
+
+    # Padding added on top of the declared tag size so the real, full-size fetch below also reaches a little past the tag boundary -- comfortably covers the first MPEG frame header and Xing/VBRI VBR header wahwah reads for duration.
+    ID3_TAG_SAFETY_MARGIN = 64.kilobytes
+
+    # Reads ID3 tags without downloading the whole file. mp3s can be huge here (real examples in this archive run 200-450MB) -- downloading one in full just to read a tag that lives in the first few KB is what caused R14 memory errors on the worker dyno. Instead: peek at the ID3v2 header to learn its declared size, then fetch only that much (plus a safety margin) via a real HTTP range request (ActiveStorage::Blob#download_chunk), rather than a full download.
+    #
+    # Falls back to the old full-download path whenever the fast path can't be trusted to be correct: no ID3v2 header (legacy ID3v1 tags live in the file's *last* 128 bytes, which a head-chunk fetch can't reach), or anything else unexpected happens while parsing the partial chunk. Slower, but still right.
+    def parse_id3_tag(blob)
+        peek_size = [ID3_PEEK_SIZE, blob.byte_size].min
+        peek = sized_io(blob.download_chunk(0...peek_size), blob.byte_size)
+        header = WahWah::ID3::V2Header.new(peek)
+        raise "no ID3v2 header" unless header.valid?
+
+        chunk_size = [header.size + ID3_TAG_SAFETY_MARGIN, blob.byte_size].min
+        io = sized_io(blob.download_chunk(0...chunk_size), blob.byte_size)
+        WahWah.open(io)
+    rescue
+        blob.open { |tempfile| WahWah.open(tempfile) }
+    end
+
+    # Wraps raw bytes already fetched in a StringIO that reports them (#read, #rewind, #seek, ...) normally, except for #size, which reports the file's *real* full byte count instead of the partial buffer's length. wahwah needs the true size for its constant-bitrate duration math ((file_size - tag_size) * 8 / bitrate) even though we only ever hand it a partial chunk.
+    def sized_io(bytes, real_size)
+        StringIO.new(bytes).tap { |io| io.define_singleton_method(:size) { real_size } }
+    end
 
     # method for setting UID upon record creation
     # UID is set here, because including record ID in #new UI, requires manipulating values in real time

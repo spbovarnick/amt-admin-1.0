@@ -439,7 +439,7 @@ DEPENDENCIES
   thor (>= 1.4.0)
   turbo-rails
   tzinfo-data
-  wahwah
+  wahwah (~> 1.6)
   web-console
   webrick (>= 1.8.2)
 

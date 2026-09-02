@@ -120,4 +120,9 @@ gem "sortablejs-rails"
 
 gem "open-uri"
 
-gem "wahwah"
+# Pinned rather than left open: archive_item.rb's extract_id3_tags! reaches into
+# WahWah::ID3::V2Header, an internal class not part of wahwah's public API, to
+# read the ID3v2 tag's declared size without downloading the whole file. A minor
+# version bump could change that internal shape without it being a breaking
+# change by wahwah's own semver.
+gem "wahwah", "~> 1.6"

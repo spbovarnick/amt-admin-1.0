@@ -42,16 +42,22 @@ namespace :archive_items do
     puts "✅ Generated #{counter} UIDs"
   end
 
+  # Enqueues one ExtractId3TagsJob per audio item instead of running extraction
+  # inline, so the worker dyno's Sidekiq concurrency (see config/sidekiq.yml)
+  # processes items in parallel rather than one full-file download at a time.
+  # This task itself returns almost immediately -- the actual backfill finishes
+  # asynchronously; watch the Sidekiq queue (or re-run this task later, which is
+  # a no-op for anything already tagged) to see when it's done.
   task backfill_id3_tags: :environment do
     counter = 0
 
     ArchiveItem.where(medium: "audio").find_each do |item|
       next unless item.content_files.attached?
 
-      item.extract_id3_tags!
+      ExtractId3TagsJob.perform_later(item.id)
       counter += 1
     end
 
-    puts "✅ Checked ID3 tags for #{counter} audio items"
+    puts "✅ Enqueued ID3 extraction for #{counter} audio items"
   end
 end

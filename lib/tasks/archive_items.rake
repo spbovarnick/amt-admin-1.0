@@ -55,4 +55,19 @@ namespace :archive_items do
 
     puts "✅ Enqueued ID3 extraction for #{counter} audio items"
   end
+
+  # Reports audio items that still need attention after a backfill_id3_tags run: items with at least one audio file missing id3 metadata (extraction never succeeded for it -- e.g. a missing S3 object, a corrupt file, or one that simply hasn't been processed yet). Read-only -- doesn't change anything, safe to re-run anytime.
+  task audio_missing_id3: :environment do
+    missing_id3 = 0
+
+    ArchiveItem.where(medium: "audio").includes(content_files_attachments: :blob).find_each do |item|
+      next unless item.content_files.attached?
+      next unless item.content_files.any? { |f| f.blob.audio? && !f.blob.metadata.key?("id3") }
+
+      puts "#{item.uid.presence || item.id} - #{item.title}"
+      missing_id3 += 1
+    end
+
+    puts "✅ #{missing_id3} item(s) missing id3 data"
+  end
 end

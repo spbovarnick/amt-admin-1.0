@@ -56,15 +56,20 @@ namespace :archive_items do
     puts "✅ Enqueued ID3 extraction for #{counter} audio items"
   end
 
-  # Reports audio items that still need attention after a backfill_id3_tags run: items with at least one audio file missing id3 metadata (extraction never succeeded for it -- e.g. a missing S3 object, a corrupt file, or one that simply hasn't been processed yet). Read-only -- doesn't change anything, safe to re-run anytime.
+  # Reports audio items that still need attention after a backfill_id3_tags run. Flags two distinct cases, both meaning "extraction never really succeeded": - no "id3" key at all (extraction raised -- missing S3 object, unreadable file, or it just hasn't been processed yet) - an "id3" key present but completely empty, with no duration even. wahwah doesn't raise on unparseable content when a plausible extension is present -- it just returns an all-nil Tag -- so this key can end up looking "done" without ever having parsed real audio. A genuinely valid but untagged file still gets a real duration out of the MPEG frame data, so an empty hash (not even duration) is the tell that something's off. Read-only -- doesn't change anything, safe to re-run anytime.
   task audio_missing_id3: :environment do
     missing_id3 = 0
 
     ArchiveItem.where(medium: "audio").includes(content_files_attachments: :blob).find_each do |item|
       next unless item.content_files.attached?
-      next unless item.content_files.any? { |f| f.blob.audio? && !f.blob.metadata.key?("id3") }
 
-      puts "#{item.uid.presence || item.id} - #{item.title}"
+      bad_files = item.content_files.select do |f|
+        f.blob.audio? && f.blob.metadata["id3"].blank?
+      end
+      next if bad_files.empty?
+
+      reasons = bad_files.map { |f| f.blob.metadata.key?("id3") ? "empty" : "never processed" }.uniq.join(", ")
+      puts "#{item.uid.presence || item.id} - #{item.title} (#{reasons})"
       missing_id3 += 1
     end
 

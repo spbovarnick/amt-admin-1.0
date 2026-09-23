@@ -51,7 +51,7 @@
   <div class="form-row">
     <div class="form-set">
       <%= form.label :lat, "Latitude" %>
-      <%= form.text_field :lat, autocomplete: "off", "data-lpignore": true %>
+      <%= form.text_field :lat, autocomplete: "off", "data-lpignore": true, pattern: Location::LAT_PATTERN, title: "Decimal between -90 and 90, e.g. 45.5231" %>
     </div>
     <div class="form-set"></div>
   </div>
@@ -59,7 +59,7 @@
   <div class="form-row">
     <div class="form-set">
       <%= form.label :lng, "Longitude" %>
-      <%= form.text_field :lng, autocomplete: "off", "data-lpignore": true %>
+      <%= form.text_field :lng, autocomplete: "off", "data-lpignore": true, pattern: Location::LNG_PATTERN, title: "Decimal between -180 and 180, e.g. -122.6765" %>
     </div>
     <div class="form-set"></div>
   </div>

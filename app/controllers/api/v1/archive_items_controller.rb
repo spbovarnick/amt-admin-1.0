@@ -138,7 +138,7 @@ class Api::V1::ArchiveItemsController < ApplicationController
         # if none of the above conditions are met, just search for items
         text_ids  = base_scope.search_archive_items(params[:q]).pluck(:id)
         names_ids = base_scope.search_archive_items_names(params[:q]).pluck(:id)
-        base_scope.in_order_of(id: text_ids | names_ids)
+        base_scope.in_order_of(:id, text_ids | names_ids)
       end
 
       filter_tags(archive_items)

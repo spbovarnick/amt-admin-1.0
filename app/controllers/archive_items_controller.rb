@@ -120,6 +120,8 @@ class ArchiveItemsController < ApplicationController
     @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
     # ^ collection_list param is split here, because of concatenated value passed into #new view
 
+    revalidate_frontend(@archive_item)
+
     flash.alert = "#{@archive_item.title}, UID #{@archive_item.uid} has been created."
     redirect_to edit_archive_item_path(@archive_item.id)
   end
@@ -225,6 +227,8 @@ class ArchiveItemsController < ApplicationController
     @archive_item.update_columns(search_locations: params[:archive_item][:location_list], search_tags: params[:archive_item][:tag_list], search_people: params[:archive_item][:person_list], search_comm_groups: params[:archive_item][:comm_group_list], search_collections: params[:archive_item][:collection_list].split("_").last)
     # ^ collection_list param is split here, because of concatenated value passed into #edit view)
 
+    revalidate_frontend(@archive_item)
+
     flash.alert = "#{@archive_item.title}, UID #{@archive_item.uid} has been updated."
     redirect_to edit_archive_item_path(@archive_item.id)
   end
@@ -249,6 +253,10 @@ class ArchiveItemsController < ApplicationController
   end
 
   private
+
+  def revalidate_frontend(item)
+    RevalidateFrontendJob.perform_later(["archive_items", "archive_item-#{item.id}"]) if item.persisted?
+  end
 
   def base_scope
     scope = ArchiveItem.all

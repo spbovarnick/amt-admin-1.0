@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       get 'archive_items/search_page_count'
       get 'archive_items/pages_index'
       get 'archive_items/timeline'
+      get 'archive_items/tally_counts'
       get '/archive_items/:id', to: 'archive_items#show'
       get 'locations/index'
       get 'locations/:name', to: 'locations#show'

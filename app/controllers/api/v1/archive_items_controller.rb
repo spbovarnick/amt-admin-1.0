@@ -79,6 +79,13 @@ class Api::V1::ArchiveItemsController < ApplicationController
     end
   end
 
+  def tally_counts
+    files_count = ActiveStorage::Attachment.where(record_type: "ArchiveItem", name: "content_files", record_id: base_scope.select(:id)).count
+    items_count = base_scope.count
+
+    render json: {files_count:, items_count:}
+  end
+
   private
 
   def base_scope

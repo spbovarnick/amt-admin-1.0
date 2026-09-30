@@ -2,6 +2,7 @@ require 'csv'
 
 class ArchiveItem < ApplicationRecord
     include PgSearch::Model
+    include RevalidatesNextCache
     pg_search_scope :search_archive_items,
         against: {
             title: 'A',

@@ -16,6 +16,9 @@ module NextRevalidation
       "Collection" => {
         tags: ["collections"],
       },
+      "ArchiveItem" => ->(record) {
+        { tags: ["archive_items", "archive_item-#{record.id}"] }
+      },
     }.freeze
 
     def self.for(record)

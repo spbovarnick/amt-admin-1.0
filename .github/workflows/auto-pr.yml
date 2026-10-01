@@ -1,0 +1,54 @@
+name: Auto PR
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: auto-pr-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Skip if a PR exists or branch has no new commits
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          open=$(gh pr list --head "${{ github.ref_name }}" --state open --json number --jq 'length')
+          ahead=$(git rev-list --count origin/main..HEAD)
+          if [ "$open" -eq 0 ] && [ "$ahead" -gt 0 ]; then
+            echo "create=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Have Claude write and open the PR
+        if: steps.check.outputs.create == 'true'
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Branch `${{ github.ref_name }}` in ${{ github.repository }} has no open PR.
+            1. Run `git log origin/main..HEAD` and `git diff origin/main...HEAD` to see what changed.
+            2. Write a PR description in markdown with these sections:
+               Problem, Cause (if it's a fix), Changes, Testing (as a checklist).
+               Be concise and specific to the actual diff. Don't invent context.
+            3. Open the PR with:
+               gh pr create --base main --head "${{ github.ref_name }}" --title "<short title>" --body "<description>"
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 8
+            --allowedTools "Bash(git log:*),Bash(git diff:*),Bash(gh pr create:*),Read"

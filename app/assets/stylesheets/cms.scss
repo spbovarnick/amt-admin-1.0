@@ -269,6 +269,31 @@ $table-max-width: 1600px;
         }
       }
 
+      .delete-all-files {
+        text-align: right;
+
+        .delete-all-files-link {
+          text-decoration: none;
+
+          &:hover {
+            opacity: .75;
+          }
+        }
+
+        .delete-all-label {
+          color: variables.$black-5;
+          text-decoration: underline;
+        }
+
+        .delete-all-x {
+          color: variables.$black-1;
+          background: variables.$white-1;
+          padding: 0 6px;
+          margin-left: 0.25rem;
+          border-radius: 2px;
+        }
+      }
+
       .delete-file-link {
         color: variables.$black-5;
         text-decoration: underline;

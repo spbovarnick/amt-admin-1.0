@@ -1,4 +1,12 @@
 <div id="content-files-list">
+  <% if @archive_item.persisted? && @archive_item.content_files.attached? %>
+    <div class="delete-all-files">
+      <%= link_to delete_all_content_files_archive_item_path(@archive_item), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete all the files attached to this archive item?" }, class: "delete-all-files-link" do %>
+        <span class="delete-all-label">Remove All Files</span>
+        <span class="delete-all-x">X</span>
+      <% end %>
+    </div>
+  <% end %>
   <ul
     id="content-files-list-el"
     data-controller="sortable"

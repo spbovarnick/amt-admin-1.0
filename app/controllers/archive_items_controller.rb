@@ -4,7 +4,7 @@ require "prawn/measurement_extensions"
 
 class ArchiveItemsController < ApplicationController
   layout 'admin'
-  before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index,  :sync_search_strings]
+  before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index,  :sync_search_strings, :delete_all_content_files, :delete_content_file, :delete_medium_photo, :delete_poster_image, :update_content_files_order, :update_medium_photos_order]
   before_action :store_return_to_session, only: [:new, :edit]
   # before_action :persist_sort_and_page_items, only: :index
 
@@ -155,6 +155,12 @@ class ArchiveItemsController < ApplicationController
     else
       redirect_to edit_archive_item_path(@archive_item), notice: "File could not be found"
     end
+  end
+
+  def delete_all_content_files
+    @archive_item = ArchiveItem.find(params[:id])
+    @archive_item.content_files.purge_later
+    redirect_to edit_archive_item_path(@archive_item), notice: "Files successfully deleted"
   end
 
   def delete_medium_photo

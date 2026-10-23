@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       delete 'delete_medium_photo'
       delete 'delete_poster_image'
       delete 'delete_content_file'
+      delete "delete_all_content_files"
       get :create_uid_pdf
       get :content_files_list
     end

@@ -13,7 +13,22 @@ Before creating the database, copy the sample env vars file. It sets `TARGET_DB`
 cp -n config/local_env_vars.rb.sample config/local_env_vars.rb
 ```
 
-To create a local database you can run `rails db:create`, and then seed it with data using `rails db:seed`.
+This app uses **PostgreSQL 15** (`db/structure.sql` is dumped from 15.17). Older `psql` versions fail `db:schema:load` with `invalid command \restrict`; the minimum is `psql` 14.19+ or 15.14+. If your Postgres server is an older version, you can install just the 15 client tools and put them first on your PATH without changing the server:
+```
+brew install postgresql@15
+echo 'export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+psql --version
+```
+Don't use `brew link postgresql@15` for this if another Postgres server is running from Homebrew. Linking requires unlinking the other version, which removes files that server reads at runtime.
+
+Then create the database and load the schema:
+```
+rails db:create db:schema:load
+```
+
+**Do not run `rails db:migrate` on a fresh database.** The migrations in `db/migrate` only change tables that were carried over from the original monorepo, so the first one fails on an empty database. `db:schema:load` builds every table from `db/structure.sql` and marks those migrations as already run. If you already ran `db:migrate`, start over with `rails db:drop db:create db:schema:load`. A failed migrate leaves tables behind that make `db:schema:load` fail with `relation "ar_internal_metadata" already exists`.
+
+`db/seeds.rb` is empty, so there is nothing to seed. To log in, create an admin user from the console (see [Users](#users)).
 
 Make sure to check `storage.yml` `local` settings to use the the Pathname appropriate to your use case--setting this up from scratch or migrating from the original monorepo.
 

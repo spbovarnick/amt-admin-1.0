@@ -88,6 +88,8 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  # Rails 7.1 doesn't support minitest 6; drop this pin when upgrading to Rails 7.2+.
+  gem "minitest", "~> 5.25"
 end
 
 gem "dartsass-rails", "~> 0.5.0"

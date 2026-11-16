@@ -45,3 +45,4 @@
 /.pg_backups
 
 /.notes
+/node_modules

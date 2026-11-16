@@ -7,6 +7,12 @@ This app is used as an administrative CMS and API to manage and hydrate the cont
 ### Database
 
 This app is using a postgres database locally and in production.
+
+Before creating the database, copy the sample env vars file. It sets `TARGET_DB` to `localhost`, which `config/database.yml` needs to pick your local database:
+```
+cp -n config/local_env_vars.rb.sample config/local_env_vars.rb
+```
+
 To create a local database you can run `rails db:create`, and then seed it with data using `rails db:seed`.
 
 Make sure to check `storage.yml` `local` settings to use the the Pathname appropriate to your use case--setting this up from scratch or migrating from the original monorepo.

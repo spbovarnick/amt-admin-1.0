@@ -1,0 +1,3 @@
+# Copy to config/local_env_vars.rb (gitignored). Loaded by config/environment.rb on boot.
+# TARGET_DB options: localhost, staging, production. See "Using live DB data" in the README.
+ENV['TARGET_DB'] = 'localhost'

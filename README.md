@@ -46,10 +46,11 @@ Because ActiveRecord attachments from the original db are stored within the othe
 - Make sure you have yarn installed globaly: `npm install --global yarn`
 - Make sure you have [redis](https://redis.io/docs/install/install-redis/install-redis-on-mac-os/) installed globally (`brew install redis`) and running while working in development
 - Install node modules: `yarn install`
-- Precompile assets: `bundle exec rake assets:precompile`
-- The master key stored in the ignored `master.key` file is required to access mailer address and app-specific password, which is stored in `config/credentials.yml.enc`
-- Rather than `rails s`, boot the development server with the `bin/dev` command, which points to `Procfile.dev` to start the server and watch for `Sass` changes
+- Don't precompile assets for development. `bin/dev` builds the Sass, and a precompiled `public/assets` folder makes the server keep sending old CSS/JS. If your CSS or JS changes don't show up, run `rails assets:clobber` and restart `bin/dev`.
+- The master key stored in the ignored `master.key` file is required to access mailer address and app-specific password, which is stored in `config/credentials.yml.enc`. Ask the team for it. If you don't have it yet, the app fails on boot because `config/environments/development.rb` reads `credentials.development[:gmail]`. To get past this locally, comment out the `config.action_mailer.smtp_settings` block in that file (don't commit the change). Mail won't send until you have the key.
+- Rather than `rails s`, boot the development server with the `bin/dev` command, which points to `Procfile.dev` to start the server, watch for `Sass` changes, and run memcached. If you already run memcached as a service (`brew services list`), `bin/dev` exits with `Address already in use`. Start it without memcached instead: `bin/dev -m all=1,memcached=0`. Development only uses memcached when caching is turned on (`rails dev:cache`).
 - Due to the production volume of `ArchiveItem` records, the application uses `redis` and `Sidekiq` for the ActiveJob `ExportArchiveItemsCsvJob`. To work on this or other jobs locally, you must run `Sidekiq` locally in a second terminal with the command `bundle exec sidekiq`
+- Sidekiq uses Redis database 0 unless `REDIS_URL` is set, and other local apps often share it. When they do, this app's Sidekiq picks up their jobs. `config/local_env_vars.rb.sample` sets `REDIS_URL` to database 2 to avoid that. Change the number if another app already uses 2.
 
 If you encounter the error `[__NSCFConstantString initialize] may have been in progress in another thread when fork() was called. We cannot safely call it or ignore it in the fork() child process. Crashing instead. Set a breakpoint on objc_initializeAfterForkError to debug.` add `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` to your `~/.zshrc` or `~/.bashrc`. You can check that the `OBJC_DISABLE_INITIALIZE_FORK_SAFETY` variable is set correctly by opening a fresh terminal from within your IDE and running `echo $OBJC_DISABLE_INITIALIZE_FORK_SAFETY`. If `YES` is returned, go ahead and start the server.
 
@@ -94,7 +95,7 @@ Worker process is scaled to 1, ie `heroku ps:scale worker=1`
 
 Admin users have unmitigated access through the `admin` namespace, including the UI to create new user accounts or edit extant ones.
 <br/>
-Admin users can be created through the console with the following command:
+Admin users can be created through the console (`rails console`) with the following command:
 
 ```
 User.create!({:email => "someone@gmail.com", :password => "testpass", :password_confirmation => "testpass", :admin => true, :page => "global"})

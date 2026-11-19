@@ -28,7 +28,7 @@ rails db:create db:schema:load
 
 **Do not run `rails db:migrate` on a fresh database.** The migrations in `db/migrate` only change tables that were carried over from the original monorepo, so the first one fails on an empty database. `db:schema:load` builds every table from `db/structure.sql` and marks those migrations as already run. If you already ran `db:migrate`, start over with `rails db:drop db:create db:schema:load`. A failed migrate leaves tables behind that make `db:schema:load` fail with `relation "ar_internal_metadata" already exists`.
 
-Run `rails db:seed` to add a sample collection. The archive item form requires a collection, and a fresh database has none. To log in, create an admin user from the console (see [Users](#users)).
+Run `rails db:seed` to add a sample collection, person, tag, community group and location. The archive item form only accepts existing records for these fields, and a fresh database has none. To log in, create an admin user from the console (see [Users](#users)).
 
 Make sure to check `storage.yml` `local` settings to use the the Pathname appropriate to your use case--setting this up from scratch or migrating from the original monorepo.
 

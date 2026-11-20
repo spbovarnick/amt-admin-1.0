@@ -1,0 +1,6 @@
+# Copy to config/local_env_vars.rb (gitignored). Loaded by config/environment.rb on boot.
+# TARGET_DB options: localhost, staging, production. See "Using live DB data" in the README.
+ENV['TARGET_DB'] = 'localhost'
+
+# Separate Redis database so Sidekiq doesn't run jobs queued by other local apps on database 0.
+ENV['REDIS_URL'] ||= 'redis://localhost:6379/2'

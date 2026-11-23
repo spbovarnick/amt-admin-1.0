@@ -38,6 +38,7 @@ module NextRevalidation
       response
 
     rescue => e
+      Appsignal.report_error(e)
       Rails.logger.error(
         "Next revalidation failed tags=#{@tags.inspect} paths=#{@paths.inspect} error=#{e.class}: #{e.message}"
       )

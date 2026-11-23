@@ -5,6 +5,7 @@ class Api::V1::CommentsController < ApplicationController
         ArchiveCommentMailer.comment_email(params[:item_comment], params[:title], params[:id], params[:uid], params[:first_name], params[:last_name], params[:email_addy], params[:subject], params[:comment]).deliver_later
         render json: { status: 'success', message: "Email sent!"}
     rescue => e
+        Appsignal.report_error(e)
         Rails.logger.error(e)
         render json: { status: "error", error: e.message }, status: 500
     end

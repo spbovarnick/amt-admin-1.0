@@ -18,6 +18,8 @@ gem 'pg', '~> 1.5', '>= 1.5.4'
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 6.4.3"
 
+gem "appsignal"
+
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 

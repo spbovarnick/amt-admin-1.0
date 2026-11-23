@@ -18,6 +18,7 @@ module RevalidatesNextCache
 
     NextRevalidation::Publisher.call(tags: payload[:tags], paths: payload[:paths])
   rescue => e
+    Appsignal.report_error(e)
     Rails.logger.error(
       "publish_next_revalidation failed model=#{self.class.name} id=#{id} error=#{e.class}: #{e.message}"
     )

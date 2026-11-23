@@ -104,6 +104,7 @@ class ArchiveItem < ApplicationRecord
                 "duration" => tag.duration
             }.compact))
         rescue => e
+            Appsignal.report_error(e)
             Rails.logger.warn("Id3 extraction failed for ArchiveItem##{id}, blob ##{blob&.id}: #{e.class}: #{e.message}")
         end
     end

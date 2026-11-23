@@ -88,6 +88,7 @@ class WeeklyCsvSnapshotJob < ApplicationJob
     urls = item.content_files.map do |file|
       blob_url(file)
     rescue => e
+      Appsignal.report_error(e)
       "Error: #{e.message}"
     end.join(", ")
 
